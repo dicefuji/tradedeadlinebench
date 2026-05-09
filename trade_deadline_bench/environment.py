@@ -20,6 +20,7 @@ from trade_deadline_bench.data_structures import (
     ScenarioData,
     TradeProposal,
 )
+from trade_deadline_bench.goal_evaluator import evaluate_goal
 from trade_deadline_bench.scenario_loader import generate_scenario
 from trade_deadline_bench.trade_validator import validate_trade
 
@@ -63,6 +64,14 @@ class TradeDeadlineEnvironment:
         # Track turns without advance per team (for force-advance)
         self._turns_without_advance: dict[str, int] = {t: 0 for t in TEAMS}
 
+        # Initial state snapshots for goal evaluation
+        self._initial_players_by_team: dict[str, list[str]] = {}
+        self._initial_picks_by_team: dict[str, list[str]] = {}
+        self._initial_payroll: dict[str, float] = {}
+
+        # Pending proposal broadcasts (delivered at start of next round)
+        self._pending_broadcasts: list[dict] = []
+
         self._initialize_from_seed(scenario_seed)
 
     def _initialize_from_seed(self, seed: int) -> None:
@@ -76,6 +85,16 @@ class TradeDeadlineEnvironment:
         }
         self.payroll = dict(scenario.payroll)
         self.team_configs = dict(scenario.team_configs)
+
+        # Snapshot initial state for goal evaluation
+        self._initial_players_by_team = {
+            t: list(pids) for t, pids in self.players_by_team.items()
+        }
+        self._initial_picks_by_team = {
+            t: [dp.pick_id for dp in picks]
+            for t, picks in self.picks_by_team.items()
+        }
+        self._initial_payroll = dict(self.payroll)
 
     def _get_scenario_snapshot(self) -> ScenarioData:
         """Build a ScenarioData from current mutable state for validation."""
@@ -267,7 +286,7 @@ class TradeDeadlineEnvironment:
         )
         self.trade_proposals[trade_id] = proposal
 
-        # Auto-broadcast to all named parties' inboxes
+        # Queue broadcast for delivery at start of next round (1-round delay)
         self._email_counter += 1
         broadcast_msg = {
             "type": "trade_proposal",
@@ -279,8 +298,7 @@ class TradeDeadlineEnvironment:
             "terms": terms,
             "timestamp": (self.current_round, self._email_counter),
         }
-        for team in sorted(parties):
-            self.inboxes[team].append(broadcast_msg)
+        self._pending_broadcasts.append(broadcast_msg)
 
         return {
             "trade_id": trade_id,
@@ -307,6 +325,16 @@ class TradeDeadlineEnvironment:
             return {"error": f"Trade {trade_id} has expired"}
         if from_team not in proposal.parties:
             return {"error": f"{from_team} is not a party to trade {trade_id}"}
+
+        # Reject same-round consent (proposal broadcast has 1-round delay)
+        if proposal.proposed_round == self.current_round:
+            return {
+                "error": (
+                    f"Trade {trade_id} was proposed this round. "
+                    f"Consent is only allowed starting round "
+                    f"{proposal.proposed_round + 1}."
+                )
+            }
 
         # Record consent
         proposal.consent_log[from_team] = True
@@ -445,22 +473,28 @@ class TradeDeadlineEnvironment:
     # ------------------------------------------------------------------
 
     def tool_check_my_progress(self, team: str) -> dict:
-        """Return goal status for the calling team only.
+        """Return evaluated goal status for the calling team only.
 
         This is private — not visible to other teams.
+        Returns: {goal_met: bool, details: str, bonuses_eligible: [...]}
         """
         if team not in TEAMS:
             return {"error": f"Unknown team: {team}"}
 
-        tc = self.team_configs[team]
-        hidden_goal = tc.hidden_goal
-
-        return {
-            "team": team,
-            "goal_description": hidden_goal["description"],
-            "bonuses": hidden_goal.get("bonuses", []),
-            "current_round": self.current_round,
-        }
+        result = evaluate_goal(
+            team=team,
+            players_by_id=self.players_by_id,
+            players_by_team=self.players_by_team,
+            picks_by_team=self.picks_by_team,
+            payroll=self.payroll,
+            cash_used=self.cash_used,
+            initial_players_by_team=self._initial_players_by_team,
+            initial_picks_by_team=self._initial_picks_by_team,
+            initial_payroll=self._initial_payroll,
+            current_round=self.current_round,
+        )
+        result["team"] = team
+        return result
 
     # ------------------------------------------------------------------
     # Tool: advance_round
@@ -509,10 +543,18 @@ class TradeDeadlineEnvironment:
 
     def _advance_round(self) -> dict:
         """Advance to the next round: expire pending proposals, reset votes."""
-        # Expire any proposals from the current round that didn't fully execute
+        # Expire proposals from round N-1 (consent window was this round)
+        # A proposal proposed in round N has consent window in round N+1.
+        # At round advance from N+1 to N+2, proposals from N expire.
         for trade_id in sorted(self.trade_proposals.keys()):
             proposal = self.trade_proposals[trade_id]
-            if not proposal.expired:
+            if proposal.expired:
+                continue
+            # Already executed?
+            if any(et.trade_id == trade_id for et in self.executed_trades):
+                continue
+            # Proposals whose consent window is this round (proposed_round + 1 == current_round)
+            if proposal.proposed_round + 1 <= self.current_round:
                 all_consented = all(
                     proposal.consent_log[t] for t in sorted(proposal.parties)
                 )
@@ -521,6 +563,13 @@ class TradeDeadlineEnvironment:
 
         self.current_round += 1
         self.advance_votes.clear()
+
+        # Deliver pending proposal broadcasts (proposals from round N-1
+        # are now visible in round N)
+        for msg in self._pending_broadcasts:
+            for team in sorted(msg["to"]):
+                self.inboxes[team].append(msg)
+        self._pending_broadcasts.clear()
 
         return {
             "status": "round_advanced",

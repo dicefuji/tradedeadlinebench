@@ -8,8 +8,6 @@ from __future__ import annotations
 
 from trade_deadline_bench.data_structures import (
     SALARY_CAP,
-    DraftPick,
-    Player,
     ScenarioData,
 )
 
@@ -165,6 +163,40 @@ def validate_trade(
                 )
 
     # ------------------------------------------------------------------
+    # Verify receives consistency (reverse): every received asset must
+    # appear in some other team's sends.
+    # ------------------------------------------------------------------
+    for team in parties:
+        receives = movements[team].get("receives", {})
+        for pid in receives.get("players", []):
+            found = False
+            for other in parties:
+                if other == team:
+                    continue
+                sends = movements[other].get("sends", {})
+                if pid in sends.get("players", []):
+                    found = True
+                    break
+            if not found:
+                return False, (
+                    f"Player {pid} received by {team} is not sent by any party"
+                )
+
+        for pick_id in receives.get("picks", []):
+            found = False
+            for other in parties:
+                if other == team:
+                    continue
+                sends = movements[other].get("sends", {})
+                if pick_id in sends.get("picks", []):
+                    found = True
+                    break
+            if not found:
+                return False, (
+                    f"Pick {pick_id} received by {team} is not sent by any party"
+                )
+
+    # ------------------------------------------------------------------
     # Rule 1: Salary matching (within 25%)
     # Each team's incoming salary <= 1.25 * outgoing salary, OR
     # the team has enough cap room to absorb the difference.
@@ -185,8 +217,7 @@ def validate_trade(
         cash_in = float(receives.get("cash", 0.0))
         cash_out = float(sends.get("cash", 0.0))
 
-        tc = scenario.team_configs[team]
-        cap_room = tc.cap_room
+        cap_room = SALARY_CAP - scenario.payroll[team]
 
         if outgoing_salary > 0:
             if incoming_salary <= 1.25 * outgoing_salary:

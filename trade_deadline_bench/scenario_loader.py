@@ -67,6 +67,10 @@ def load_teams_config(config_path: str) -> list[TeamConfig]:
                 f"tradeable_count for {config.name} must be 4-6, "
                 f"got {config.tradeable_count}"
             )
+        if len(config.franchise_lock_slots) != len(set(config.franchise_lock_slots)):
+            raise ValueError(
+                f"franchise_lock_slots for {config.name} contains duplicates"
+            )
         for slot in config.franchise_lock_slots:
             if not 0 <= slot <= 11:
                 raise ValueError(

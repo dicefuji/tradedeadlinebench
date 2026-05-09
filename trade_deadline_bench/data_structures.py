@@ -72,7 +72,7 @@ class TeamConfig:
 
     @property
     def tradeable_count(self) -> int:
-        return 12 - len(self.franchise_lock_slots)
+        return 12 - len(set(self.franchise_lock_slots))
 
 
 @dataclass

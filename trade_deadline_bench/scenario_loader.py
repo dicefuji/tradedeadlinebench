@@ -236,4 +236,4 @@ def _scale_aavs(players: list[Player], target_payroll: float) -> None:
     # Fix rounding residual on the first player.
     residual = round(target_payroll - sum(p.aav for p in players), 2)
     if residual != 0.0:
-        players[0].aav = round(players[0].aav + residual, 2)
+        players[0].aav = max(1.0, min(40.0, round(players[0].aav + residual, 2)))

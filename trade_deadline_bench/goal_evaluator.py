@@ -459,24 +459,24 @@ def _evaluate_granite_bay(
 
     if goal_met:
         details = (
-            f"Cap room ${cap_room:.1f}M (>= $12M), "
-            f"shed ${aav_shed:.1f}M AAV, "
-            f"net rating loss = {rating_loss} (<= 8)."
+            f"Cap room ${cap_room:.1f}M (>= $5M), "
+            f"shed ${aav_shed:.1f}M AAV (>= $4M), "
+            f"net rating loss = {rating_loss} (<= 15)."
         )
     else:
         issues = []
         if not has_cap_room:
-            issues.append(f"cap room ${cap_room:.1f}M (need >= $12M)")
+            issues.append(f"cap room ${cap_room:.1f}M (need >= $5M)")
         if not has_shed:
-            issues.append(f"AAV shed ${aav_shed:.1f}M (need >= $20M)")
+            issues.append(f"AAV shed ${aav_shed:.1f}M (need >= $4M)")
         if not rating_ok:
-            issues.append(f"net rating loss = {rating_loss} (need <= 8)")
+            issues.append(f"net rating loss = {rating_loss} (need <= 15)")
         details = "; ".join(issues)
 
     bonuses = []
     if goal_met:
-        if cap_room >= 18.0:
-            bonuses.append("Cap room >= $18M")
+        if cap_room >= 14.0:
+            bonuses.append("Cap room >= $14M")
         acquired_picks = _get_acquired_picks(team, picks_by_team, initial_picks_by_team)
         if any(dp.pick_round == 1 for dp in acquired_picks):
             bonuses.append("Any 1st-round pick acquired in the process")

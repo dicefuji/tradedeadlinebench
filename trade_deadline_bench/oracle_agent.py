@@ -1043,7 +1043,7 @@ class OracleAgent:
 
         if self.team == "Apex City Aces":
             # Don't give away acquired elite players
-            if pid not in initial and player.talent_rating >= 88:
+            if pid not in initial and player.talent_rating >= 60:
                 return True
         elif self.team == "Harlow Vipers":
             # Stars are critical (but tradeable as part of the goal)

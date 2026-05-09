@@ -22,13 +22,19 @@ class TestTeamStructure:
             assert len(pids) == 12, f"{team} has {len(pids)} players"
 
     def test_tradeable_count_per_team(self):
+        """Each team's tradeable count = 12 - len(franchise_lock_slots)."""
         for team in TEAMS:
             pids = self.scenario.players_by_team[team]
             players = [self.scenario.players_by_id[pid] for pid in pids]
             tradeable = [p for p in players if p.is_tradeable]
-            assert 4 <= len(tradeable) <= 6, (
-                f"{team} has {len(tradeable)} tradeable (expected 4-6)"
+            tc = self.scenario.team_configs[team]
+            expected_tradeable = 12 - len(tc.franchise_lock_slots)
+            assert len(tradeable) == expected_tradeable, (
+                f"{team} has {len(tradeable)} tradeable "
+                f"(expected {expected_tradeable} from config)"
             )
+            # At least 1 tradeable player per team
+            assert len(tradeable) >= 1
 
     def test_four_draft_picks_per_team(self):
         for team in TEAMS:

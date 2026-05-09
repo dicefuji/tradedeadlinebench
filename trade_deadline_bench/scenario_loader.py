@@ -62,9 +62,9 @@ def load_teams_config(config_path: str) -> list[TeamConfig]:
     for config in configs:
         if config.name not in TEAMS:
             raise ValueError(f"Unknown team name in config: {config.name}")
-        if not 4 <= config.tradeable_count <= 6:
+        if config.tradeable_count < 1:
             raise ValueError(
-                f"tradeable_count for {config.name} must be 4-6, "
+                f"tradeable_count for {config.name} must be >= 1, "
                 f"got {config.tradeable_count}"
             )
         if len(config.franchise_lock_slots) != len(set(config.franchise_lock_slots)):
@@ -102,13 +102,11 @@ def generate_scenario(seed: int, config_path: str | None = None) -> ScenarioData
     # Decide how many elite players (talent >= 88) league-wide: 4-6
     num_elite = rng.randint(4, MAX_ELITE_PLAYERS)
 
-    # Distribute elite slots across teams.  Shuffle team indices and assign
-    # one elite per team until the budget is exhausted.
+    # Distribute elite slots across teams randomly (allows natural
+    # clustering so some teams have 2+ elites, making slot-1+ tradeable).
     team_elite_counts: dict[str, int] = {tc.name: 0 for tc in team_configs}
-    elite_pool = list(range(len(team_configs)))
-    rng.shuffle(elite_pool)
-    for i in range(num_elite):
-        team_idx = elite_pool[i % len(elite_pool)]
+    for _ in range(num_elite):
+        team_idx = rng.randrange(len(team_configs))
         team_elite_counts[team_configs[team_idx].name] += 1
 
     used_names: set[str] = set()

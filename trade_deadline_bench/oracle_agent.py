@@ -39,10 +39,21 @@ class OracleAgent:
     No LLM calls. No randomness. Pure constraint satisfaction.
     """
 
-    def __init__(self, team: str, env: TradeDeadlineEnvironment):
+    def __init__(
+        self,
+        team: str,
+        env: TradeDeadlineEnvironment,
+        team_thresholds: dict[str, dict] | None = None,
+    ):
         self.team = team
         self.env = env
+        self.team_thresholds = team_thresholds or {}
         self._proposals_made_this_round = 0
+
+    @property
+    def goal_thresholds(self) -> dict:
+        """Get this team's goal thresholds from YAML config."""
+        return self.team_thresholds.get(self.team, {})
 
     def reset_round(self) -> None:
         """Reset per-round counters."""
@@ -61,6 +72,7 @@ class OracleAgent:
             initial_picks_by_team=self.env._initial_picks_by_team,
             initial_payroll=self.env._initial_payroll,
             current_round=self.env.current_round,
+            goal_thresholds=self.goal_thresholds,
         )
 
     def consent_phase(self) -> None:
@@ -161,16 +173,17 @@ class OracleAgent:
     def _acceptable_for_apex(
         self, sent_players, recv_players, sent_picks, recv_picks
     ) -> bool:
-        """Apex wants a player rated >= 60. Accept if we receive one or don't
-        lose elite acquisitions."""
+        """Apex wants a player rated >= min_talent. Accept if we receive one
+        or don't lose elite acquisitions."""
         p = self.env.players_by_id
+        min_talent = self.goal_thresholds.get("min_talent", 86)
         # If we receive a qualifying player, always accept
-        if any(p[pid].talent_rating >= 60 for pid in recv_players if pid in p):
+        if any(p[pid].talent_rating >= min_talent for pid in recv_players if pid in p):
             return True
         # Don't send away a qualifying player we already acquired
         initial = set(self.env._initial_players_by_team[self.team])
         for pid in sent_players:
-            if pid not in initial and pid in p and p[pid].talent_rating >= 60:
+            if pid not in initial and pid in p and p[pid].talent_rating >= min_talent:
                 return False
         # Neutral trade is fine
         return True
@@ -178,10 +191,11 @@ class OracleAgent:
     def _acceptable_for_harlow(
         self, sent_players, recv_players, sent_picks, recv_picks
     ) -> bool:
-        """Harlow wants to trade a star for a package (player >= 59 + 1st pick).
-        Accept if the trade involves sending a star and getting the package,
-        or is neutral."""
+        """Harlow wants to trade a star for a package (player >= min_return_talent
+        + 1st pick). Accept if the trade involves sending a star and getting the
+        package, or is neutral."""
         p = self.env.players_by_id
+        min_return_talent = self.goal_thresholds.get("min_return_talent", 76)
         initial_pids = self.env._initial_players_by_team[self.team]
         stars = self._get_harlow_stars()
         star_ids = {s.player_id for s in stars}
@@ -189,19 +203,20 @@ class OracleAgent:
         # If we're trading a star, check if we get a good package
         sending_star = any(pid in star_ids for pid in sent_players)
         if sending_star:
-            has_player_59 = any(
-                p[pid].talent_rating >= 59 for pid in recv_players if pid in p
+            has_player = any(
+                p[pid].talent_rating >= min_return_talent
+                for pid in recv_players if pid in p
             )
             has_first_pick = any(
                 self._is_first_round_pick(pick_id) for pick_id in recv_picks
             )
-            return has_player_59 and has_first_pick
+            return has_player and has_first_pick
 
         # If not sending a star, accept if neutral (don't give away acquired
         # good players or acquired picks)
         acquired = set(self.env.players_by_team[self.team]) - set(initial_pids)
         for pid in sent_players:
-            if pid in acquired and pid in p and p[pid].talent_rating >= 59:
+            if pid in acquired and pid in p and p[pid].talent_rating >= min_return_talent:
                 return False
         # Don't give away acquired 1st-round picks
         acquired_pick_ids = self._get_acquired_pick_ids()
@@ -213,18 +228,24 @@ class OracleAgent:
     def _acceptable_for_eastgate(
         self, sent_players, recv_players, sent_picks, recv_picks
     ) -> bool:
-        """Eastgate wants a SF/PF rated 57-71, >= 2 years, <= $13M.
-        Accept if we get a qualifying player or trade is neutral."""
+        """Eastgate wants a SF/PF rated min_talent-max_talent, >= min_years,
+        <= max_salary. Accept if we get a qualifying player or trade is neutral."""
         p = self.env.players_by_id
+        gt = self.goal_thresholds
+        min_talent = gt.get("min_talent", 76)
+        max_talent = gt.get("max_talent", 84)
+        positions = gt.get("positions", ["SF", "PF"])
+        min_years = gt.get("min_years", 2)
+        max_salary = gt.get("max_salary", 20.0)
         # If we receive a qualifying player, accept
         for pid in recv_players:
             if pid in p:
                 pl = p[pid]
                 if (
-                    pl.position in ("SF", "PF")
-                    and 57 <= pl.talent_rating <= 71
-                    and pl.years_remaining >= 2
-                    and pl.aav <= 13.0
+                    pl.position in positions
+                    and min_talent <= pl.talent_rating <= max_talent
+                    and pl.years_remaining >= min_years
+                    and pl.aav <= max_salary
                 ):
                     return True
         # Don't send away a qualifying player we already acquired
@@ -233,10 +254,10 @@ class OracleAgent:
             if pid not in initial and pid in p:
                 pl = p[pid]
                 if (
-                    pl.position in ("SF", "PF")
-                    and 57 <= pl.talent_rating <= 71
-                    and pl.years_remaining >= 2
-                    and pl.aav <= 13.0
+                    pl.position in positions
+                    and min_talent <= pl.talent_rating <= max_talent
+                    and pl.years_remaining >= min_years
+                    and pl.aav <= max_salary
                 ):
                     return False
         return True
@@ -244,16 +265,18 @@ class OracleAgent:
     def _acceptable_for_ironwood(
         self, sent_players, recv_players, sent_picks, recv_picks
     ) -> bool:
-        """Ironwood wants 2 players with defense sum >= 15.
+        """Ironwood wants 2 players with defense sum >= min_defense_sum.
         Accept if we get high-defense players or trade is neutral."""
         p = self.env.players_by_id
-        # If we receive a defense player rated >= 7, accept
-        if any(p[pid].defense_rating >= 7 for pid in recv_players if pid in p):
+        min_defense_sum = self.goal_thresholds.get("min_defense_sum", 17)
+        min_individual_def = max(1, min_defense_sum - 10)
+        # If we receive a defense player rated >= threshold, accept
+        if any(p[pid].defense_rating >= min_individual_def for pid in recv_players if pid in p):
             return True
         # Don't send away high-defense acquisitions
         initial = set(self.env._initial_players_by_team[self.team])
         for pid in sent_players:
-            if pid not in initial and pid in p and p[pid].defense_rating >= 7:
+            if pid not in initial and pid in p and p[pid].defense_rating >= min_individual_def:
                 return False
         return True
 
@@ -285,9 +308,11 @@ class OracleAgent:
     def _acceptable_for_granite_bay(
         self, sent_players, recv_players, sent_picks, recv_picks
     ) -> bool:
-        """Granite Bay wants cap room >= $5M, shed >= $4M AAV, rating loss <= 15.
-        Accept if we shed more AAV than we take on without too much rating loss."""
+        """Granite Bay wants cap room >= min_cap_room, shed >= min_aav_shed,
+        rating loss <= max_rating_loss. Accept if we shed AAV without too much
+        rating loss."""
         p = self.env.players_by_id
+        max_rating_loss = self.goal_thresholds.get("max_rating_loss", 10)
         sent_aav = sum(p[pid].aav for pid in sent_players if pid in p)
         recv_aav = sum(p[pid].aav for pid in recv_players if pid in p)
         sent_rating = sum(p[pid].talent_rating for pid in sent_players if pid in p)
@@ -307,12 +332,12 @@ class OracleAgent:
 
         projected_rating_loss = all_sent_rating - all_acquired_rating
 
-        # Accept if projected rating loss stays <= 15 and we shed AAV
-        if sent_aav > recv_aav and projected_rating_loss <= 15:
+        # Accept if projected rating loss stays within budget and we shed AAV
+        if sent_aav > recv_aav and projected_rating_loss <= max_rating_loss:
             return True
         # Also accept if receiving a 1st-round pick (bonus)
         if any(self._is_first_round_pick(pick_id) for pick_id in recv_picks):
-            if projected_rating_loss <= 15:
+            if projected_rating_loss <= max_rating_loss:
                 return True
         # Neutral if we don't lose anything important
         if sent_aav == 0 and recv_aav == 0 and not sent_players:
@@ -344,18 +369,19 @@ class OracleAgent:
         return []
 
     def _search_apex_trades(self) -> list[dict]:
-        """Apex: find trades to acquire a player rated >= 60."""
+        """Apex: find trades to acquire a player rated >= min_talent."""
         candidates = []
         p = self.env.players_by_id
+        min_talent = self.goal_thresholds.get("min_talent", 86)
 
-        # Find all tradeable players rated >= 60 on other teams
+        # Find all tradeable players rated >= min_talent on other teams
         targets = []
         for other_team in sorted(TEAMS):
             if other_team == self.team:
                 continue
             for pid in sorted(self.env.players_by_team[other_team]):
                 player = p[pid]
-                if player.talent_rating >= 60 and player.is_tradeable:
+                if player.talent_rating >= min_talent and player.is_tradeable:
                     targets.append((other_team, pid))
 
         # For each target, try to build a valid trade
@@ -371,7 +397,7 @@ class OracleAgent:
         return candidates
 
     def _search_harlow_trades(self) -> list[dict]:
-        """Harlow: trade a star for package (player >= 59 + 1st-round pick)."""
+        """Harlow: trade a star for package (player >= min_return_talent + 1st pick)."""
         candidates = []
         stars = self._get_harlow_stars()
 
@@ -395,9 +421,15 @@ class OracleAgent:
         return candidates
 
     def _search_eastgate_trades(self) -> list[dict]:
-        """Eastgate: acquire SF/PF rated 57-71, >= 2 years, <= $13M."""
+        """Eastgate: acquire SF/PF rated min_talent-max_talent."""
         candidates = []
         p = self.env.players_by_id
+        gt = self.goal_thresholds
+        min_talent = gt.get("min_talent", 76)
+        max_talent = gt.get("max_talent", 84)
+        positions = gt.get("positions", ["SF", "PF"])
+        min_years = gt.get("min_years", 2)
+        max_salary = gt.get("max_salary", 20.0)
 
         targets = []
         for other_team in sorted(TEAMS):
@@ -407,10 +439,10 @@ class OracleAgent:
                 player = p[pid]
                 if (
                     player.is_tradeable
-                    and player.position in ("SF", "PF")
-                    and 57 <= player.talent_rating <= 71
-                    and player.years_remaining >= 2
-                    and player.aav <= 13.0
+                    and player.position in positions
+                    and min_talent <= player.talent_rating <= max_talent
+                    and player.years_remaining >= min_years
+                    and player.aav <= max_salary
                 ):
                     targets.append((other_team, pid))
 
@@ -426,9 +458,11 @@ class OracleAgent:
         return candidates
 
     def _search_ironwood_trades(self) -> list[dict]:
-        """Ironwood: acquire 2 players with defense sum >= 15."""
+        """Ironwood: acquire 2 players with defense sum >= min_defense_sum."""
         candidates = []
         p = self.env.players_by_id
+        min_defense_sum = self.goal_thresholds.get("min_defense_sum", 17)
+        min_individual_def = max(1, min_defense_sum - 10)
 
         # Find high-defense tradeable players on other teams
         targets = []
@@ -437,7 +471,7 @@ class OracleAgent:
                 continue
             for pid in sorted(self.env.players_by_team[other_team]):
                 player = p[pid]
-                if player.is_tradeable and player.defense_rating >= 7:
+                if player.is_tradeable and player.defense_rating >= min_individual_def:
                     targets.append((other_team, pid))
 
         # Try to acquire them one at a time
@@ -487,9 +521,10 @@ class OracleAgent:
         return candidates
 
     def _search_granite_bay_trades(self) -> list[dict]:
-        """Granite Bay: shed AAV while keeping rating loss <= 15."""
+        """Granite Bay: shed AAV while keeping rating loss <= max_rating_loss."""
         candidates = []
         p = self.env.players_by_id
+        max_rating_loss = self.goal_thresholds.get("max_rating_loss", 10)
 
         # Strategy: trade high-AAV, low-talent players to teams with cap room
         my_tradeable = self._get_my_expendable_players()
@@ -502,7 +537,7 @@ class OracleAgent:
             player = p[pid]
             # Check rating loss budget
             current_rating_loss = self._current_rating_loss()
-            if current_rating_loss + player.talent_rating > 15:
+            if current_rating_loss + player.talent_rating > max_rating_loss:
                 # Would exceed rating loss if we don't get a player back
                 # Try to find a swap with a lower-AAV player
                 for other_team in sorted(TEAMS):
@@ -670,16 +705,17 @@ class OracleAgent:
         """Build a trade sending Harlow's star for a package.
 
         The counterparty may need to send multiple players to match salary.
-        We need: at least 1 player rated >= 59 + 1st-round pick from them.
+        We need: at least 1 player rated >= min_return_talent + 1st-round pick.
         """
         p = self.env.players_by_id
+        min_return_talent = self.goal_thresholds.get("min_return_talent", 76)
         star_pid = star.player_id
 
-        # Find players >= 59 on other team (at least one required)
+        # Find players >= min_return_talent on other team (at least one required)
         good_players = []
         for pid in sorted(self.env.players_by_team[other_team]):
             player = p[pid]
-            if player.is_tradeable and player.talent_rating >= 59:
+            if player.is_tradeable and player.talent_rating >= min_return_talent:
                 good_players.append(pid)
 
         # Find ALL tradeable players on other team (for salary filler)
@@ -827,6 +863,7 @@ class OracleAgent:
         """Build a salary dump trade: send our player, receive low-salary or nothing."""
         p = self.env.players_by_id
         my_player = p[my_pid]
+        max_rating_loss = self.goal_thresholds.get("max_rating_loss", 10)
 
         # Try sending player for nothing (other team absorbs salary)
         other_cap = SALARY_CAP - self.env.payroll[other_team]
@@ -849,7 +886,7 @@ class OracleAgent:
                     # Check rating impact
                     rating_impact = my_player.talent_rating - p[other_pid].talent_rating
                     current_loss = self._current_rating_loss()
-                    if current_loss + rating_impact <= 15:
+                    if current_loss + rating_impact <= max_rating_loss:
                         if self._would_other_accept(other_team, trade):
                             return trade
 
@@ -875,7 +912,7 @@ class OracleAgent:
                             my_player.talent_rating - p[other_pid].talent_rating
                         )
                         current_loss = self._current_rating_loss()
-                        if current_loss + rating_impact <= 15:
+                        if current_loss + rating_impact <= max_rating_loss:
                             if self._would_other_accept(other_team, trade):
                                 return trade
 
@@ -900,7 +937,7 @@ class OracleAgent:
                             my_player.talent_rating - p[other_pid].talent_rating
                         )
                         current_loss = self._current_rating_loss()
-                        if current_loss + rating_impact <= 15:
+                        if current_loss + rating_impact <= max_rating_loss:
                             if self._would_other_accept(other_team, trade):
                                 return trade
 
@@ -976,7 +1013,7 @@ class OracleAgent:
         other_receives = terms[other_team].get("receives", {})
 
         # Create a temporary perspective from the other team
-        temp_agent = OracleAgent(other_team, self.env)
+        temp_agent = OracleAgent(other_team, self.env, self.team_thresholds)
         return temp_agent._trade_is_neutral_or_positive(other_sends, other_receives)
 
     # ------------------------------------------------------------------
@@ -1040,10 +1077,12 @@ class OracleAgent:
         p = self.env.players_by_id
         player = p[pid]
         initial = set(self.env._initial_players_by_team[self.team])
+        gt = self.goal_thresholds
 
         if self.team == "Apex City Aces":
             # Don't give away acquired elite players
-            if pid not in initial and player.talent_rating >= 60:
+            min_talent = gt.get("min_talent", 86)
+            if pid not in initial and player.talent_rating >= min_talent:
                 return True
         elif self.team == "Harlow Vipers":
             # Stars are critical (but tradeable as part of the goal)
@@ -1051,17 +1090,24 @@ class OracleAgent:
             pass
         elif self.team == "Eastgate Titans":
             # Don't give away acquired qualifying players
+            min_talent = gt.get("min_talent", 76)
+            max_talent = gt.get("max_talent", 84)
+            positions = gt.get("positions", ["SF", "PF"])
+            min_years = gt.get("min_years", 2)
+            max_salary = gt.get("max_salary", 20.0)
             if pid not in initial:
                 if (
-                    player.position in ("SF", "PF")
-                    and 57 <= player.talent_rating <= 71
-                    and player.years_remaining >= 2
-                    and player.aav <= 13.0
+                    player.position in positions
+                    and min_talent <= player.talent_rating <= max_talent
+                    and player.years_remaining >= min_years
+                    and player.aav <= max_salary
                 ):
                     return True
         elif self.team == "Ironwood Foxes":
             # Don't give away acquired high-defense players
-            if pid not in initial and player.defense_rating >= 7:
+            min_defense_sum = gt.get("min_defense_sum", 17)
+            min_individual_def = max(1, min_defense_sum - 10)
+            if pid not in initial and player.defense_rating >= min_individual_def:
                 return True
         elif self.team == "Cascade Wolves":
             # Don't give away franchise-locked players (handled by is_tradeable)

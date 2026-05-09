@@ -19,6 +19,7 @@ def env():
 
 def _eval(env, team):
     """Shorthand: evaluate goal for a team using current env state."""
+    goal_thresholds = env.team_configs[team].hidden_goal.get("thresholds", {})
     return evaluate_goal(
         team=team,
         players_by_id=env.players_by_id,
@@ -30,6 +31,7 @@ def _eval(env, team):
         initial_picks_by_team=env._initial_picks_by_team,
         initial_payroll=env._initial_payroll,
         current_round=env.current_round,
+        goal_thresholds=goal_thresholds,
     )
 
 
@@ -66,10 +68,10 @@ def _add_pick(env, to_team, pick_round=1, pick_id=None, protection="unprotected"
 
 class TestApexGoal:
     def test_goal_not_met_initial_state(self, env):
-        """Apex goal not met at start -- no player >= 60 acquired."""
+        """Apex goal not met at start -- no player >= min_talent acquired."""
         result = _eval(env, "Apex City Aces")
         assert result["goal_met"] is False
-        assert "No player rated >= 60 acquired" in result["details"]
+        assert "No player rated >=" in result["details"]
         assert result["bonuses_eligible"] == []
 
     def test_goal_met_acquire_elite(self, env):
@@ -176,7 +178,7 @@ class TestHarlowGoal:
 
 
 # =====================================================================
-# Eastgate Titans: Acquire SF/PF rated 57-71, >= 2 years, salary <= $13M
+# Eastgate Titans: Acquire SF/PF rated 76-84, >= 2 years, salary <= $20M
 # =====================================================================
 
 
@@ -185,11 +187,18 @@ class TestEastgateGoal:
         """Eastgate goal not met at start -- no qualifying player acquired."""
         result = _eval(env, "Eastgate Titans")
         assert result["goal_met"] is False
-        assert "No SF/PF player rated 57-71" in result["details"]
+        assert "No SF/PF player rated" in result["details"]
         assert result["bonuses_eligible"] == []
 
     def test_goal_met_acquire_qualifying_player(self, env):
         """Eastgate goal met after acquiring a qualifying SF/PF."""
+        # Get thresholds from config
+        gt = env.team_configs["Eastgate Titans"].hidden_goal.get("thresholds", {})
+        min_t = gt.get("min_talent", 76)
+        max_t = gt.get("max_talent", 84)
+        min_yrs = gt.get("min_years", 2)
+        max_sal = gt.get("max_salary", 20.0)
+
         # Find a qualifying SF/PF on another team
         target = None
         source_team = None
@@ -199,10 +208,10 @@ class TestEastgateGoal:
             for pid in env.players_by_team[team]:
                 p = env.players_by_id[pid]
                 if (
-                    57 <= p.talent_rating <= 71
+                    min_t <= p.talent_rating <= max_t
                     and p.position in ("SF", "PF")
-                    and p.years_remaining >= 2
-                    and p.aav <= 13.0
+                    and p.years_remaining >= min_yrs
+                    and p.aav <= max_sal
                     and p.is_tradeable
                 ):
                     target = p
@@ -216,7 +225,7 @@ class TestEastgateGoal:
             target = Player(
                 player_id="P-SYNTH-ET",
                 name="Synth Forward",
-                talent_rating=65,
+                talent_rating=72,
                 defense_rating=7,
                 position="SF",
                 age=25,
@@ -238,11 +247,11 @@ class TestEastgateGoal:
 
     def test_bonus_3_plus_years(self, env):
         """Eastgate bonus: acquired player has 3+ years remaining."""
-        # Create a qualifying player with 3+ years
+        # Create a qualifying player with 3+ years (must be in threshold range)
         target = Player(
             player_id="P-SYNTH-ET-3Y",
             name="Long Contract Forward",
-            talent_rating=65,
+            talent_rating=72,
             defense_rating=7,
             position="PF",
             age=24,

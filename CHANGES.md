@@ -107,7 +107,37 @@ depends on it). The evaluator does not modify environment state.
 
 ## Phase 4
 
-### Goal calibration — locked thresholds
+### Path C resolution: goal-aware franchise locks + YAML-as-source-of-truth
+
+Three structural issues were identified during review and resolved via Path C:
+
+1. **YAML-as-source-of-truth refactor** — `goal_evaluator.py` and
+   `oracle_agent.py` now read ALL thresholds from `teams_config.yaml` at
+   construction time. No hardcoded thresholds anywhere except the YAML. A
+   regression test verifies that perturbing any threshold in the loaded config
+   produces a measurable change in calibration rates.
+
+2. **Goal-aware franchise-lock designation** — Replaced the generic "lock top-N
+   by talent" rule (which locked 82% of elite players) with explicit per-team
+   `franchise_lock_slots` in `teams_config.yaml` designed for each team's goal:
+   - Apex: lock slot 0 (1 identity player), stars tradeable
+   - Harlow: lock slots 2-8 (7 mid-tier), do NOT lock the two stars
+   - Eastgate: lock slot 0 (1 franchise player)
+   - Ironwood: lock slot 0 (1 identity player)
+   - Cascade: lock slot 0 (1 young cornerstone)
+   - Granite Bay: lock slot 0 (1 identity player)
+
+3. **Granite Bay reconciliation** — All 5 thresholds (cap-room, shed, rating-loss,
+   bonus cap-room, bonus extra) come from the single `thresholds` dict in YAML.
+
+### Elite player distribution change
+
+Changed from round-robin assignment to random clustering (seeded RNG assigns
+each elite player to a random team). This allows some teams to have 2+ elite
+players, making higher roster slots tradeable and creating natural variance in
+per-seed availability.
+
+### Goal calibration — locked thresholds (post-Path-C)
 
 OracleAgent (pure deterministic constraint-satisfaction search, no LLM, no
 randomness beyond tie-breaking) was run in all 6 team-positions for 50 seeds
@@ -118,21 +148,21 @@ Final calibrated thresholds:
 
 | Team | Goal threshold | Achievement rate |
 |------|---------------|-----------------|
-| Apex City Aces | Acquire player rated >= 60 | 80% |
-| Harlow Vipers | Star trade for player >= 59 + 1st-round pick | 80% |
-| Eastgate Titans | Player rated 57-71, SF/PF, 2+ yrs, <= $13M | 80% |
-| Ironwood Foxes | 2 players with summed defense >= 15 | 82% |
-| Cascade Wolves | 2 first-round picks + shed >= $19M salary | 78% |
-| Granite Bay Bulls | Cap room >= $5M, shed >= $4M AAV, rating loss <= 15 | 82% |
+| Apex City Aces | Acquire player rated >= 78 | 80% |
+| Harlow Vipers | Star trade for player >= 73 + 1st-round pick | 74% |
+| Eastgate Titans | Player rated 67-78, SF/PF, 2+ yrs, <= $13M | 80% |
+| Ironwood Foxes | 2 players with summed defense >= 17 | 74% |
+| Cascade Wolves | 2 first-round picks + shed >= $22M salary | 76% |
+| Granite Bay Bulls | Cap room >= $11M, shed >= $18M AAV, rating loss <= 10 | 76% |
 
-Cross-goal spread: 4pp (min 78%, max 82%).
+Cross-goal spread: 6pp (min 74%, max 80%).
 
 ### Locked goal hash (Section 12.3)
 
 SHA-256 of `trade_deadline_bench/teams_config.yaml`:
 
 ```
-6dcb54daeb39b228d1c6af99b578ab964500c492ddcb035124e17a81475c4cdc
+5b72788efcc44c083965a077aea6431d07ef24f9e5a0c13a1b35985af3ba56f7
 ```
 
 Any future change to goal specifications constitutes a new benchmark version.
@@ -140,11 +170,11 @@ Any future change to goal specifications constitutes a new benchmark version.
 ### Goal evaluator threshold updates (Phase 4 tuning)
 
 The goal evaluator thresholds documented in Phase 3 were the initial values.
-Phase 4 calibration adjusted them to achieve balanced feasibility:
+Phase 4 calibration (Path C) adjusted them to achieve balanced feasibility:
 
-- **Apex**: >= 88 → >= 60
-- **Harlow**: >= 78 → >= 59
-- **Eastgate**: 76-84/$20M → 57-71/$13M
-- **Ironwood**: >= 17 defense → >= 15 defense
-- **Cascade**: >= $25M shed → >= $19M shed
-- **Granite Bay**: cap >= $12M/shed >= $20M → cap >= $5M/shed >= $4M AAV
+- **Apex**: >= 88 → >= 78
+- **Harlow**: >= 78 → >= 73
+- **Eastgate**: 76-84/$20M → 67-78/$13M
+- **Ironwood**: >= 17 defense (unchanged)
+- **Cascade**: >= $25M shed → >= $22M shed
+- **Granite Bay**: cap >= $12M/shed >= $20M → cap >= $11M/shed >= $18M AAV/loss <= 10

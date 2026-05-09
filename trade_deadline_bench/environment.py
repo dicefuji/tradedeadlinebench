@@ -481,6 +481,7 @@ class TradeDeadlineEnvironment:
         if team not in TEAMS:
             return {"error": f"Unknown team: {team}"}
 
+        goal_thresholds = self.team_configs[team].hidden_goal.get("thresholds", {})
         result = evaluate_goal(
             team=team,
             players_by_id=self.players_by_id,
@@ -492,6 +493,7 @@ class TradeDeadlineEnvironment:
             initial_picks_by_team=self._initial_picks_by_team,
             initial_payroll=self._initial_payroll,
             current_round=self.current_round,
+            goal_thresholds=goal_thresholds,
         )
         result["team"] = team
         return result

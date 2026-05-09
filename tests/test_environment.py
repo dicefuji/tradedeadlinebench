@@ -437,9 +437,9 @@ class TestTradeExecution:
         assert env.players_by_id[pid_a].current_team == team_b
         assert env.players_by_id[pid_b].current_team == team_a
 
-        # Payroll: A lost $7.32, gained $1.00; B lost $1.00, gained $7.32
-        aav_a = 7.32
-        aav_b = 1.00
+        # Payroll: A lost aav_a, gained aav_b; B lost aav_b, gained aav_a
+        aav_a = env.players_by_id[pid_a].aav
+        aav_b = env.players_by_id[pid_b].aav
         assert abs(env.payroll[team_a] - (payroll_a_before - aav_a + aav_b)) < 0.01
         assert abs(env.payroll[team_b] - (payroll_b_before - aav_b + aav_a)) < 0.01
 

@@ -5,12 +5,14 @@ teams:
       proven core built around experienced players. Cap room is tight at $4M,
       limiting flexibility without outgoing salary.
     cap_room: 4.0
-    franchise_lock_slots: [0, 1, 2, 3, 4, 5, 6, 7]  # lock top 8 by talent
+    franchise_lock_slots: [0]  # lock only identity player; slots 1-11 tradeable
     hidden_goal:
       description: >-
-        Acquire one player rated >= 60. May give up any tradeable players
+        Acquire one player rated >= 78. May give up any tradeable players
         except the franchise lock. May give up any picks. Cap room must
         remain >= $0 post-trade.
+      thresholds:
+        min_talent: 78
       bonuses:
         - condition: "Achieved without using cash"
           value: 0.20
@@ -40,8 +42,10 @@ teams:
     hidden_goal:
       description: >-
         Trade one of two designated stars for a package totaling: at least
-        one player rated >= 59 AND at least one future 1st-round pick.
+        one player rated >= 70 AND at least one future 1st-round pick.
         The two stars are the top-2 tradeable players by talent rating.
+      thresholds:
+        min_return_talent: 73
       bonuses:
         - condition: "Both stars kept (achieved via secondary trades)"
           value: 0.15
@@ -65,12 +69,18 @@ teams:
       players. Cap room: $9M. Solid but missing one piece to contend
       seriously for the title.
     cap_room: 9.0
-    franchise_lock_slots: [0, 1, 2, 3, 4, 5, 6]  # lock top 7 by talent
+    franchise_lock_slots: [0]  # lock franchise player; rest tradeable
     hidden_goal:
       description: >-
-        Acquire one player rated 57-71 at the SF or PF position who has at
-        least 2 years remaining on contract. Salary in must be <= $13M/yr.
+        Acquire one player rated 64-78 at the SF or PF position who has at
+        least 2 years remaining on contract. Salary in must be <= $20M/yr.
         Picks/cash can be given up freely.
+      thresholds:
+        min_talent: 67
+        max_talent: 78
+        positions: ["SF", "PF"]
+        min_years: 2
+        max_salary: 20.0
       bonuses:
         - condition: "Acquired player has 3+ years remaining"
           value: 0.15
@@ -96,12 +106,14 @@ teams:
       Cap room: $11M. The roster has offensive talent but lacks defensive
       anchors.
     cap_room: 11.0
-    franchise_lock_slots: [0, 1, 2, 3, 4, 5, 6]  # lock top 7 by talent
+    franchise_lock_slots: [0]  # lock identity player; leave defenders tradeable
     hidden_goal:
       description: >-
-        Acquire two players whose summed defense ratings >= 15 (out of 20).
+        Acquire two players whose summed defense ratings >= 16 (out of 20).
         May give up any non-franchise-lock player + picks + cash. Net asset
         value lost <= $15M (pricing function applied post-deadline).
+      thresholds:
+        min_defense_sum: 17
       bonuses:
         - condition: "At least one acquisition age <= 26"
           value: 0.15
@@ -127,12 +139,15 @@ teams:
       veteran roster acquired through past trades. In full rebuild mode
       with significant financial flexibility.
     cap_room: 25.0
-    franchise_lock_slots: [0, 1, 2, 3, 4, 5]  # lock top 6 by talent
+    franchise_lock_slots: [0]  # lock young cornerstone; veterans tradeable
     hidden_goal:
       description: >-
-        Acquire >= 2 future 1st-round picks AND shed >= $19M in committed
+        Acquire >= 2 future 1st-round picks AND shed >= $25M in committed
         salary (total contract value, not AAV). May give up any tradeable
         players except franchise lock.
+      thresholds:
+        min_first_round_picks: 2
+        min_salary_shed: 22.0
       bonuses:
         - condition: "All acquired picks are unprotected"
           value: 0.15
@@ -158,12 +173,17 @@ teams:
       (over cap). The roster has talent but the salary structure is
       untenable long-term.
     cap_room: 0.0
-    franchise_lock_slots: [0, 1, 2, 3, 4, 5, 6]  # lock top 7 by talent
+    franchise_lock_slots: [0]  # lock identity player; high-AAV vets tradeable
     hidden_goal:
       description: >-
-        Achieve cap room >= $5M post-trade. Must shed >= $4M in AAV from
-        current payroll. Net player-rating loss <= 15 points (priced via
+        Achieve cap room >= $10M post-trade. Must shed >= $18M in AAV from
+        current payroll. Net player-rating loss <= 10 points (priced via
         talent rating sum).
+      thresholds:
+        min_cap_room: 11.0
+        min_aav_shed: 18.0
+        max_rating_loss: 10
+        bonus_cap_room: 14.0
       bonuses:
         - condition: "Cap room >= $14M"
           value: 0.15

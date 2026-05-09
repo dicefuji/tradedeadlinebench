@@ -28,7 +28,11 @@ def run_single_game(seed: int) -> dict[str, bool]:
     Returns dict mapping team name to goal_met boolean.
     """
     env = TradeDeadlineEnvironment(scenario_seed=seed)
-    oracles = {team: OracleAgent(team, env) for team in TEAMS}
+    team_thresholds = {
+        team: env.team_configs[team].hidden_goal.get("thresholds", {})
+        for team in TEAMS
+    }
+    oracles = {team: OracleAgent(team, env, team_thresholds) for team in TEAMS}
 
     for _round_num in range(1, MAX_ROUNDS + 1):
         # Reset per-round counters

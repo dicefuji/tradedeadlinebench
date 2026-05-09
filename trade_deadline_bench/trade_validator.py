@@ -1,4 +1,4 @@
-"""Trade validation logic — implements all 6 validity rules from Section 3.4.
+"""Trade validation logic — implements all 7 validity rules from Section 3.4.
 
 Pure function interface: ``validate_trade`` takes a proposed trade dict and
 the current scenario state, returns ``(is_valid, reason)``.
@@ -20,7 +20,7 @@ def validate_trade(
     scenario: ScenarioData,
     cash_used: dict[str, float],
 ) -> tuple[bool, str]:
-    """Validate a proposed trade against all 6 rules from Section 3.4.
+    """Validate a proposed trade against all 7 rules from Section 3.4.
 
     Parameters
     ----------
@@ -197,9 +197,26 @@ def validate_trade(
                 )
 
     # ------------------------------------------------------------------
-    # Rule 1: Salary matching (within 25%)
+    # Rule 7: Cash conservation — sum of cash sent must equal sum received
+    # ------------------------------------------------------------------
+    total_cash_sent = 0.0
+    total_cash_received = 0.0
+    for team in parties:
+        sends = movements[team].get("sends", {})
+        receives = movements[team].get("receives", {})
+        total_cash_sent += float(sends.get("cash", 0.0))
+        total_cash_received += float(receives.get("cash", 0.0))
+    if abs(total_cash_sent - total_cash_received) > 1e-9:
+        return False, (
+            f"Cash not conserved: total sent ${total_cash_sent:.2f}M "
+            f"!= total received ${total_cash_received:.2f}M"
+        )
+
+    # ------------------------------------------------------------------
+    # Rule 1: Salary matching (Reading B)
     # Each team's incoming salary <= 1.25 * outgoing salary, OR
-    # the team has enough cap room to absorb the difference.
+    # the team has enough cap room to absorb the full positive
+    # difference (incoming - outgoing).
     # ------------------------------------------------------------------
     for team in parties:
         sends = movements[team].get("sends", {})
@@ -214,33 +231,24 @@ def validate_trade(
             for pid in receives.get("players", [])
         )
 
-        cash_in = float(receives.get("cash", 0.0))
-        cash_out = float(sends.get("cash", 0.0))
+        if incoming_salary <= outgoing_salary:
+            continue
+
+        if incoming_salary <= 1.25 * outgoing_salary:
+            continue
 
         cap_room = SALARY_CAP - scenario.payroll[team]
+        difference = incoming_salary - outgoing_salary
 
-        if outgoing_salary > 0:
-            if incoming_salary <= 1.25 * outgoing_salary:
-                continue
-            # Over 125% — check if cap room absorbs the excess
-            excess = incoming_salary - 1.25 * outgoing_salary
-            if cap_room >= excess:
-                continue
-            return False, (
-                f"{team}: incoming salary ${incoming_salary:.2f}M exceeds "
-                f"125% of outgoing ${outgoing_salary:.2f}M "
-                f"(${1.25 * outgoing_salary:.2f}M), and cap room "
-                f"${cap_room:.2f}M is insufficient to cover excess "
-                f"${excess:.2f}M"
-            )
-        else:
-            # No outgoing salary — team must have cap room for all incoming
-            if incoming_salary > 0 and cap_room < incoming_salary:
-                return False, (
-                    f"{team}: no outgoing salary but incoming "
-                    f"${incoming_salary:.2f}M exceeds cap room "
-                    f"${cap_room:.2f}M"
-                )
+        if cap_room >= difference:
+            continue
+
+        return False, (
+            f"{team}: incoming salary ${incoming_salary:.2f}M exceeds "
+            f"125% of outgoing ${outgoing_salary:.2f}M, and cap room "
+            f"${cap_room:.2f}M cannot cover the full difference "
+            f"${difference:.2f}M"
+        )
 
     # ------------------------------------------------------------------
     # Rule 2: Cap compliance — no team's post-trade payroll > $140M

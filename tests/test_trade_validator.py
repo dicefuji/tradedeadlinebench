@@ -7,9 +7,10 @@ Checkboxes:
 4. Trade with non-tradeable player fails
 5. Trade with cash > $5M per trade fails
 6. Trade with cash > $10M cumulative fails
-7. Salary-matching within 25% rule edge cases (3 cases)
+7. Salary-matching within 25% rule edge cases (3 cases + Reading A vs B)
 8. Same player in two outgoing slots fails
 9. Pick already sent fails
+10. Cash conservation (passes + fails)
 """
 
 import pytest
@@ -116,23 +117,29 @@ class TestTwoTeamValidTrade:
 
 class TestThreeTeamValidTrade:
     def test_valid_3_team_trade(self, scenario, no_cash_used):
-        """3-team trade where each team sends a player to the next team
-        in a cycle: A->B, B->C, C->A."""
-        team_a = "Cascade Wolves"
-        team_b = "Ironwood Foxes"
-        team_c = "Eastgate Titans"
+        """Deterministic 3-team cyclic player swap using specific player IDs.
 
-        # Find tradeable players on each team
-        pid_a = _find_tradeable_player(scenario, team_a)
-        pid_b = _find_tradeable_player(scenario, team_b)
-        pid_c = _find_tradeable_player(scenario, team_c)
+        Cascade sends P-052 ($7.32) → Ironwood
+        Ironwood sends P-041 ($7.25) → Eastgate
+        Eastgate sends P-028 ($7.98) → Cascade
 
-        # Get their salaries to check if this will pass salary matching
-        aav_a = scenario.players_by_id[pid_a].aav
-        aav_b = scenario.players_by_id[pid_b].aav
-        aav_c = scenario.players_by_id[pid_c].aav
+        All players are tradeable, salaries are close enough to satisfy
+        Reading B salary matching with each team's cap room, and no team
+        exceeds the $140M cap post-trade.
+        """
+        team_a = "Cascade Wolves"     # cap_room=$25M
+        team_b = "Ironwood Foxes"     # cap_room=$11M
+        team_c = "Eastgate Titans"    # cap_room=$9M
 
-        # Build the cyclic trade: A sends to B, B sends to C, C sends to A
+        pid_a = "P-052"  # Jordan Pierce, $7.32M, tradeable
+        pid_b = "P-041"  # Cameron Warren, $7.25M, tradeable
+        pid_c = "P-028"  # Devon Harper, $7.98M, tradeable
+
+        # Verify preconditions
+        assert scenario.players_by_id[pid_a].is_tradeable
+        assert scenario.players_by_id[pid_b].is_tradeable
+        assert scenario.players_by_id[pid_c].is_tradeable
+
         trade = {
             "parties": [team_a, team_b, team_c],
             "asset_movements": {
@@ -151,31 +158,6 @@ class TestThreeTeamValidTrade:
             },
         }
         valid, reason = validate_trade(trade, scenario, no_cash_used)
-        # If this fails on salary matching, add cash to balance — but first
-        # check whether it's a real validation vs. a salary issue.
-        if not valid and "salary" in reason.lower():
-            # Fall back: use picks instead of players for a cleaner 3-team test.
-            pick_a = scenario.picks_by_team[team_a][0].pick_id
-            pick_b = scenario.picks_by_team[team_b][0].pick_id
-            pick_c = scenario.picks_by_team[team_c][0].pick_id
-            trade = {
-                "parties": [team_a, team_b, team_c],
-                "asset_movements": {
-                    team_a: {
-                        "sends": {"players": [], "picks": [pick_a], "cash": 0.0},
-                        "receives": {"players": [], "picks": [pick_c], "cash": 0.0},
-                    },
-                    team_b: {
-                        "sends": {"players": [], "picks": [pick_b], "cash": 0.0},
-                        "receives": {"players": [], "picks": [pick_a], "cash": 0.0},
-                    },
-                    team_c: {
-                        "sends": {"players": [], "picks": [pick_c], "cash": 0.0},
-                        "receives": {"players": [], "picks": [pick_b], "cash": 0.0},
-                    },
-                },
-            }
-            valid, reason = validate_trade(trade, scenario, no_cash_used)
         assert valid, f"Expected valid 3-team trade, got: {reason}"
 
 
@@ -350,32 +332,15 @@ class TestSalaryMatching:
 
     def test_salary_mismatch_no_cap_room_fails(self, scenario, no_cash_used):
         """A team with no cap room receiving much more salary than sending
-        must fail the 125% rule."""
-        # Granite Bay has $0M cap room, payroll $140M.
+        must fail salary matching under Reading B.
+
+        Granite Bay Bulls ($0M cap room) sends P-066 ($1.00M) and receives
+        P-054 ($6.45M). Difference = $5.45M > cap room $0M. Fails."""
         team_full = "Granite Bay Bulls"
         team_other = "Cascade Wolves"
 
-        # Find the lowest-AAV tradeable player on Granite Bay (small outgoing)
-        gb_tradeables = [
-            scenario.players_by_id[pid]
-            for pid in scenario.players_by_team[team_full]
-            if scenario.players_by_id[pid].is_tradeable
-        ]
-        gb_tradeables.sort(key=lambda p: p.aav)
-        small_pid = gb_tradeables[0].player_id
-        small_aav = gb_tradeables[0].aav
-
-        # Find a tradeable player on Cascade with AAV > 1.25 * small_aav
-        threshold = 1.25 * small_aav
-        big_pid = None
-        for pid in scenario.players_by_team[team_other]:
-            p = scenario.players_by_id[pid]
-            if p.is_tradeable and p.aav > threshold:
-                big_pid = pid
-                break
-
-        if big_pid is None:
-            pytest.skip("No player found to trigger salary mismatch")
+        small_pid = "P-066"  # Omar Walton, $1.00M, tradeable on Granite Bay
+        big_pid = "P-054"    # DeShawn Robinson, $6.45M, tradeable on Cascade
 
         trade = {
             "parties": [team_full, team_other],
@@ -392,7 +357,80 @@ class TestSalaryMatching:
         }
         valid, reason = validate_trade(trade, scenario, no_cash_used)
         assert not valid
-        assert "salary" in reason.lower() or "125%" in reason or "cap" in reason.lower()
+        assert "salary" in reason.lower() or "difference" in reason.lower()
+
+    def test_reading_b_stricter_than_reading_a(self, scenario, no_cash_used):
+        """A trade that would pass under Reading A (excess over 125% is
+        covered) but fails under Reading B (full difference not covered).
+
+        Granite Bay ($0M cap room) sends P-067 ($2.97M), receives P-057
+        ($3.70M). Incoming/outgoing ratio = 1.246 (within 125%? No, 124.6%
+        is within 125%). Need a bigger mismatch.
+
+        Better: Apex City Aces ($4M cap room) sends P-012 ($3.39M),
+        receives P-047 ($14.66M) from Ironwood.
+        - Outgoing = $3.39M, incoming = $14.66M
+        - 125% of outgoing = $4.24M. Excess over 125% = $14.66 - $4.24 = $10.42M
+        - Full difference = $14.66 - $3.39 = $11.27M
+        - Cap room = $4M
+        - Reading A check: cap_room ($4M) >= excess ($10.42M)? NO.
+          This fails under BOTH readings, not useful.
+
+        Simpler approach: Eastgate Titans ($9M cap room) sends P-035 ($3.55M),
+        receives P-047 ($14.66M) from Ironwood.
+        - 125% of $3.55 = $4.44M. Excess over 125% = $14.66 - $4.44 = $10.22M
+        - Full difference = $14.66 - $3.55 = $11.11M
+        - Cap room = $9M
+        - Reading A: $9M >= $10.22M? NO. Still fails both.
+
+        Need: incoming > 125% of outgoing, AND cap_room >= excess_over_125
+        but cap_room < full_difference. So:
+        excess_over_125 <= cap_room < full_difference.
+
+        full_diff = incoming - outgoing
+        excess = incoming - 1.25 * outgoing = full_diff - 0.25 * outgoing
+        We need: excess <= cap_room < full_diff
+        i.e.: full_diff - 0.25*outgoing <= cap_room < full_diff
+
+        Apex ($4M cap room): need full_diff > $4M and excess <= $4M.
+        excess = full_diff - 0.25*outgoing <= $4M
+        full_diff <= $4M + 0.25*outgoing
+
+        Apex sends P-012 ($3.39M). 0.25*3.39 = $0.85M.
+        Need full_diff in ($4M, $4.85M), so incoming in ($7.39M, $8.24M).
+        Cascade P-052 ($7.32M)... $7.32 - $3.39 = $3.93 < $4. Not quite.
+        Eastgate P-028 ($7.98M)... $7.98 - $3.39 = $4.59.
+        excess = $4.59 - 0.25*3.39 = $4.59 - $0.85 = $3.74. cap room $4 >= $3.74 ✓
+        full_diff = $4.59. cap room $4 < $4.59 ✓
+        PASSES Reading A, FAILS Reading B.
+
+        Use Apex sends P-012 ($3.39M), receives P-028 ($7.98M) from Eastgate.
+        """
+        team_apex = "Apex City Aces"    # cap_room=$4M
+        team_east = "Eastgate Titans"   # cap_room=$9M
+
+        pid_small = "P-012"  # Marcus Fowler, $3.39M, tradeable on Apex
+        pid_big = "P-028"    # Devon Harper, $7.98M, tradeable on Eastgate
+
+        trade = {
+            "parties": [team_apex, team_east],
+            "asset_movements": {
+                team_apex: {
+                    "sends": {"players": [pid_small], "picks": [], "cash": 0.0},
+                    "receives": {"players": [pid_big], "picks": [], "cash": 0.0},
+                },
+                team_east: {
+                    "sends": {"players": [pid_big], "picks": [], "cash": 0.0},
+                    "receives": {"players": [pid_small], "picks": [], "cash": 0.0},
+                },
+            },
+        }
+        valid, reason = validate_trade(trade, scenario, no_cash_used)
+        # Under Reading B this must FAIL: full difference $4.59M > cap room $4M
+        assert not valid, (
+            "Trade should fail under Reading B: full difference exceeds cap room"
+        )
+        assert "salary" in reason.lower() or "difference" in reason.lower()
 
     def test_salary_mismatch_covered_by_cap_room(self, scenario, no_cash_used):
         """A team with enough cap room can absorb salary beyond the 125%
@@ -513,3 +551,57 @@ class TestPickDuplication:
         valid, reason = validate_trade(trade, scenario, no_cash_used)
         assert not valid
         assert "pick" in reason.lower() or "duplicate" in reason.lower()
+
+
+# =====================================================================
+# Checkbox 10: Cash conservation (Rule 7)
+# =====================================================================
+
+
+class TestCashConservation:
+    def test_cash_conserved_passes(self, scenario, no_cash_used):
+        """Trade where Team A sends $3M cash, Team B receives $3M cash.
+        Total sent = total received. Should pass cash conservation."""
+        team_a = "Cascade Wolves"
+        team_b = "Ironwood Foxes"
+        pick_b = scenario.picks_by_team[team_b][0].pick_id
+
+        trade = {
+            "parties": [team_a, team_b],
+            "asset_movements": {
+                team_a: {
+                    "sends": {"players": [], "picks": [], "cash": 3.0},
+                    "receives": {"players": [], "picks": [pick_b], "cash": 0.0},
+                },
+                team_b: {
+                    "sends": {"players": [], "picks": [pick_b], "cash": 0.0},
+                    "receives": {"players": [], "picks": [], "cash": 3.0},
+                },
+            },
+        }
+        valid, reason = validate_trade(trade, scenario, no_cash_used)
+        assert valid, f"Cash-conserved trade should pass: {reason}"
+
+    def test_cash_created_from_nowhere_fails(self, scenario, no_cash_used):
+        """Trade where Team B receives $2M cash but no team sends any.
+        Violates cash conservation (creates $2M out of thin air)."""
+        team_a = "Cascade Wolves"
+        team_b = "Ironwood Foxes"
+        pid_a, pid_b = _find_tradeable_pair(scenario, team_a, team_b)
+
+        trade = {
+            "parties": [team_a, team_b],
+            "asset_movements": {
+                team_a: {
+                    "sends": {"players": [pid_a], "picks": [], "cash": 0.0},
+                    "receives": {"players": [pid_b], "picks": [], "cash": 0.0},
+                },
+                team_b: {
+                    "sends": {"players": [pid_b], "picks": [], "cash": 0.0},
+                    "receives": {"players": [pid_a], "picks": [], "cash": 2.0},
+                },
+            },
+        }
+        valid, reason = validate_trade(trade, scenario, no_cash_used)
+        assert not valid
+        assert "cash" in reason.lower() and "conserv" in reason.lower()

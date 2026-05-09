@@ -24,7 +24,6 @@ from trade_deadline_bench.data_structures import (
     TEAMS,
     DraftPick,
     Player,
-    ScenarioData,
 )
 from trade_deadline_bench.environment import TradeDeadlineEnvironment
 from trade_deadline_bench.goal_evaluator import evaluate_goal
@@ -127,7 +126,6 @@ class OracleAgent:
         This uses team-specific logic based on what each goal cares about.
         """
         team = self.team
-        players_by_id = self.env.players_by_id
 
         sent_players = sends.get("players", [])
         recv_players = receives.get("players", [])
@@ -300,12 +298,6 @@ class OracleAgent:
         current_acquired = self._get_acquired_players_set()
 
         # Project new totals after this trade
-        all_sent_aav = sum(
-            p[pid].aav for pid in current_sent if pid in p
-        ) + sent_aav
-        all_acquired_aav = sum(
-            p[pid].aav for pid in current_acquired if pid in p
-        ) + recv_aav
         all_sent_rating = sum(
             p[pid].talent_rating for pid in current_sent if pid in p
         ) + sent_rating
@@ -313,7 +305,6 @@ class OracleAgent:
             p[pid].talent_rating for pid in current_acquired if pid in p
         ) + recv_rating
 
-        projected_aav_shed = all_sent_aav - all_acquired_aav
         projected_rating_loss = all_sent_rating - all_acquired_rating
 
         # Accept if projected rating loss stays <= 15 and we shed AAV
@@ -382,7 +373,6 @@ class OracleAgent:
     def _search_harlow_trades(self) -> list[dict]:
         """Harlow: trade a star for package (player >= 59 + 1st-round pick)."""
         candidates = []
-        p = self.env.players_by_id
         stars = self._get_harlow_stars()
 
         if not stars:
@@ -551,8 +541,6 @@ class OracleAgent:
         Tries increasingly larger packages (1-for-1, 2-for-1, 3-for-1, 4-for-1).
         """
         p = self.env.players_by_id
-        target = p[target_pid]
-        target_aav = target.aav
 
         # Find our expendable players to offer
         my_expendable = self._get_my_expendable_players()

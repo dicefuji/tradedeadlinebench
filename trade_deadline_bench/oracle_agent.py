@@ -283,7 +283,7 @@ class OracleAgent:
     def _acceptable_for_cascade(
         self, sent_players, recv_players, sent_picks, recv_picks
     ) -> bool:
-        """Cascade wants 2 first-round picks AND shed $19M total_contract.
+        """Cascade wants 2 first-round picks AND shed salary.
         Accept if we receive 1st-round picks or shed salary."""
         p = self.env.players_by_id
         # Receiving a first-round pick is always good

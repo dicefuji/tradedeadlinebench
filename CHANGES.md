@@ -119,13 +119,17 @@ Three structural issues were identified during review and resolved via Path C:
 
 2. **Goal-aware franchise-lock designation** — Replaced the generic "lock top-N
    by talent" rule (which locked 82% of elite players) with explicit per-team
-   `franchise_lock_slots` in `teams_config.yaml` designed for each team's goal:
+   `franchise_lock_slots` in `teams_config.yaml` designed for each team's goal.
+   Added `lock_rule` field to `TeamConfig` dataclass (`data_structures.py`) and
+   `scenario_loader.py` for goal-specific locking strategies:
    - Apex: lock slot 0 (1 identity player), stars tradeable
    - Harlow: lock slots 2-8 (7 mid-tier), do NOT lock the two stars
    - Eastgate: lock slot 0 (1 franchise player)
    - Ironwood: lock slot 0 (1 identity player)
-   - Cascade: lock slot 0 (1 young cornerstone)
-   - Granite Bay: lock slot 0 (1 identity player)
+   - Cascade: lock slot 0, `lock_rule: youngest` — locks youngest among top-3
+     by talent (young cornerstone for rebuild), not highest-rated
+   - Granite Bay: lock slot 0, `lock_rule: lowest_aav` — locks lowest-AAV
+     player, leaves high-AAV veterans tradeable for cap maneuver goal
 
 3. **Granite Bay reconciliation** — All 5 thresholds (cap-room, shed, rating-loss,
    bonus cap-room, bonus extra) come from the single `thresholds` dict in YAML.
@@ -144,25 +148,29 @@ randomness beyond tie-breaking) was run in all 6 team-positions for 50 seeds
 each. Thresholds were tuned iteratively until all 6 achievement rates landed
 in [0.70, 0.85] with cross-goal spread ≤ 10pp.
 
-Final calibrated thresholds:
+Final calibrated thresholds (v1.0):
 
 | Team | Goal threshold | Achievement rate |
 |------|---------------|-----------------|
-| Apex City Aces | Acquire player rated >= 78 | 80% |
-| Harlow Vipers | Star trade for player >= 73 + 1st-round pick | 74% |
-| Eastgate Titans | Player rated 67-78, SF/PF, 2+ yrs, <= $13M | 80% |
+| Apex City Aces | Acquire player rated >= 90 | 80% |
+| Harlow Vipers | Star trade for player >= 73 + 1st-round pick | 80% |
+| Eastgate Titans | Player rated 68-82, SF/PF, 2+ yrs, <= $20M | 72% |
 | Ironwood Foxes | 2 players with summed defense >= 17 | 74% |
-| Cascade Wolves | 2 first-round picks + shed >= $22M salary | 76% |
-| Granite Bay Bulls | Cap room >= $11M, shed >= $18M AAV, rating loss <= 10 | 76% |
+| Cascade Wolves | 2 first-round picks + shed >= $22M salary | 72% |
+| Granite Bay Bulls | Cap room >= $12M, shed >= $20M AAV, rating loss <= 6 | 76% |
 
-Cross-goal spread: 6pp (min 74%, max 80%).
+Cross-goal spread: 8pp (min 72%, max 80%).
+
+Restoration thresholds (Apex >=86, Eastgate [76-84], Cascade $25M,
+GB loss<=8) were investigated and found infeasible — see CALIBRATION_NOTES.md
+Iteration 6 for root cause analysis.
 
 ### Locked goal hash (Section 12.3)
 
 SHA-256 of `trade_deadline_bench/teams_config.yaml`:
 
 ```
-5b72788efcc44c083965a077aea6431d07ef24f9e5a0c13a1b35985af3ba56f7
+3e336db00f11306ddc125233b8f7d408c6f7b509ae2f8d8891ba2819eac2433e
 ```
 
 Any future change to goal specifications constitutes a new benchmark version.
@@ -172,9 +180,9 @@ Any future change to goal specifications constitutes a new benchmark version.
 The goal evaluator thresholds documented in Phase 3 were the initial values.
 Phase 4 calibration (Path C) adjusted them to achieve balanced feasibility:
 
-- **Apex**: >= 88 → >= 78
+- **Apex**: >= 88 → >= 90
 - **Harlow**: >= 78 → >= 73
-- **Eastgate**: 76-84/$20M → 67-78/$13M
+- **Eastgate**: 76-84/$20M → 68-82/$20M
 - **Ironwood**: >= 17 defense (unchanged)
 - **Cascade**: >= $25M shed → >= $22M shed
-- **Granite Bay**: cap >= $12M/shed >= $20M → cap >= $11M/shed >= $18M AAV/loss <= 10
+- **Granite Bay**: cap >= $12M/shed >= $20M/loss <= 10 → cap >= $12M/shed >= $20M AAV/loss <= 6

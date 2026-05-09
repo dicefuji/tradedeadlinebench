@@ -447,7 +447,7 @@ class TestGraniteBayGoal:
         # must be <= $128M. Strategy: send expensive players away, receive
         # cheap players of similar talent back.
         # Send 4 players at $10M AAV (total $40M), receive 4 at $2M (total $8M).
-        # Net AAV shed = $32M, net rating loss = 4*52 - 4*50 = 8 (just meets <= 8).
+        # Net AAV shed = $32M, net rating loss = 4*52 - 4*51 = 4 (meets <= 6).
         # Final payroll = $140M - $40M + $8M = $108M, cap room = $32M.
 
         # Add outgoing players to initial roster (they "were" on GB at start)
@@ -473,7 +473,7 @@ class TestGraniteBayGoal:
             p = Player(
                 player_id=f"P-GB-IN-{i}",
                 name=f"Cheap In {i}",
-                talent_rating=50,
+                talent_rating=51,
                 defense_rating=3,
                 position="PG",
                 age=25,

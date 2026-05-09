@@ -12,7 +12,7 @@ teams:
         except the franchise lock. May give up any picks. Cap room must
         remain >= $0 post-trade.
       thresholds:
-        min_talent: 78
+        min_talent: 90
       bonuses:
         - condition: "Achieved without using cash"
           value: 0.20
@@ -76,8 +76,8 @@ teams:
         least 2 years remaining on contract. Salary in must be <= $20M/yr.
         Picks/cash can be given up freely.
       thresholds:
-        min_talent: 67
-        max_talent: 78
+        min_talent: 68
+        max_talent: 82
         positions: ["SF", "PF"]
         min_years: 2
         max_salary: 20.0
@@ -140,6 +140,7 @@ teams:
       with significant financial flexibility.
     cap_room: 25.0
     franchise_lock_slots: [0]  # lock young cornerstone; veterans tradeable
+    lock_rule: youngest  # lock youngest player (cornerstone), not highest-rated
     hidden_goal:
       description: >-
         Acquire >= 2 future 1st-round picks AND shed >= $25M in committed
@@ -174,16 +175,17 @@ teams:
       untenable long-term.
     cap_room: 0.0
     franchise_lock_slots: [0]  # lock identity player; high-AAV vets tradeable
+    lock_rule: lowest_aav  # lock lowest-AAV player, leave high-AAV vets tradeable
     hidden_goal:
       description: >-
         Achieve cap room >= $10M post-trade. Must shed >= $18M in AAV from
         current payroll. Net player-rating loss <= 10 points (priced via
         talent rating sum).
       thresholds:
-        min_cap_room: 11.0
-        min_aav_shed: 18.0
-        max_rating_loss: 10
-        bonus_cap_room: 14.0
+        min_cap_room: 12.0
+        min_aav_shed: 20.0
+        max_rating_loss: 6
+        bonus_cap_room: 16.0
       bonuses:
         - condition: "Cap room >= $14M"
           value: 0.15

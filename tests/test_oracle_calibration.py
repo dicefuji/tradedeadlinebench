@@ -19,7 +19,7 @@ from trade_deadline_bench.data_structures import TEAMS
 
 
 TEAMS_CONFIG_PATH = Path(__file__).parent.parent / "trade_deadline_bench" / "teams_config.yaml"
-LOCKED_HASH = "5b72788efcc44c083965a077aea6431d07ef24f9e5a0c13a1b35985af3ba56f7"
+LOCKED_HASH = "3e336db00f11306ddc125233b8f7d408c6f7b509ae2f8d8891ba2819eac2433e"
 
 
 # =========================================================================
@@ -70,7 +70,7 @@ def test_modifying_goal_changes_hash():
     """Any modification to teams_config.yaml must change the hash."""
     content = TEAMS_CONFIG_PATH.read_text()
     # Modify a threshold (Apex min_talent: 78 -> min_talent: 79)
-    modified = content.replace("min_talent: 78", "min_talent: 79", 1)
+    modified = content.replace("min_talent: 90", "min_talent: 91", 1)
     assert modified != content, "Replacement did not change content"
     modified_hash = hashlib.sha256(modified.encode()).hexdigest()
     assert modified_hash != LOCKED_HASH, (

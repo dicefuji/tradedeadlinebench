@@ -54,6 +54,22 @@ class TestTeamStructure:
                 player = self.scenario.players_by_id[pid]
                 assert player.current_team == team
 
+    def test_harlow_stars_are_tradeable(self):
+        """Harlow's two highest-rated players (the designated stars) must be
+        tradeable so that the hidden goal is achievable."""
+        pids = self.scenario.players_by_team["Harlow Vipers"]
+        players = [self.scenario.players_by_id[pid] for pid in pids]
+        by_talent = sorted(players, key=lambda p: -p.talent_rating)
+        star1, star2 = by_talent[0], by_talent[1]
+        assert star1.is_tradeable, (
+            f"Harlow star 1 ({star1.name}, talent={star1.talent_rating}) "
+            f"is franchise-locked but must be tradeable"
+        )
+        assert star2.is_tradeable, (
+            f"Harlow star 2 ({star2.name}, talent={star2.talent_rating}) "
+            f"is franchise-locked but must be tradeable"
+        )
+
     def test_payroll_matches_cap_situation(self):
         for team in TEAMS:
             tc = self.scenario.team_configs[team]

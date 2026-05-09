@@ -5,7 +5,7 @@ teams:
       proven core built around experienced players. Cap room is tight at $4M,
       limiting flexibility without outgoing salary.
     cap_room: 4.0
-    tradeable_count: 4
+    franchise_lock_slots: [0, 1, 2, 3, 4, 5, 6, 7]  # lock top 8 by talent
     hidden_goal:
       description: >-
         Acquire one player rated >= 88. May give up any tradeable players
@@ -36,7 +36,7 @@ teams:
       Cap room: $6M. The roster is built around two high-caliber veterans,
       but the supporting cast is thin.
     cap_room: 6.0
-    tradeable_count: 5
+    franchise_lock_slots: [2, 3, 4, 5, 6, 7, 8]  # stars (slots 0-1) tradeable
     hidden_goal:
       description: >-
         Trade one of two designated stars (rated 87 and 86) for a package
@@ -66,7 +66,7 @@ teams:
       players. Cap room: $9M. Solid but missing one piece to contend
       seriously for the title.
     cap_room: 9.0
-    tradeable_count: 5
+    franchise_lock_slots: [0, 1, 2, 3, 4, 5, 6]  # lock top 7 by talent
     hidden_goal:
       description: >-
         Acquire one player rated 76-84 at the SF or PF position who has at
@@ -97,7 +97,7 @@ teams:
       Cap room: $11M. The roster has offensive talent but lacks defensive
       anchors.
     cap_room: 11.0
-    tradeable_count: 5
+    franchise_lock_slots: [0, 1, 2, 3, 4, 5, 6]  # lock top 7 by talent
     hidden_goal:
       description: >-
         Acquire two players whose summed defense ratings >= 17 (out of 20).
@@ -128,7 +128,7 @@ teams:
       veteran roster acquired through past trades. In full rebuild mode
       with significant financial flexibility.
     cap_room: 25.0
-    tradeable_count: 6
+    franchise_lock_slots: [0, 1, 2, 3, 4, 5]  # lock top 6 by talent
     hidden_goal:
       description: >-
         Acquire >= 2 future 1st-round picks AND shed >= $25M in committed
@@ -159,7 +159,7 @@ teams:
       (over cap). The roster has talent but the salary structure is
       untenable long-term.
     cap_room: 0.0
-    tradeable_count: 5
+    franchise_lock_slots: [0, 1, 2, 3, 4, 5, 6]  # lock top 7 by talent
     hidden_goal:
       description: >-
         Achieve cap room >= $12M post-trade. Must shed >= $20M in AAV from

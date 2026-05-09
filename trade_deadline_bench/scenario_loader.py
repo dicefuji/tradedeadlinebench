@@ -48,7 +48,7 @@ def load_teams_config(config_path: str) -> list[TeamConfig]:
             name=team_data["name"],
             public_profile=team_data["public_profile"],
             cap_room=float(team_data["cap_room"]),
-            tradeable_count=int(team_data["tradeable_count"]),
+            franchise_lock_slots=list(team_data["franchise_lock_slots"]),
             hidden_goal=team_data["hidden_goal"],
             draft_picks_config=team_data["draft_picks"],
         )
@@ -67,6 +67,16 @@ def load_teams_config(config_path: str) -> list[TeamConfig]:
                 f"tradeable_count for {config.name} must be 4-6, "
                 f"got {config.tradeable_count}"
             )
+        if len(config.franchise_lock_slots) != len(set(config.franchise_lock_slots)):
+            raise ValueError(
+                f"franchise_lock_slots for {config.name} contains duplicates"
+            )
+        for slot in config.franchise_lock_slots:
+            if not 0 <= slot <= 11:
+                raise ValueError(
+                    f"franchise_lock_slot {slot} for {config.name} "
+                    f"must be in [0, 11]"
+                )
 
     return configs
 
@@ -118,14 +128,14 @@ def generate_scenario(seed: int, config_path: str | None = None) -> ScenarioData
             )
             team_players.append(player)
 
-        # Assign tradeable status: sort by talent descending, franchise-lock
-        # the top (12 - tradeable_count) players.
+        # Sort by talent descending, then apply franchise-lock slots
+        # from config.  Slot 0 = highest talent, slot 11 = lowest.
         team_players.sort(
             key=lambda p: (-p.talent_rating, p.player_id)
         )
-        num_locks = 12 - tc.tradeable_count
+        lock_set = set(tc.franchise_lock_slots)
         for j, p in enumerate(team_players):
-            p.is_tradeable = j >= num_locks
+            p.is_tradeable = j not in lock_set
 
         # Scale AAVs so team payroll matches target.
         _scale_aavs(team_players, target_payroll)

@@ -66,9 +66,13 @@ class TeamConfig:
     name: str
     public_profile: str
     cap_room: float
-    tradeable_count: int
+    franchise_lock_slots: list[int]  # indices into talent-sorted roster
     hidden_goal: dict           # {"description": str, "bonuses": [...]}
     draft_picks_config: list[dict]
+
+    @property
+    def tradeable_count(self) -> int:
+        return 12 - len(set(self.franchise_lock_slots))
 
 
 @dataclass

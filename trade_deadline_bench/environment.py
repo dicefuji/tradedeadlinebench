@@ -317,6 +317,18 @@ class TradeDeadlineEnvironment:
         )
 
         if all_consented:
+            # Re-validate against current state before executing
+            trade_dict = {
+                "parties": proposal.parties,
+                "asset_movements": proposal.asset_movements,
+            }
+            scenario = self._get_scenario_snapshot()
+            valid, reason = validate_trade(
+                trade_dict, scenario, self.cash_used
+            )
+            if not valid:
+                proposal.expired = True
+                return {"error": f"Trade {trade_id} is no longer valid: {reason}"}
             return self._execute_trade(proposal)
 
         return {
@@ -348,46 +360,34 @@ class TradeDeadlineEnvironment:
                 # Update player's current_team
                 self.players_by_id[pid].current_team = team
 
-        # Transfer picks
+        # Transfer picks: pre-collect objects before removing
+        pick_objects_by_id: dict[str, DraftPick] = {}
         for team in sorted(proposal.parties):
             sends = terms[team].get("sends", {})
             for pick_id in sends.get("picks", []):
-                # Remove pick from sending team
+                for dp in self.picks_by_team.get(team, []):
+                    if dp.pick_id == pick_id:
+                        pick_objects_by_id[pick_id] = dp
+                        break
+
+        # Remove picks from senders
+        for team in sorted(proposal.parties):
+            sends = terms[team].get("sends", {})
+            sent_pick_ids = set(sends.get("picks", []))
+            if sent_pick_ids:
                 self.picks_by_team[team] = [
                     dp for dp in self.picks_by_team[team]
-                    if dp.pick_id != pick_id
+                    if dp.pick_id not in sent_pick_ids
                 ]
 
+        # Add picks to receivers
         for team in sorted(proposal.parties):
             receives = terms[team].get("receives", {})
             for pick_id in receives.get("picks", []):
-                # Find the pick object and transfer
-                pick_obj = None
-                for other in sorted(proposal.parties):
-                    if other == team:
-                        continue
-                    sends = terms[other].get("sends", {})
-                    if pick_id in sends.get("picks", []):
-                        # Find the DraftPick object
-                        for dp in self.picks_by_team.get(other, []):
-                            if dp.pick_id == pick_id:
-                                pick_obj = dp
-                                break
-                        # It was already removed; find from any team's old list
-                        if pick_obj is None:
-                            # Search all teams
-                            for t in TEAMS:
-                                for dp in self.picks_by_team.get(t, []):
-                                    if dp.pick_id == pick_id:
-                                        pick_obj = dp
-                                        break
-                                if pick_obj:
-                                    break
-                        break
+                pick_obj = pick_objects_by_id.get(pick_id)
                 if pick_obj is not None:
                     pick_obj.owning_team = team
-                    if pick_obj not in self.picks_by_team[team]:
-                        self.picks_by_team[team].append(pick_obj)
+                    self.picks_by_team[team].append(pick_obj)
 
         # Update payrolls and cash_used
         for team in sorted(proposal.parties):

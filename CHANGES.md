@@ -64,3 +64,43 @@ interprets "absorb the difference" as: cap room must cover the **full positive
 difference** (incoming − outgoing), not merely the excess above the 125%
 threshold. This is the stricter interpretation and is now the implemented
 behavior.
+
+## Phase 3
+
+### Proposal broadcast 1-round delay (spec Section 3.5)
+
+Proposals created in round N are **not** delivered to parties' inboxes until
+round N+1 (when the round advances). Consent (calling `execute_trade`) is
+only permitted in the consent window (round N+1); attempts in the same round
+as the proposal are rejected with an error. If not all parties consent by the
+end of round N+1, the proposal expires.
+
+**Implementation:** `tool_propose_trade` queues the broadcast message in
+`_pending_broadcasts`. The `_advance_round` method delivers pending broadcasts
+and expires proposals whose consent window has passed.
+
+### Goal evaluator rules (spec Section 7.4)
+
+`tool_check_my_progress` returns `{goal_met: bool, details: str,
+bonuses_eligible: [...]}` with the goal evaluated against current environment
+state. Interpretation decisions for each team:
+
+- **Apex City Aces** — "Acquire" means a player rated >= 88 is on the current
+  roster but was NOT on the initial roster (i.e., came via trade).
+- **Harlow Vipers** — "Stars" are the top 2 tradeable players by talent_rating
+  on Harlow's initial roster. "Package" requires both a player rated >= 78
+  acquired AND a 1st-round pick acquired.
+- **Eastgate Titans** — Qualifying player must be SF or PF, rated 76-84, have
+  >= 2 years remaining, and AAV <= $20M. Must be acquired (not originally on
+  roster).
+- **Ironwood Foxes** — Must acquire (not originally on roster) at least 2
+  players whose combined defense_rating >= 17.
+- **Cascade Wolves** — Must acquire >= 2 first-round picks (not in initial
+  picks) AND shed >= $25M in total_contract (sum of sent players'
+  total_contract minus sum of received players' total_contract).
+- **Granite Bay Bulls** — "Shed AAV" = sum AAV of sent players minus sum AAV
+  of received players (not total_contract). Cap room = $140M - current payroll.
+  Net rating loss = sum talent_rating of sent - sum talent_rating of received.
+
+**Precedent:** goal evaluation is a Phase 3 deliverable (Phase 4's oracle
+depends on it). The evaluator does not modify environment state.

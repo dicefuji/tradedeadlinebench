@@ -309,9 +309,6 @@ class TestSalaryMatching:
         pid_a = _find_tradeable_player(scenario, team_a)
         pid_b = _find_tradeable_player(scenario, team_b)
 
-        aav_a = scenario.players_by_id[pid_a].aav
-        aav_b = scenario.players_by_id[pid_b].aav
-
         # Cascade has $25M cap room, so even a big mismatch passes via
         # the cap-room exception.
         trade = {

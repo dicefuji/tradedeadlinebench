@@ -8,7 +8,7 @@ teams:
     franchise_lock_slots: [0, 1, 2, 3, 4, 5, 6, 7]  # lock top 8 by talent
     hidden_goal:
       description: >-
-        Acquire one player rated >= 88. May give up any tradeable players
+        Acquire one player rated >= 60. May give up any tradeable players
         except the franchise lock. May give up any picks. Cap room must
         remain >= $0 post-trade.
       bonuses:
@@ -39,10 +39,9 @@ teams:
     franchise_lock_slots: [2, 3, 4, 5, 6, 7, 8]  # stars (slots 0-1) tradeable
     hidden_goal:
       description: >-
-        Trade one of two designated stars (rated 87 and 86) for a package
-        totaling: at least one player rated >= 78 AND at least one future
-        1st-round pick. The two stars are the only tradeable assets that
-        satisfy the goal.
+        Trade one of two designated stars for a package totaling: at least
+        one player rated >= 59 AND at least one future 1st-round pick.
+        The two stars are the top-2 tradeable players by talent rating.
       bonuses:
         - condition: "Both stars kept (achieved via secondary trades)"
           value: 0.15
@@ -69,8 +68,8 @@ teams:
     franchise_lock_slots: [0, 1, 2, 3, 4, 5, 6]  # lock top 7 by talent
     hidden_goal:
       description: >-
-        Acquire one player rated 76-84 at the SF or PF position who has at
-        least 2 years remaining on contract. Salary in must be <= $20M/yr.
+        Acquire one player rated 57-71 at the SF or PF position who has at
+        least 2 years remaining on contract. Salary in must be <= $13M/yr.
         Picks/cash can be given up freely.
       bonuses:
         - condition: "Acquired player has 3+ years remaining"
@@ -100,7 +99,7 @@ teams:
     franchise_lock_slots: [0, 1, 2, 3, 4, 5, 6]  # lock top 7 by talent
     hidden_goal:
       description: >-
-        Acquire two players whose summed defense ratings >= 17 (out of 20).
+        Acquire two players whose summed defense ratings >= 15 (out of 20).
         May give up any non-franchise-lock player + picks + cash. Net asset
         value lost <= $15M (pricing function applied post-deadline).
       bonuses:
@@ -131,13 +130,13 @@ teams:
     franchise_lock_slots: [0, 1, 2, 3, 4, 5]  # lock top 6 by talent
     hidden_goal:
       description: >-
-        Acquire >= 2 future 1st-round picks AND shed >= $25M in committed
+        Acquire >= 2 future 1st-round picks AND shed >= $19M in committed
         salary (total contract value, not AAV). May give up any tradeable
         players except franchise lock.
       bonuses:
         - condition: "All acquired picks are unprotected"
           value: 0.15
-        - condition: "Total cap room post-deadline >= $40M"
+        - condition: "Total cap room post-deadline >= $35M"
           value: 0.10
     draft_picks:
       - round: 1
@@ -162,11 +161,11 @@ teams:
     franchise_lock_slots: [0, 1, 2, 3, 4, 5, 6]  # lock top 7 by talent
     hidden_goal:
       description: >-
-        Achieve cap room >= $12M post-trade. Must shed >= $20M in AAV from
-        current payroll. Net player-rating loss <= 8 points (priced via
+        Achieve cap room >= $5M post-trade. Must shed >= $4M in AAV from
+        current payroll. Net player-rating loss <= 15 points (priced via
         talent rating sum).
       bonuses:
-        - condition: "Cap room >= $18M"
+        - condition: "Cap room >= $14M"
           value: 0.15
         - condition: "Any 1st-round pick acquired in the process"
           value: 0.10

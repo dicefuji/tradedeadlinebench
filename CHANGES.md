@@ -104,3 +104,47 @@ state. Interpretation decisions for each team:
 
 **Precedent:** goal evaluation is a Phase 3 deliverable (Phase 4's oracle
 depends on it). The evaluator does not modify environment state.
+
+## Phase 4
+
+### Goal calibration — locked thresholds
+
+OracleAgent (pure deterministic constraint-satisfaction search, no LLM, no
+randomness beyond tie-breaking) was run in all 6 team-positions for 50 seeds
+each. Thresholds were tuned iteratively until all 6 achievement rates landed
+in [0.70, 0.85] with cross-goal spread ≤ 10pp.
+
+Final calibrated thresholds:
+
+| Team | Goal threshold | Achievement rate |
+|------|---------------|-----------------|
+| Apex City Aces | Acquire player rated >= 60 | 80% |
+| Harlow Vipers | Star trade for player >= 59 + 1st-round pick | 80% |
+| Eastgate Titans | Player rated 57-71, SF/PF, 2+ yrs, <= $13M | 80% |
+| Ironwood Foxes | 2 players with summed defense >= 15 | 82% |
+| Cascade Wolves | 2 first-round picks + shed >= $19M salary | 78% |
+| Granite Bay Bulls | Cap room >= $5M, shed >= $4M AAV, rating loss <= 15 | 82% |
+
+Cross-goal spread: 4pp (min 78%, max 82%).
+
+### Locked goal hash (Section 12.3)
+
+SHA-256 of `trade_deadline_bench/teams_config.yaml`:
+
+```
+6dcb54daeb39b228d1c6af99b578ab964500c492ddcb035124e17a81475c4cdc
+```
+
+Any future change to goal specifications constitutes a new benchmark version.
+
+### Goal evaluator threshold updates (Phase 4 tuning)
+
+The goal evaluator thresholds documented in Phase 3 were the initial values.
+Phase 4 calibration adjusted them to achieve balanced feasibility:
+
+- **Apex**: >= 88 → >= 60
+- **Harlow**: >= 78 → >= 59
+- **Eastgate**: 76-84/$20M → 57-71/$13M
+- **Ironwood**: >= 17 defense → >= 15 defense
+- **Cascade**: >= $25M shed → >= $19M shed
+- **Granite Bay**: cap >= $12M/shed >= $20M → cap >= $5M/shed >= $4M AAV

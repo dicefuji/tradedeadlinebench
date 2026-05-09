@@ -49,6 +49,7 @@ def load_teams_config(config_path: str) -> list[TeamConfig]:
             public_profile=team_data["public_profile"],
             cap_room=float(team_data["cap_room"]),
             franchise_lock_slots=list(team_data["franchise_lock_slots"]),
+            lock_rule=team_data.get("lock_rule", "talent_desc"),
             hidden_goal=team_data["hidden_goal"],
             draft_picks_config=team_data["draft_picks"],
         )
@@ -62,9 +63,9 @@ def load_teams_config(config_path: str) -> list[TeamConfig]:
     for config in configs:
         if config.name not in TEAMS:
             raise ValueError(f"Unknown team name in config: {config.name}")
-        if not 4 <= config.tradeable_count <= 6:
+        if config.tradeable_count < 1:
             raise ValueError(
-                f"tradeable_count for {config.name} must be 4-6, "
+                f"tradeable_count for {config.name} must be >= 1, "
                 f"got {config.tradeable_count}"
             )
         if len(config.franchise_lock_slots) != len(set(config.franchise_lock_slots)):
@@ -102,13 +103,11 @@ def generate_scenario(seed: int, config_path: str | None = None) -> ScenarioData
     # Decide how many elite players (talent >= 88) league-wide: 4-6
     num_elite = rng.randint(4, MAX_ELITE_PLAYERS)
 
-    # Distribute elite slots across teams.  Shuffle team indices and assign
-    # one elite per team until the budget is exhausted.
+    # Distribute elite slots across teams randomly (allows natural
+    # clustering so some teams have 2+ elites, making slot-1+ tradeable).
     team_elite_counts: dict[str, int] = {tc.name: 0 for tc in team_configs}
-    elite_pool = list(range(len(team_configs)))
-    rng.shuffle(elite_pool)
-    for i in range(num_elite):
-        team_idx = elite_pool[i % len(elite_pool)]
+    for _ in range(num_elite):
+        team_idx = rng.randrange(len(team_configs))
         team_elite_counts[team_configs[team_idx].name] += 1
 
     used_names: set[str] = set()
@@ -128,14 +127,31 @@ def generate_scenario(seed: int, config_path: str | None = None) -> ScenarioData
             )
             team_players.append(player)
 
-        # Sort by talent descending, then apply franchise-lock slots
-        # from config.  Slot 0 = highest talent, slot 11 = lowest.
+        # Sort by talent descending for default slot assignment.
         team_players.sort(
             key=lambda p: (-p.talent_rating, p.player_id)
         )
-        lock_set = set(tc.franchise_lock_slots)
-        for j, p in enumerate(team_players):
-            p.is_tradeable = j not in lock_set
+
+        # Apply franchise locks based on lock_rule.
+        num_locks = len(tc.franchise_lock_slots)
+        if tc.lock_rule == "youngest":
+            # Lock the youngest among the top-3 by talent ("young cornerstone").
+            top3 = team_players[:3]  # already sorted talent-descending
+            youngest = min(top3, key=lambda p: (p.age, p.player_id))
+            locked_ids = {youngest.player_id}
+            for p in team_players:
+                p.is_tradeable = p.player_id not in locked_ids
+        elif tc.lock_rule == "lowest_aav":
+            # Lock the lowest-AAV player (leave expensive vets tradeable).
+            by_aav = sorted(team_players, key=lambda p: (p.aav, p.player_id))
+            locked_ids = {by_aav[i].player_id for i in range(num_locks)}
+            for p in team_players:
+                p.is_tradeable = p.player_id not in locked_ids
+        else:
+            # Default: lock by talent-sorted slot index.
+            lock_set = set(tc.franchise_lock_slots)
+            for j, p in enumerate(team_players):
+                p.is_tradeable = j not in lock_set
 
         # Scale AAVs so team payroll matches target.
         _scale_aavs(team_players, target_payroll)

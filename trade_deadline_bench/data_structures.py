@@ -67,6 +67,7 @@ class TeamConfig:
     public_profile: str
     cap_room: float
     franchise_lock_slots: list[int]  # indices into talent-sorted roster
+    lock_rule: str  # "talent_desc" (default), "youngest", or "lowest_aav"
     hidden_goal: dict           # {"description": str, "bonuses": [...]}
     draft_picks_config: list[dict]
 

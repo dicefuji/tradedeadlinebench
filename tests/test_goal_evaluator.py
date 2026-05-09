@@ -19,6 +19,7 @@ def env():
 
 def _eval(env, team):
     """Shorthand: evaluate goal for a team using current env state."""
+    goal_thresholds = env.team_configs[team].hidden_goal.get("thresholds", {})
     return evaluate_goal(
         team=team,
         players_by_id=env.players_by_id,
@@ -30,6 +31,7 @@ def _eval(env, team):
         initial_picks_by_team=env._initial_picks_by_team,
         initial_payroll=env._initial_payroll,
         current_round=env.current_round,
+        goal_thresholds=goal_thresholds,
     )
 
 
@@ -60,16 +62,16 @@ def _add_pick(env, to_team, pick_round=1, pick_id=None, protection="unprotected"
 
 
 # =====================================================================
-# Apex City Aces: Acquire one player rated >= 88
+# Apex City Aces: Acquire one player rated >= 60
 # =====================================================================
 
 
 class TestApexGoal:
     def test_goal_not_met_initial_state(self, env):
-        """Apex goal not met at start -- no player >= 88 acquired."""
+        """Apex goal not met at start -- no player >= min_talent acquired."""
         result = _eval(env, "Apex City Aces")
         assert result["goal_met"] is False
-        assert "No player rated >= 88 acquired" in result["details"]
+        assert "No player rated >=" in result["details"]
         assert result["bonuses_eligible"] == []
 
     def test_goal_met_acquire_elite(self, env):
@@ -185,11 +187,18 @@ class TestEastgateGoal:
         """Eastgate goal not met at start -- no qualifying player acquired."""
         result = _eval(env, "Eastgate Titans")
         assert result["goal_met"] is False
-        assert "No SF/PF player rated 76-84" in result["details"]
+        assert "No SF/PF player rated" in result["details"]
         assert result["bonuses_eligible"] == []
 
     def test_goal_met_acquire_qualifying_player(self, env):
         """Eastgate goal met after acquiring a qualifying SF/PF."""
+        # Get thresholds from config
+        gt = env.team_configs["Eastgate Titans"].hidden_goal.get("thresholds", {})
+        min_t = gt.get("min_talent", 76)
+        max_t = gt.get("max_talent", 84)
+        min_yrs = gt.get("min_years", 2)
+        max_sal = gt.get("max_salary", 20.0)
+
         # Find a qualifying SF/PF on another team
         target = None
         source_team = None
@@ -199,10 +208,10 @@ class TestEastgateGoal:
             for pid in env.players_by_team[team]:
                 p = env.players_by_id[pid]
                 if (
-                    76 <= p.talent_rating <= 84
+                    min_t <= p.talent_rating <= max_t
                     and p.position in ("SF", "PF")
-                    and p.years_remaining >= 2
-                    and p.aav <= 20.0
+                    and p.years_remaining >= min_yrs
+                    and p.aav <= max_sal
                     and p.is_tradeable
                 ):
                     target = p
@@ -216,18 +225,18 @@ class TestEastgateGoal:
             target = Player(
                 player_id="P-SYNTH-ET",
                 name="Synth Forward",
-                talent_rating=80,
+                talent_rating=72,
                 defense_rating=7,
                 position="SF",
                 age=25,
-                aav=12.0,
+                aav=8.0,
                 years_remaining=3,
                 current_team="Cascade Wolves",
                 is_tradeable=True,
             )
             env.players_by_id["P-SYNTH-ET"] = target
             env.players_by_team["Cascade Wolves"].append("P-SYNTH-ET")
-            env.payroll["Cascade Wolves"] += 12.0
+            env.payroll["Cascade Wolves"] += 8.0
             source_team = "Cascade Wolves"
 
         _move_player(env, target.player_id, source_team, "Eastgate Titans")
@@ -238,22 +247,22 @@ class TestEastgateGoal:
 
     def test_bonus_3_plus_years(self, env):
         """Eastgate bonus: acquired player has 3+ years remaining."""
-        # Create a qualifying player with 3+ years
+        # Create a qualifying player with 3+ years (must be in threshold range)
         target = Player(
             player_id="P-SYNTH-ET-3Y",
             name="Long Contract Forward",
-            talent_rating=80,
+            talent_rating=72,
             defense_rating=7,
             position="PF",
             age=24,
-            aav=10.0,
+            aav=8.0,
             years_remaining=4,
             current_team="Ironwood Foxes",
             is_tradeable=True,
         )
         env.players_by_id["P-SYNTH-ET-3Y"] = target
         env.players_by_team["Ironwood Foxes"].append("P-SYNTH-ET-3Y")
-        env.payroll["Ironwood Foxes"] += 10.0
+        env.payroll["Ironwood Foxes"] += 8.0
 
         _move_player(env, "P-SYNTH-ET-3Y", "Ironwood Foxes", "Eastgate Titans")
 
@@ -438,7 +447,7 @@ class TestGraniteBayGoal:
         # must be <= $128M. Strategy: send expensive players away, receive
         # cheap players of similar talent back.
         # Send 4 players at $10M AAV (total $40M), receive 4 at $2M (total $8M).
-        # Net AAV shed = $32M, net rating loss = 4*52 - 4*50 = 8 (just meets <= 8).
+        # Net AAV shed = $32M, net rating loss = 4*52 - 4*51 = 4 (meets <= 6).
         # Final payroll = $140M - $40M + $8M = $108M, cap room = $32M.
 
         # Add outgoing players to initial roster (they "were" on GB at start)
@@ -464,7 +473,7 @@ class TestGraniteBayGoal:
             p = Player(
                 player_id=f"P-GB-IN-{i}",
                 name=f"Cheap In {i}",
-                talent_rating=50,
+                talent_rating=51,
                 defense_rating=3,
                 position="PG",
                 age=25,

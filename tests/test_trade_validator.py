@@ -331,13 +331,27 @@ class TestSalaryMatching:
         """A team with no cap room receiving much more salary than sending
         must fail salary matching under Reading B.
 
-        Granite Bay Bulls ($0M cap room) sends P-066 ($1.00M) and receives
-        P-054 ($6.45M). Difference = $5.45M > cap room $0M. Fails."""
+        Granite Bay Bulls ($0M cap room) sends a low-AAV tradeable player
+        and receives a high-AAV tradeable player from Cascade.
+        Difference exceeds cap room $0M. Fails."""
         team_full = "Granite Bay Bulls"
         team_other = "Cascade Wolves"
 
-        small_pid = "P-066"  # Omar Walton, $1.00M, tradeable on Granite Bay
-        big_pid = "P-054"    # DeShawn Robinson, $6.45M, tradeable on Cascade
+        # Find a low-AAV tradeable player on Granite Bay
+        gb_tradeables = sorted(
+            [scenario.players_by_id[pid] for pid in scenario.players_by_team[team_full]
+             if scenario.players_by_id[pid].is_tradeable],
+            key=lambda p: p.aav,
+        )
+        small_pid = gb_tradeables[0].player_id
+
+        # Find a high-AAV tradeable player on Cascade
+        cas_tradeables = sorted(
+            [scenario.players_by_id[pid] for pid in scenario.players_by_team[team_other]
+             if scenario.players_by_id[pid].is_tradeable],
+            key=lambda p: -p.aav,
+        )
+        big_pid = cas_tradeables[0].player_id
 
         trade = {
             "parties": [team_full, team_other],

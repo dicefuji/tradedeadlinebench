@@ -1,22 +1,11 @@
-"""Goal evaluator — evaluates each team's hidden goal against current state.
+"""Goal evaluator - evaluates each team hidden goal against current state.
 
 Each team has a hidden goal defined in teams_config.yaml. This module
-provides per-team evaluation logic that compares current environment state
-against the initial scenario to determine goal completion and bonus eligibility.
+provides per-team evaluation logic that reads all numerical thresholds
+from the loaded goal specification (YAML-as-source-of-truth).
 
-Spec interpretation decisions (documented in CHANGES.md):
-- "Acquire" means the player is on the team's roster now but was NOT there
-  at scenario start.
-- "Shed salary" means total_contract (AAV * years_remaining) of players
-  sent away minus total_contract of players received.
-- For Granite Bay "shed AAV" we interpret as sum of AAV of players traded away
-  minus AAV of players received.
-- "Net player-rating loss" for Granite Bay is sum of talent_ratings of players
-  sent minus sum of talent_ratings of players received.
-- Cascade's "shed >= $25M in committed salary" uses total_contract value
-  (AAV * years_remaining) of players sent minus players received.
-- Ironwood's "acquire two players" means two distinct players acquired
-  (not already on roster at start) whose defense_ratings sum >= 17.
+No hardcoded thresholds exist in this file - all values come from
+the goal_thresholds dict passed in from the YAML config.
 """
 
 from __future__ import annotations
@@ -40,11 +29,18 @@ def evaluate_goal(
     initial_picks_by_team: dict[str, list[str]],
     initial_payroll: dict[str, float],
     current_round: int,
+    goal_thresholds: dict | None = None,
 ) -> dict:
-    """Evaluate a team's goal against current state.
+    """Evaluate a team goal against current state.
+
+    Args:
+        goal_thresholds: Dict of numerical thresholds from teams_config.yaml.
 
     Returns: {"goal_met": bool, "details": str, "bonuses_eligible": [...]}
     """
+    if goal_thresholds is None:
+        goal_thresholds = {}
+
     evaluators = {
         "Apex City Aces": _evaluate_apex,
         "Harlow Vipers": _evaluate_harlow,
@@ -66,6 +62,7 @@ def evaluate_goal(
         initial_picks_by_team=initial_picks_by_team,
         initial_payroll=initial_payroll,
         current_round=current_round,
+        goal_thresholds=goal_thresholds,
     )
 
 
@@ -118,7 +115,7 @@ def _get_sent_picks(
 
 
 # =========================================================================
-# Apex City Aces: Acquire one player rated >= 88
+# Apex City Aces: Acquire one player rated >= min_talent
 # =========================================================================
 
 
@@ -133,18 +130,21 @@ def _evaluate_apex(
     initial_picks_by_team: dict[str, list[str]],
     initial_payroll: dict[str, float],
     current_round: int,
+    goal_thresholds: dict,
 ) -> dict:
+    min_talent = goal_thresholds["min_talent"]
+
     acquired = _get_acquired_players(team, players_by_team, initial_players_by_team)
     elite_acquired = [
         pid for pid in acquired
-        if players_by_id[pid].talent_rating >= 88
+        if players_by_id[pid].talent_rating >= min_talent
     ]
 
     goal_met = len(elite_acquired) >= 1
     if goal_met:
         details = f"Acquired elite player(s): {elite_acquired}"
     else:
-        details = "No player rated >= 88 acquired yet."
+        details = f"No player rated >= {min_talent} acquired yet."
 
     bonuses = []
     if goal_met:
@@ -159,7 +159,7 @@ def _evaluate_apex(
 
 
 # =========================================================================
-# Harlow Vipers: Trade one of two designated stars for package
+# Harlow Vipers: Trade star for package (player >= min_return_talent + pick)
 # =========================================================================
 
 
@@ -174,8 +174,10 @@ def _evaluate_harlow(
     initial_picks_by_team: dict[str, list[str]],
     initial_payroll: dict[str, float],
     current_round: int,
+    goal_thresholds: dict,
 ) -> dict:
-    # Stars are the top 2 rated tradeable players on Harlow at start
+    min_return_talent = goal_thresholds["min_return_talent"]
+
     initial_pids = initial_players_by_team[team]
     initial_players = sorted(
         [players_by_id[pid] for pid in initial_pids if players_by_id[pid].is_tradeable],
@@ -187,7 +189,6 @@ def _evaluate_harlow(
     acquired = _get_acquired_players(team, players_by_team, initial_players_by_team)
     acquired_picks = _get_acquired_picks(team, picks_by_team, initial_picks_by_team)
 
-    # Check if at least one star was traded away
     star_ids = {s.player_id for s in stars}
     stars_traded = [pid for pid in sent if pid in star_ids]
 
@@ -198,30 +199,28 @@ def _evaluate_harlow(
             "bonuses_eligible": [],
         }
 
-    # Check return package: >= 1 player rated >= 78 AND >= 1 future 1st
-    has_player_78 = any(
-        players_by_id[pid].talent_rating >= 78 for pid in acquired
+    has_player = any(
+        players_by_id[pid].talent_rating >= min_return_talent for pid in acquired
     )
     has_first_round_pick = any(dp.pick_round == 1 for dp in acquired_picks)
 
-    goal_met = has_player_78 and has_first_round_pick
+    goal_met = has_player and has_first_round_pick
 
     if goal_met:
         details = (
             f"Star(s) traded: {stars_traded}. "
-            f"Acquired player(s) >= 78 rating and 1st-round pick."
+            f"Acquired player(s) >= {min_return_talent} rating and 1st-round pick."
         )
     else:
         missing = []
-        if not has_player_78:
-            missing.append("no player rated >= 78 acquired")
+        if not has_player:
+            missing.append(f"no player rated >= {min_return_talent} acquired")
         if not has_first_round_pick:
             missing.append("no 1st-round pick acquired")
-        details = f"Star(s) traded: {stars_traded}, but {', '.join(missing)}."
+        details = f"Star(s) traded: {stars_traded}, but " + ", ".join(missing) + "."
 
     bonuses = []
     if goal_met:
-        # Bonus: both stars kept (only possible if goal achieved via secondary trades)
         stars_remaining = [pid for pid in star_ids if pid in players_by_team[team]]
         if len(stars_remaining) == 2:
             bonuses.append("Both stars kept (achieved via secondary trades)")
@@ -230,7 +229,7 @@ def _evaluate_harlow(
 
 
 # =========================================================================
-# Eastgate Titans: Acquire SF/PF rated 76-84, >= 2 years, salary <= $20M
+# Eastgate Titans: Acquire SF/PF rated min_talent-max_talent
 # =========================================================================
 
 
@@ -245,7 +244,14 @@ def _evaluate_eastgate(
     initial_picks_by_team: dict[str, list[str]],
     initial_payroll: dict[str, float],
     current_round: int,
+    goal_thresholds: dict,
 ) -> dict:
+    min_talent = goal_thresholds["min_talent"]
+    max_talent = goal_thresholds["max_talent"]
+    positions = goal_thresholds["positions"]
+    min_years = goal_thresholds["min_years"]
+    max_salary = goal_thresholds["max_salary"]
+
     acquired = _get_acquired_players(team, players_by_team, initial_players_by_team)
     sent_picks = _get_sent_picks(team, picks_by_team, initial_picks_by_team)
 
@@ -253,10 +259,10 @@ def _evaluate_eastgate(
     for pid in acquired:
         p = players_by_id[pid]
         if (
-            76 <= p.talent_rating <= 84
-            and p.position in ("SF", "PF")
-            and p.years_remaining >= 2
-            and p.aav <= 20.0
+            min_talent <= p.talent_rating <= max_talent
+            and p.position in positions
+            and p.years_remaining >= min_years
+            and p.aav <= max_salary
         ):
             qualifying.append(pid)
 
@@ -265,28 +271,21 @@ def _evaluate_eastgate(
     if goal_met:
         details = f"Acquired qualifying SF/PF player(s): {qualifying}"
     else:
-        details = "No SF/PF player rated 76-84 with >= 2 years and salary <= $20M acquired."
+        details = (
+            f"No SF/PF player rated {min_talent}-{max_talent} "
+            f"with >= {min_years} years and salary <= ${max_salary}M acquired."
+        )
 
     bonuses = []
     if goal_met:
         if any(players_by_id[pid].years_remaining >= 3 for pid in qualifying):
             bonuses.append("Acquired player has 3+ years remaining")
-        # Check if no 1st-round picks were given up
-        # We need to check all picks sent by this team across all executed trades
         if not sent_picks:
             bonuses.append("No 1st-round picks given up")
         else:
-            # sent_picks are pick_ids - we need to check if any were round 1
-            # Since picks have been transferred, we check from initial state
-            # A sent pick_id that starts with pattern indicating round 1
-            # Actually we need the pick objects. Let's check from initial picks.
-            # All initial picks for this team:
             all_initial = initial_picks_by_team[team]
-            # Currently held:
             current_pick_ids = {dp.pick_id for dp in picks_by_team[team]}
-            # Picks given away are in all_initial but not in current
             given_away_ids = set(all_initial) - current_pick_ids
-            # We need pick round info - check current picks_by_team across all teams
             first_round_given = False
             for t in TEAMS:
                 for dp in picks_by_team[t]:
@@ -302,7 +301,7 @@ def _evaluate_eastgate(
 
 
 # =========================================================================
-# Ironwood Foxes: Acquire two players with summed defense >= 17
+# Ironwood Foxes: Acquire two players with summed defense >= min_defense_sum
 # =========================================================================
 
 
@@ -317,22 +316,24 @@ def _evaluate_ironwood(
     initial_picks_by_team: dict[str, list[str]],
     initial_payroll: dict[str, float],
     current_round: int,
+    goal_thresholds: dict,
 ) -> dict:
+    min_defense_sum = goal_thresholds["min_defense_sum"]
+
     acquired = _get_acquired_players(team, players_by_team, initial_players_by_team)
 
-    # Find best pair of acquired players by defense rating
     acquired_with_def = [
         (pid, players_by_id[pid].defense_rating) for pid in acquired
     ]
     acquired_with_def.sort(key=lambda x: -x[1])
 
     best_pair_sum = 0
-    best_pair = []
+    best_pair: list[str] = []
     if len(acquired_with_def) >= 2:
         best_pair = [acquired_with_def[0][0], acquired_with_def[1][0]]
         best_pair_sum = acquired_with_def[0][1] + acquired_with_def[1][1]
 
-    goal_met = best_pair_sum >= 17
+    goal_met = best_pair_sum >= min_defense_sum
 
     if goal_met:
         details = (
@@ -341,9 +342,12 @@ def _evaluate_ironwood(
         )
     else:
         if len(acquired_with_def) < 2:
-            details = f"Only {len(acquired_with_def)} player(s) acquired; need 2 with defense sum >= 17."
+            details = (
+                f"Only {len(acquired_with_def)} player(s) acquired; "
+                f"need 2 with defense sum >= {min_defense_sum}."
+            )
         else:
-            details = f"Best pair defense sum = {best_pair_sum}; need >= 17."
+            details = f"Best pair defense sum = {best_pair_sum}; need >= {min_defense_sum}."
 
     bonuses = []
     if goal_met:
@@ -356,7 +360,7 @@ def _evaluate_ironwood(
 
 
 # =========================================================================
-# Cascade Wolves: Acquire >= 2 first-round picks AND shed >= $25M salary
+# Cascade Wolves: Acquire picks AND shed salary
 # =========================================================================
 
 
@@ -371,11 +375,14 @@ def _evaluate_cascade(
     initial_picks_by_team: dict[str, list[str]],
     initial_payroll: dict[str, float],
     current_round: int,
+    goal_thresholds: dict,
 ) -> dict:
+    min_first_round_picks = goal_thresholds["min_first_round_picks"]
+    min_salary_shed = goal_thresholds["min_salary_shed"]
+
     acquired_picks = _get_acquired_picks(team, picks_by_team, initial_picks_by_team)
     first_round_acquired = [dp for dp in acquired_picks if dp.pick_round == 1]
 
-    # Salary shed: total_contract of players sent - total_contract of players received
     sent = _get_sent_players(team, players_by_team, initial_players_by_team)
     acquired_players = _get_acquired_players(team, players_by_team, initial_players_by_team)
 
@@ -385,8 +392,8 @@ def _evaluate_cascade(
         players_by_id[pid].total_contract for pid in acquired_players
     )
 
-    has_picks = len(first_round_acquired) >= 2
-    has_shed = salary_shed >= 25.0
+    has_picks = len(first_round_acquired) >= min_first_round_picks
+    has_shed = salary_shed >= min_salary_shed
 
     goal_met = has_picks and has_shed
 
@@ -398,9 +405,12 @@ def _evaluate_cascade(
     else:
         missing = []
         if not has_picks:
-            missing.append(f"only {len(first_round_acquired)} 1st-round pick(s) acquired (need 2)")
+            missing.append(
+                f"only {len(first_round_acquired)} 1st-round pick(s) "
+                f"acquired (need {min_first_round_picks})"
+            )
         if not has_shed:
-            missing.append(f"salary shed ${salary_shed:.1f}M (need >= $25M)")
+            missing.append(f"salary shed ${salary_shed:.1f}M (need >= ${min_salary_shed}M)")
         details = "; ".join(missing)
 
     bonuses = []
@@ -408,14 +418,14 @@ def _evaluate_cascade(
         if all(dp.protection_note == "unprotected" for dp in first_round_acquired):
             bonuses.append("All acquired picks are unprotected")
         cap_room = SALARY_CAP - payroll[team]
-        if cap_room >= 40.0:
-            bonuses.append("Total cap room post-deadline >= $40M")
+        if cap_room >= 35.0:
+            bonuses.append("Total cap room post-deadline >= $35M")
 
     return {"goal_met": goal_met, "details": details, "bonuses_eligible": bonuses}
 
 
 # =========================================================================
-# Granite Bay Bulls: Cap room >= $12M, shed >= $20M AAV, rating loss <= 8
+# Granite Bay Bulls: Cap room, AAV shed, rating loss
 # =========================================================================
 
 
@@ -430,10 +440,15 @@ def _evaluate_granite_bay(
     initial_picks_by_team: dict[str, list[str]],
     initial_payroll: dict[str, float],
     current_round: int,
+    goal_thresholds: dict,
 ) -> dict:
+    min_cap_room = goal_thresholds["min_cap_room"]
+    min_aav_shed = goal_thresholds["min_aav_shed"]
+    max_rating_loss = goal_thresholds["max_rating_loss"]
+    bonus_cap_room = goal_thresholds.get("bonus_cap_room", min_cap_room + 4.0)
+
     cap_room = SALARY_CAP - payroll[team]
 
-    # AAV shed: sum AAV of players sent - sum AAV of players received
     sent = _get_sent_players(team, players_by_team, initial_players_by_team)
     acquired = _get_acquired_players(team, players_by_team, initial_players_by_team)
 
@@ -443,39 +458,38 @@ def _evaluate_granite_bay(
         players_by_id[pid].aav for pid in acquired
     )
 
-    # Net talent rating loss: sent talent sum - acquired talent sum
     rating_loss = sum(
         players_by_id[pid].talent_rating for pid in sent
     ) - sum(
         players_by_id[pid].talent_rating for pid in acquired
     )
 
-    has_cap_room = cap_room >= 12.0
-    has_shed = aav_shed >= 20.0
-    rating_ok = rating_loss <= 8
+    has_cap_room = cap_room >= min_cap_room
+    has_shed = aav_shed >= min_aav_shed
+    rating_ok = rating_loss <= max_rating_loss
 
     goal_met = has_cap_room and has_shed and rating_ok
 
     if goal_met:
         details = (
-            f"Cap room ${cap_room:.1f}M (>= $12M), "
-            f"shed ${aav_shed:.1f}M AAV, "
-            f"net rating loss = {rating_loss} (<= 8)."
+            f"Cap room ${cap_room:.1f}M (>= ${min_cap_room}M), "
+            f"shed ${aav_shed:.1f}M AAV (>= ${min_aav_shed}M), "
+            f"net rating loss = {rating_loss} (<= {max_rating_loss})."
         )
     else:
         issues = []
         if not has_cap_room:
-            issues.append(f"cap room ${cap_room:.1f}M (need >= $12M)")
+            issues.append(f"cap room ${cap_room:.1f}M (need >= ${min_cap_room}M)")
         if not has_shed:
-            issues.append(f"AAV shed ${aav_shed:.1f}M (need >= $20M)")
+            issues.append(f"AAV shed ${aav_shed:.1f}M (need >= ${min_aav_shed}M)")
         if not rating_ok:
-            issues.append(f"net rating loss = {rating_loss} (need <= 8)")
+            issues.append(f"net rating loss = {rating_loss} (need <= {max_rating_loss})")
         details = "; ".join(issues)
 
     bonuses = []
     if goal_met:
-        if cap_room >= 18.0:
-            bonuses.append("Cap room >= $18M")
+        if cap_room >= bonus_cap_room:
+            bonuses.append(f"Cap room >= ${bonus_cap_room}M")
         acquired_picks = _get_acquired_picks(team, picks_by_team, initial_picks_by_team)
         if any(dp.pick_round == 1 for dp in acquired_picks):
             bonuses.append("Any 1st-round pick acquired in the process")

@@ -119,14 +119,16 @@ def run_single_game(
     turn_counter = 0
     round_logs = []
 
-    for round_num in range(1, MAX_ROUNDS + 1):
-        if env.current_round > MAX_ROUNDS:
-            break
-
+    while env.current_round <= MAX_ROUNDS:
+        current_round_at_start = env.current_round
         round_order = rotate_team_order(env.current_round, run_id)
         round_log = {"round": env.current_round, "turns": []}
 
         for team in round_order:
+            # Round may have advanced mid-loop if 6th agent voted
+            if env.current_round != current_round_at_start:
+                break
+
             is_test_model = (team == test_team)
             model_id = test_model if is_test_model else NEUTRAL_GM_MODEL
             is_neutral = not is_test_model
@@ -150,15 +152,14 @@ def run_single_game(
                 "terminated": turn_result["terminated_reason"],
             })
 
-            # Force-advance check for stuck agents
-            if not turn_result["advanced_round"]:
-                force_advanced = env.force_advance_check(team)
-                if force_advanced:
-                    logger.info("Force-advanced round after %s stuck", team)
-
-        # Check if all teams have voted to advance
-        if len(env.advance_votes) == len(TEAMS):
-            env._advance_round()
+        # After all teams had their turn, force-advance any non-voters
+        if env.current_round == current_round_at_start:
+            non_voters = [t for t in TEAMS if t not in env.advance_votes]
+            for t in sorted(non_voters):
+                env.advance_votes.add(t)
+                logger.info("Force-advanced %s (did not vote this round)", t)
+            if len(env.advance_votes) == len(TEAMS):
+                env._advance_round()
 
         round_logs.append(round_log)
 

@@ -283,6 +283,12 @@ class OpenRouterClient:
                     headers=self._headers,
                     timeout=_DEFAULT_TIMEOUT,
                 )
+                if resp.status_code >= 400:
+                    logger.warning(
+                        "HTTP %d response body: %s",
+                        resp.status_code,
+                        resp.text[:1000],
+                    )
                 resp.raise_for_status()
                 result_box.append(resp.json())
             except Exception as exc:

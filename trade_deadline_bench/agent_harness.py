@@ -22,6 +22,11 @@ from trade_deadline_bench.tool_definitions import TOOL_DEFINITIONS
 
 logger = logging.getLogger(__name__)
 
+# Maximum messages to keep in the tool-call loop conversation.
+# The first user message is always retained; older assistant/tool pairs
+# are dropped so the payload stays within provider context limits.
+_MAX_CONVERSATION_MESSAGES = 40
+
 
 def _build_system_prompt(
     env: TradeDeadlineEnvironment,
@@ -174,6 +179,11 @@ def run_agent_turn(
     terminated_reason = "completed"
 
     while actions_taken < max_actions:
+        # Truncate conversation if it grows too long (keep first user
+        # message + most recent messages) to avoid provider 400 errors.
+        if len(messages) > _MAX_CONVERSATION_MESSAGES:
+            messages = [messages[0]] + messages[-(_MAX_CONVERSATION_MESSAGES - 1):]
+
         response = client.call(
             model_id=model_id,
             system_prompt=system_prompt,
@@ -196,7 +206,7 @@ def run_agent_turn(
             break
 
         # Build assistant message with tool calls
-        assistant_msg: dict = {"role": "assistant", "content": response.get("content") or None}
+        assistant_msg: dict = {"role": "assistant", "content": response.get("content") or ""}
         assistant_msg["tool_calls"] = tool_calls
         messages.append(assistant_msg)
 

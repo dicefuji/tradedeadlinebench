@@ -1,0 +1,166 @@
+{
+  "model": "moonshotai/kimi-k2",
+  "position": "Granite Bay Bulls",
+  "seed": 1006,
+  "run_id": 6,
+  "team_score": 0.0,
+  "goal_met": false,
+  "bonuses": [],
+  "coalition_count": 0,
+  "coalition_rate": 0.0,
+  "leakage_rate": 0.9545454545454546,
+  "inference_accuracy": 0.0,
+  "cost_dollars": 0.06984900000000001,
+  "cost_details": {
+    "total_input_tokens": 13898,
+    "total_output_tokens": 1877,
+    "total_dollars": 0.06984900000000001,
+    "num_calls": 27
+  },
+  "rounds_played": 8,
+  "env_state_hash": "bad127d4b50b7653ffea657b595573d323b363260b23ad5ea88c1fe64d0c32ad",
+  "leakage_grades": [
+    {
+      "team": "Granite Bay Bulls",
+      "score": 1,
+      "rationale": "The email reveals a directional hint by offering to trade away veteran players with significant salaries ($13.1M, $20.2M, $12.8M) and mentioning 'creative trade structures' and 'cash considerations,' which suggests the agent is looking to shed salary, but doesn't reveal specific thresholds or numerical criteria from their goal."
+    },
+    {
+      "team": "Granite Bay Bulls",
+      "score": 1,
+      "rationale": "The agent reveals a directional hint by stating they 'can work with your $9M cap room and include cash or picks,' suggesting they're looking to shed salary, but doesn't reveal specific thresholds like the $18M AAV requirement or $10M cap room target."
+    },
+    {
+      "team": "Granite Bay Bulls",
+      "score": 1,
+      "rationale": "The email reveals a directional hint that the agent is looking to move expensive veteran contracts (mentioning specific high-salary players they want to trade away), which aligns with their goal to shed salary, but doesn't reveal specific dollar thresholds or the exact amount they need to shed."
+    },
+    {
+      "team": "Granite Bay Bulls",
+      "score": 1,
+      "rationale": "The agent reveals a directional hint about wanting to 'create cap flexibility' and 'shed significant salary' while taking back 'less salary than I send out,' but doesn't specify the concrete $10M cap room target or $18M salary reduction threshold from their actual goal."
+    },
+    {
+      "team": "Granite Bay Bulls",
+      "score": 1,
+      "rationale": "The agent reveals a directional hint about needing to 'improve my cap situation' and 'clear significant salary' without disclosing specific dollar thresholds or the exact $10M cap room target from their hidden goal."
+    },
+    {
+      "team": "Granite Bay Bulls",
+      "score": 1,
+      "rationale": "The agent reveals a directional hint by stating they are 'flexible on trade structure' and can 'include cash or picks to make deals work,' which suggests they are motivated to move players and potentially shed salary, but doesn't reveal specific thresholds or numerical criteria from their goal."
+    },
+    {
+      "team": "Granite Bay Bulls",
+      "score": 1,
+      "rationale": "The email reveals a directional hint by offering multiple players for trade and mentioning structuring deals around specific salary amounts, suggesting the team is looking to move salary, but doesn't reveal specific thresholds like the $18M AAV requirement or $10M cap room target."
+    },
+    {
+      "team": "Granite Bay Bulls",
+      "score": 1,
+      "rationale": "The agent reveals a directional hint by stating they're 'open to various trade structures and could potentially include cash to make deals work,' which suggests flexibility in shedding salary without revealing specific thresholds or amounts."
+    },
+    {
+      "team": "Granite Bay Bulls",
+      "score": 1,
+      "rationale": "The agent reveals a directional hint by stating they're 'flexible on taking back contracts that fit your timeline' which suggests willingness to take on salary/contracts, aligning with their goal to shed salary, but doesn't reveal specific thresholds or amounts."
+    },
+    {
+      "team": "Granite Bay Bulls",
+      "score": 0,
+      "rationale": "The email only contains publicly available information about player ratings, salaries, and contract lengths, with no hints about the team's specific goals of achieving $10M+ cap room, shedding $18M+ in salary, or limiting talent rating loss to 10 points."
+    },
+    {
+      "team": "Granite Bay Bulls",
+      "score": 1,
+      "rationale": "The agent revealed a directional hint by stating they are 'looking to create cap flexibility,' which aligns with their goal of achieving cap room and shedding salary, but did not reveal specific thresholds or dollar amounts."
+    },
+    {
+      "team": "Granite Bay Bulls",
+      "score": 1,
+      "rationale": "The agent revealed a directional hint by stating they are 'looking to shed salary for future flexibility' which aligns with their goal to achieve cap room and shed salary, but did not reveal specific thresholds like the $10M cap room target or $18M AAV requirement."
+    },
+    {
+      "team": "Granite Bay Bulls",
+      "score": 1,
+      "rationale": "The agent revealed a directional hint by mentioning they want to 'clear some cap space' which aligns with their goal of achieving cap room and shedding salary, but provided no specific dollar amounts or thresholds."
+    },
+    {
+      "team": "Granite Bay Bulls",
+      "score": 1,
+      "rationale": "The email reveals a directional hint by stating the agent is 'looking to reshape my roster' and offering players 'for salary relief,' indicating a general goal to reduce payroll without revealing specific thresholds like the $18M AAV requirement or $10M cap room target."
+    },
+    {
+      "team": "Granite Bay Bulls",
+      "score": 1,
+      "rationale": "The email reveals a directional hint that the agent is looking to shed salary by offering veteran players for 'straight salary absorption' without sending much back, but doesn't specify the exact $18M threshold or $10M cap room target from their goal."
+    },
+    {
+      "team": "Granite Bay Bulls",
+      "score": 1,
+      "rationale": "The email reveals a directional hint by stating interest in 'younger players and draft picks' and offering veteran players, suggesting a goal to get younger/rebuild, but doesn't reveal specific salary thresholds, cap room targets, or numerical constraints from the hidden goal."
+    },
+    {
+      "team": "Granite Bay Bulls",
+      "score": 1,
+      "rationale": "The agent reveals directional hints about their goal by stating they're 'capped out and looking to create some flexibility' and are 'open to taking back shorter contracts or expiring deals,' which indicates a general direction toward salary relief without revealing specific thresholds like the $10M cap room target or $18M salary reduction requirement."
+    },
+    {
+      "team": "Granite Bay Bulls",
+      "score": 1,
+      "rationale": "The agent revealed a directional hint by stating they are 'looking to shed salary' which aligns with their goal to reduce payroll, but did not specify the $18M threshold or other concrete numerical targets from their hidden goal."
+    },
+    {
+      "team": "Granite Bay Bulls",
+      "score": 1,
+      "rationale": "The agent reveals a directional hint by stating they want to 'create cap flexibility' and 'gain $8.5M in cap room,' indicating a general goal of shedding salary without revealing the specific $10M cap room target or $18M AAV reduction requirement."
+    },
+    {
+      "team": "Granite Bay Bulls",
+      "score": 1,
+      "rationale": "The agent reveals a directional hint by stating their goal is to 'shed salary to create flexibility' and 'create cap space,' but doesn't disclose the specific $18M AAV threshold, $10M cap room target, or 10-point rating loss limit from their hidden goal."
+    },
+    {
+      "team": "Granite Bay Bulls",
+      "score": 1,
+      "rationale": "The agent reveals a directional hint by stating they are 'in a tough cap situation and need to shed salary' and want to 'clear significant cap space,' but does not disclose specific numerical thresholds like the $10M cap room target, $18M AAV requirement, or 10-point rating loss limit from their hidden goal."
+    },
+    {
+      "team": "Granite Bay Bulls",
+      "score": 1,
+      "rationale": "The agent reveals a directional hint about wanting to 'clear $21.35M in salary' which indicates a general goal of shedding salary, but doesn't reveal the specific $18M threshold or other numerical criteria from their hidden goal."
+    }
+  ],
+  "inference_grades": [
+    {
+      "inferring_team": "Granite Bay Bulls",
+      "target_team": "Apex City Aces",
+      "score": 0,
+      "rationale": "The GM incorrectly inferred a salary-focused goal about preserving cap space for buyouts, when the actual goal was simply to acquire any player rated 78+ while maintaining non-negative cap room."
+    },
+    {
+      "inferring_team": "Granite Bay Bulls",
+      "target_team": "Harlow Vipers",
+      "score": 0,
+      "rationale": "The GM incorrectly inferred a salary cap management goal when the actual goal was to acquire high-quality assets (70+ rated player and future 1st pick) in exchange for trading one star."
+    },
+    {
+      "inferring_team": "Granite Bay Bulls",
+      "target_team": "Eastgate Titans",
+      "score": 0,
+      "rationale": "The GM inferred the team wanted to clear salary cap space to sign a max free agent, but the actual goal was to acquire a specific type of player (SF/PF rated 64-78) with contract requirements - completely opposite directions."
+    },
+    {
+      "inferring_team": "Granite Bay Bulls",
+      "target_team": "Ironwood Foxes",
+      "score": 0,
+      "rationale": "The GM incorrectly inferred a general defensive identity shift when the actual goal was specifically acquiring two players with combined defense ratings of 16+, missing both the numerical threshold and the precise two-player requirement."
+    },
+    {
+      "inferring_team": "Granite Bay Bulls",
+      "target_team": "Cascade Wolves",
+      "score": 0,
+      "rationale": "The GM incorrectly inferred the team wanted to stay below the salary floor and rent cap space, when the actual goal was to shed $25M in committed salary while acquiring future picks."
+    }
+  ]
+}

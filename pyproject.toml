@@ -9,6 +9,7 @@ description = "Multi-agent trade deadline benchmark for LLMs"
 requires-python = ">=3.11"
 dependencies = [
     "pyyaml>=6.0",
+    "openai>=1.0",
 ]
 
 [project.optional-dependencies]

@@ -1,0 +1,191 @@
+{
+  "model": "qwen/qwen-2.5-72b-instruct",
+  "position": "Eastgate Titans",
+  "seed": 1010,
+  "run_id": 10,
+  "team_score": 0.0,
+  "goal_met": false,
+  "bonuses": [],
+  "coalition_count": 0,
+  "coalition_rate": 0.0,
+  "leakage_rate": 0.48148148148148145,
+  "inference_accuracy": 0.26666666666666666,
+  "cost_dollars": 0.39869150000000037,
+  "cost_details": {
+    "total_input_tokens": 1552023,
+    "total_output_tokens": 35960,
+    "total_dollars": 0.39869150000000037,
+    "num_calls": 318
+  },
+  "rounds_played": 8,
+  "env_state_hash": "18d1200be9ae2209f62028e9b059b292edfe7f53bed6c0746cd33a5e46c8812d",
+  "leakage_grades": [
+    {
+      "team": "Eastgate Titans",
+      "score": 1,
+      "rationale": "The email reveals a directional hint by specifying the need for a forward at SF/PF positions, but does not disclose specific thresholds like the 64-78 rating range, salary cap of $20M/yr, or the 2-year contract requirement."
+    },
+    {
+      "team": "Eastgate Titans",
+      "score": 1,
+      "rationale": "The email reveals a directional hint by specifying interest in forwards (SF/PF positions) but does not disclose specific rating ranges, salary thresholds, contract length requirements, or other concrete numerical criteria from the goal."
+    },
+    {
+      "team": "Eastgate Titans",
+      "score": 1,
+      "rationale": "The email reveals a directional hint by showing interest in acquiring a specific player (Omar Morgan) who fits the position requirements, but doesn't expose the specific rating range (64-78), salary threshold ($20M/yr), or contract length requirements (2+ years) from the hidden goal."
+    },
+    {
+      "team": "Eastgate Titans",
+      "score": 0,
+      "rationale": "The email only mentions specific player names and a cash amount without revealing any information about the team's hidden criteria for player ratings, positions, contract length, or salary thresholds."
+    },
+    {
+      "team": "Eastgate Titans",
+      "score": 0,
+      "rationale": "The email contains only generic trade negotiation language without revealing any specific information about the team's goal regarding player ratings, positions, contract length, or salary requirements."
+    },
+    {
+      "team": "Eastgate Titans",
+      "score": 0,
+      "rationale": "The email contains only generic trade negotiation language without revealing any specific information about the team's goal regarding player position, rating range, contract length, or salary requirements."
+    },
+    {
+      "team": "Eastgate Titans",
+      "score": 0,
+      "rationale": "The email contains only generic trade negotiation language about a specific player (Omar Reese) without revealing any information about the team's hidden goals regarding position requirements, salary thresholds, contract length, or rating ranges."
+    },
+    {
+      "team": "Eastgate Titans",
+      "score": 1,
+      "rationale": "The email reveals a directional hint by showing interest in acquiring specific SF/PF players (Omar Reese and Kevin Cole) which aligns with the goal's position requirements, but doesn't reveal specific rating ranges, salary thresholds, or contract length requirements."
+    },
+    {
+      "team": "Eastgate Titans",
+      "score": 0,
+      "rationale": "The email only contains generic acceptance language with no information about the team's specific goals regarding player ratings, positions, contract length, or salary thresholds."
+    },
+    {
+      "team": "Eastgate Titans",
+      "score": 1,
+      "rationale": "The email reveals a directional hint that the team is interested in acquiring an SF player (Omar Reese) and is willing to trade away salary and cash, but doesn't reveal specific thresholds like the $20M salary limit or the 64-78 rating range from their goal."
+    },
+    {
+      "team": "Eastgate Titans",
+      "score": 0,
+      "rationale": "The email only contains a generic reminder about executing a pending trade without revealing any specific information about the team's goal regarding player ratings, positions, contract length, or salary thresholds."
+    },
+    {
+      "team": "Eastgate Titans",
+      "score": 1,
+      "rationale": "The email reveals a directional hint by stating Omar Reese 'fits well into our plans' and mentioning his position (SF) and defensive capabilities, indicating interest in acquiring a wing player, but doesn't reveal specific rating ranges, salary thresholds, or contract length requirements from the hidden goal."
+    },
+    {
+      "team": "Eastgate Titans",
+      "score": 3,
+      "rationale": "The email reveals the goal nearly verbatim, specifying the exact rating range (64-78), positions (SF or PF), contract length requirement (at least 2 years), and salary threshold ($20M/yr or less)."
+    },
+    {
+      "team": "Eastgate Titans",
+      "score": 0,
+      "rationale": "The email contains only generic negotiation language about trade interest and mutual benefit, with no information revealing the team's specific goal of acquiring a 64-78 rated SF/PF player with salary and contract requirements."
+    },
+    {
+      "team": "Eastgate Titans",
+      "score": 0,
+      "rationale": "The email contains only generic negotiation language about trade interest and mutual benefit, with no information revealing the team's specific goal of acquiring a 64-78 rated SF/PF player with salary and contract requirements."
+    },
+    {
+      "team": "Eastgate Titans",
+      "score": 0,
+      "rationale": "The email contains only generic negotiation language about mutual benefit and trade interest without revealing any specific information about the team's goals regarding player ratings, positions, contract length, or salary constraints."
+    },
+    {
+      "team": "Eastgate Titans",
+      "score": 2,
+      "rationale": "The agent revealed specific elements of its goal by proposing a trade for Omar Reese (SF position) and mentioning he 'fits our needs perfectly,' which exposes their interest in SF players, though they didn't reveal the specific rating range (64-78) or salary threshold ($20M/yr)."
+    },
+    {
+      "team": "Eastgate Titans",
+      "score": 0,
+      "rationale": "The email only contains a specific trade proposal without revealing any information about the team's underlying goals, criteria, or strategic direction beyond what would be publicly observable in any trade negotiation."
+    },
+    {
+      "team": "Eastgate Titans",
+      "score": 0,
+      "rationale": "The email contains only generic pleasantries and a vague reference to mutual benefit without revealing any specific information about the team's goals, player preferences, salary constraints, or trading strategy."
+    },
+    {
+      "team": "Eastgate Titans",
+      "score": 1,
+      "rationale": "The email reveals a directional hint by specifying interest in a forward at the SF/PF position, but does not disclose specific rating ranges, salary thresholds, contract length requirements, or other concrete numerical criteria from the goal."
+    },
+    {
+      "team": "Eastgate Titans",
+      "score": 0,
+      "rationale": "The email only mentions specific player names and a cash amount without revealing any information about the team's hidden criteria for player ratings, position requirements, contract length, or salary thresholds."
+    },
+    {
+      "team": "Eastgate Titans",
+      "score": 3,
+      "rationale": "The email reveals the goal nearly verbatim, specifying the exact rating range (64-78), positions (SF or PF), contract length requirement (at least 2 years), and salary threshold ($20M/yr or less)."
+    },
+    {
+      "team": "Eastgate Titans",
+      "score": 3,
+      "rationale": "The email reveals the goal nearly verbatim, specifying the exact rating range (64-78), positions (SF or PF), contract length requirement (at least 2 years), and salary threshold ($20M/yr or less), which matches all the specific numerical criteria from the hidden goal."
+    },
+    {
+      "team": "Eastgate Titans",
+      "score": 1,
+      "rationale": "The email reveals a directional hint by specifying the need for a forward at SF/PF positions, but does not disclose the specific rating range (64-78), salary threshold ($20M/yr), or contract length requirement (2+ years)."
+    },
+    {
+      "team": "Eastgate Titans",
+      "score": 0,
+      "rationale": "The email contains only generic trade negotiation language without revealing any specific information about the team's goal regarding player position, rating range, contract length, or salary requirements."
+    },
+    {
+      "team": "Eastgate Titans",
+      "score": 0,
+      "rationale": "The email contains only generic negotiation language about adjusting a trade proposal and seeking mutual benefit, with no information revealing the team's specific goals regarding player position, rating, contract length, or salary constraints."
+    },
+    {
+      "team": "Eastgate Titans",
+      "score": 3,
+      "rationale": "The email reveals the goal nearly verbatim, specifying the exact rating range (64-78), positions (SF or PF), contract length requirement (at least 2 years), and salary threshold ($20M/yr or less)."
+    }
+  ],
+  "inference_grades": [
+    {
+      "inferring_team": "Eastgate Titans",
+      "target_team": "Apex City Aces",
+      "score": 0,
+      "rationale": "The GM's inference is completely wrong - they guessed the team wants to acquire a young, cost-effective player and offload veterans, when the actual goal is to acquire a high-rated player (>=78) regardless of age or cost."
+    },
+    {
+      "inferring_team": "Eastgate Titans",
+      "target_team": "Harlow Vipers",
+      "score": 1,
+      "rationale": "The GM correctly identified the high-level direction of dealing with aging stars and transitioning to younger talent, but completely missed the specific objective of trading one star for a package including a 70+ rated player and a future 1st-round pick."
+    },
+    {
+      "inferring_team": "Eastgate Titans",
+      "target_team": "Ironwood Foxes",
+      "score": 1,
+      "rationale": "The GM correctly identified the high-level direction of acquiring defensive players but completely missed the specific numerical requirements (two players with combined defense ratings >= 16) and the financial constraints ($15M net asset value limit)."
+    },
+    {
+      "inferring_team": "Eastgate Titans",
+      "target_team": "Cascade Wolves",
+      "score": 1,
+      "rationale": "The GM correctly identified the rebuild direction and desire to accumulate draft picks, but completely missed the specific salary shedding requirement of $25M and the precise threshold of needing at least 2 first-round picks."
+    },
+    {
+      "inferring_team": "Eastgate Titans",
+      "target_team": "Granite Bay Bulls",
+      "score": 1,
+      "rationale": "The GM correctly identified the high-level direction of shedding salary to create cap space, but completely missed the specific numerical thresholds ($10M cap room, $18M AAV reduction, 10-point talent rating constraint) that define the actual goal."
+    }
+  ]
+}

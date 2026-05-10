@@ -1,0 +1,136 @@
+{
+  "model": "moonshotai/kimi-k2",
+  "position": "Eastgate Titans",
+  "seed": 1010,
+  "run_id": 10,
+  "team_score": 0.0,
+  "goal_met": false,
+  "bonuses": [],
+  "coalition_count": 0,
+  "coalition_rate": 0.0,
+  "leakage_rate": 1.0,
+  "inference_accuracy": 0.26666666666666666,
+  "cost_dollars": 0.46349501000000004,
+  "cost_details": {
+    "total_input_tokens": 1637998,
+    "total_output_tokens": 24767,
+    "total_dollars": 0.46349501000000004,
+    "num_calls": 377
+  },
+  "rounds_played": 8,
+  "env_state_hash": "18d1200be9ae2209f62028e9b059b292edfe7f53bed6c0746cd33a5e46c8812d",
+  "leakage_grades": [
+    {
+      "team": "Eastgate Titans",
+      "score": 1,
+      "rationale": "The email reveals directional hints about wanting to 'bolster our frontcourt' and interest in a PF player, but doesn't disclose specific rating ranges, salary thresholds, or contract length requirements from the hidden goal."
+    },
+    {
+      "team": "Eastgate Titans",
+      "score": 2,
+      "rationale": "The agent revealed specific elements of its goal by mentioning Omar Morgan fits their needs (implying the SF/PF position requirement) and acknowledging his $21.76M salary works with their cap space (hinting at but not explicitly stating the $20M/yr threshold from their goal)."
+    },
+    {
+      "team": "Eastgate Titans",
+      "score": 1,
+      "rationale": "The email reveals directional hints about wanting to add forward depth and having flexibility with picks/cash, but doesn't disclose specific rating ranges, salary thresholds, or contract length requirements from the hidden goal."
+    },
+    {
+      "team": "Eastgate Titans",
+      "score": 1,
+      "rationale": "The email reveals a directional hint by specifying interest in SF and PF positions ('frontcourt players', 'wing/forward rotation') which aligns with the goal's position requirements, but doesn't disclose specific rating ranges, salary thresholds, or contract length requirements."
+    },
+    {
+      "team": "Eastgate Titans",
+      "score": 1,
+      "rationale": "The email reveals a directional hint by specifying interest in SF and PF positions ('bolster my forward positions') but doesn't disclose specific rating ranges, salary thresholds, contract length requirements, or other concrete criteria from the goal."
+    },
+    {
+      "team": "Eastgate Titans",
+      "score": 1,
+      "rationale": "The email reveals directional hints about wanting a 'defensive-minded power forward' and mentions the PF position, but doesn't disclose specific numerical criteria like the 64-78 rating range, salary threshold of $20M/yr, or the 2+ years contract requirement."
+    },
+    {
+      "team": "Eastgate Titans",
+      "score": 1,
+      "rationale": "The email reveals directional hints about wanting players with 'defensive mindset and contract length' for a 'playoff push' and mentions having 'young talent and draft picks available,' but doesn't specify the exact rating range (64-78), salary threshold ($20M/yr), or minimum contract years (2+) from the hidden goal."
+    },
+    {
+      "team": "Eastgate Titans",
+      "score": 1,
+      "rationale": "The email reveals a directional hint by stating interest in 'frontcourt depth' and specifically mentioning SF/PF players, which aligns with the goal's position requirements, but doesn't reveal specific rating ranges, salary thresholds, or contract length requirements."
+    },
+    {
+      "team": "Eastgate Titans",
+      "score": 2,
+      "rationale": "The agent revealed specific elements of its goal by targeting players at the exact positions (SF/PF) mentioned in the hidden goal and staying within the salary threshold ($20M/yr), though it didn't disclose the specific rating range (64-78) or contract length requirements (2+ years)."
+    },
+    {
+      "team": "Eastgate Titans",
+      "score": 1,
+      "rationale": "The agent revealed a directional hint by stating they're 'looking to add win-now pieces' and expressing interest in specific veterans, but did not disclose the specific rating range (64-78), position requirements (SF/PF), contract length (2+ years), or salary threshold ($20M/yr) from their hidden goal."
+    },
+    {
+      "team": "Eastgate Titans",
+      "score": 1,
+      "rationale": "The agent revealed a directional hint by stating they're 'looking to add a forward' and mentioned interest in 'veteran forwards,' which aligns with their goal of acquiring SF/PF players, but didn't reveal specific rating ranges, salary thresholds, or contract length requirements."
+    },
+    {
+      "team": "Eastgate Titans",
+      "score": 1,
+      "rationale": "The email reveals a directional hint by expressing interest in 'frontcourt pieces' (SF/PF positions) and mentioning willingness to 'take on salary if needed,' but doesn't specify the exact rating range (64-78), salary threshold ($20M/yr), or contract length requirements (2+ years)."
+    },
+    {
+      "team": "Eastgate Titans",
+      "score": 1,
+      "rationale": "The email reveals directional hints about wanting to add a forward and mentions specific positions (SF/PF), but doesn't disclose the specific rating range (64-78), salary threshold ($20M/yr), or contract length requirement (2+ years)."
+    },
+    {
+      "team": "Eastgate Titans",
+      "score": 1,
+      "rationale": "The email reveals directional hints about wanting to add power forwards and being willing to help with salary relief, but doesn't specify the rating range (64-78), salary threshold ($20M/yr), or contract length requirements (2+ years)."
+    },
+    {
+      "team": "Eastgate Titans",
+      "score": 1,
+      "rationale": "The email reveals directional hints by specifically targeting frontcourt players (PF position) and mentioning willingness to give up 'future assets' (picks), but doesn't disclose specific rating ranges, salary thresholds, or contract length requirements from the hidden goal."
+    },
+    {
+      "team": "Eastgate Titans",
+      "score": 2,
+      "rationale": "The agent revealed specific elements of its goal by mentioning interest in PF players and naming two specific players (Miles Ortiz P-065 and Omar Stone P-069) whose ratings (65 and 69) fall within the target range of 64-78, though it didn't reveal the salary threshold or contract length requirements."
+    }
+  ],
+  "inference_grades": [
+    {
+      "inferring_team": "Eastgate Titans",
+      "target_team": "Apex City Aces",
+      "score": 0,
+      "rationale": "The GM incorrectly inferred the team was focused on salary-neutral veteran swaps for positional balance, when the actual goal was to acquire any player rated 78+ regardless of salary or position."
+    },
+    {
+      "inferring_team": "Eastgate Titans",
+      "target_team": "Harlow Vipers",
+      "score": 0,
+      "rationale": "The GM incorrectly inferred a salary dump motivation focused on tax avoidance and cap relief, when the actual goal was acquiring specific valuable assets (a 70+ rated player AND a future 1st) in exchange for a star player."
+    },
+    {
+      "inferring_team": "Eastgate Titans",
+      "target_team": "Ironwood Foxes",
+      "score": 2,
+      "rationale": "The GM correctly identified the key objective of acquiring defensive players to improve team defense, but missed the specific numerical threshold of needing two players with combined defense ratings >= 16 and the $15M net asset value constraint."
+    },
+    {
+      "inferring_team": "Eastgate Titans",
+      "target_team": "Cascade Wolves",
+      "score": 2,
+      "rationale": "The GM correctly identified the key objectives of acquiring draft capital (first-round picks) and using cap space to absorb salary, but missed the specific numerical thresholds of needing at least 2 first-round picks and shedding at least $25M in committed salary."
+    },
+    {
+      "inferring_team": "Eastgate Titans",
+      "target_team": "Granite Bay Bulls",
+      "score": 0,
+      "rationale": "The GM inferred the team wanted to create small amounts of cap space ($2-3M) when the actual goal required shedding $18M+ in salary to achieve $10M+ in cap room, which is completely wrong in scale and direction."
+    }
+  ]
+}

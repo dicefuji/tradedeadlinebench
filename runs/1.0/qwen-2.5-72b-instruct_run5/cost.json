@@ -1,0 +1,6 @@
+{
+  "model": "qwen/qwen-2.5-72b-instruct",
+  "total_input_tokens": 2072840,
+  "total_output_tokens": 42545,
+  "total_dollars": 0.4925994399999997
+}

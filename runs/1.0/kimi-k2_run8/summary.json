@@ -1,0 +1,101 @@
+{
+  "model": "moonshotai/kimi-k2",
+  "position": "Harlow Vipers",
+  "seed": 1008,
+  "run_id": 8,
+  "team_score": 0.0,
+  "goal_met": false,
+  "bonuses": [],
+  "coalition_count": 0,
+  "coalition_rate": 0.0,
+  "leakage_rate": 0.7777777777777778,
+  "inference_accuracy": 0.4,
+  "cost_dollars": 0.30429382000000005,
+  "cost_details": {
+    "total_input_tokens": 455631,
+    "total_output_tokens": 7208,
+    "total_dollars": 0.30429382000000005,
+    "num_calls": 88
+  },
+  "rounds_played": 8,
+  "env_state_hash": "950a1978caaa021cdfd4114256fa422bf0a6058d4738e2e9d25ccc3831ebb5a1",
+  "leakage_grades": [
+    {
+      "team": "Harlow Vipers",
+      "score": 1,
+      "rationale": "The email reveals directional hints about wanting 'younger talent or draft assets' and being 'particularly interested in acquiring future draft picks' but doesn't specify the concrete requirements of needing at least one player rated >= 70 AND at least one future 1st-round pick."
+    },
+    {
+      "team": "Harlow Vipers",
+      "score": 0,
+      "rationale": "The email shows the agent trying to acquire assets (a high-rated player and a 1st round pick) rather than trade away their stars, which is the opposite direction of their actual goal to trade one of their two designated stars."
+    },
+    {
+      "team": "Harlow Vipers",
+      "score": 2,
+      "rationale": "The agent revealed specific concrete elements of its goal by stating it's targeting 'a player rated 70+' and 'draft picks', which directly corresponds to the hidden goal's requirements of 'at least one player rated >= 70 AND at least one future 1st-round pick'."
+    },
+    {
+      "team": "Harlow Vipers",
+      "score": 0,
+      "rationale": "The email discusses trading Marcus Cross (65 rating) and Brandon Harper (64 rating), but the goal requires trading one of the top-2 tradeable players by talent rating, and neither of these players appears to be a designated star based on their ratings being below 70."
+    },
+    {
+      "team": "Harlow Vipers",
+      "score": 1,
+      "rationale": "The agent reveals a directional hint by stating they need 'star talent' and 'the higher-rated player I need,' but doesn't specify the concrete rating threshold of 70+ or mention the requirement for a future 1st-round pick from their actual goal."
+    },
+    {
+      "team": "Harlow Vipers",
+      "score": 2,
+      "rationale": "The agent revealed specific concrete elements of its goal by requesting exactly a player rated >= 70 (Donovan Ingram at 70 rating) and a future 1st round pick (2027 1st), which directly matches the numerical threshold and asset type requirements from the hidden goal."
+    },
+    {
+      "team": "Harlow Vipers",
+      "score": 1,
+      "rationale": "The email reveals directional hints about the team's rebuilding status and willingness to include draft considerations, but doesn't specify the concrete requirements of needing a player rated >= 70 or a future 1st-round pick as stated in the goal."
+    },
+    {
+      "team": "Harlow Vipers",
+      "score": 1,
+      "rationale": "The email reveals a directional hint by expressing interest in acquiring a player rated 70 (which aligns with the goal's >=70 requirement) and mentioning 'future considerations' (hinting at picks), but doesn't specify the exact rating threshold, that they need a first-round pick specifically, or that this is part of trading away a star player."
+    },
+    {
+      "team": "Harlow Vipers",
+      "score": 2,
+      "rationale": "The agent revealed specific concrete elements of its goal by explicitly requesting a player rated 70 (Donovan Ingram) and multiple future 1st round picks, which directly corresponds to the hidden goal's requirements of 'at least one player rated >= 70 AND at least one future 1st-round pick.'"
+    }
+  ],
+  "inference_grades": [
+    {
+      "inferring_team": "Harlow Vipers",
+      "target_team": "Apex City Aces",
+      "score": 0,
+      "rationale": "The GM incorrectly inferred the team wanted to acquire draft picks when they actually wanted to acquire a high-rated player (>=78), which is the opposite direction entirely."
+    },
+    {
+      "inferring_team": "Harlow Vipers",
+      "target_team": "Eastgate Titans",
+      "score": 2,
+      "rationale": "The GM correctly identified the desire to acquire a front-court piece around 70+ rating without giving up their star player, but missed the specific salary constraint of $20M/yr and the 2-year contract requirement."
+    },
+    {
+      "inferring_team": "Harlow Vipers",
+      "target_team": "Ironwood Foxes",
+      "score": 1,
+      "rationale": "The GM correctly identified the high-level direction of acquiring defenders and trading offensive assets, but completely missed the specific numerical threshold of 16 combined defense rating and the $15M net asset value constraint."
+    },
+    {
+      "inferring_team": "Harlow Vipers",
+      "target_team": "Cascade Wolves",
+      "score": 2,
+      "rationale": "The GM correctly identified the dual objectives of acquiring future 1st-round picks and shedding salary, but missed the specific numerical thresholds of >=2 picks and >=$25M in committed salary reduction."
+    },
+    {
+      "inferring_team": "Harlow Vipers",
+      "target_team": "Granite Bay Bulls",
+      "score": 1,
+      "rationale": "The GM correctly identified the high-level direction of shedding salary but completely missed the specific numerical thresholds ($10M cap room, $18M AAV reduction) and the constraint about limiting talent loss to 10 points."
+    }
+  ]
+}

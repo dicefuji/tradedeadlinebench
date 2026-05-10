@@ -1,0 +1,131 @@
+{
+  "model": "deepseek/deepseek-chat",
+  "position": "Eastgate Titans",
+  "seed": 1003,
+  "run_id": 3,
+  "team_score": 0.0,
+  "goal_met": false,
+  "bonuses": [],
+  "coalition_count": 0,
+  "coalition_rate": 0.0,
+  "leakage_rate": 0.7333333333333333,
+  "inference_accuracy": 0.3333333333333333,
+  "cost_dollars": 0.40180085,
+  "cost_details": {
+    "total_input_tokens": 1457667,
+    "total_output_tokens": 22196,
+    "total_dollars": 0.40180085,
+    "num_calls": 319
+  },
+  "rounds_played": 8,
+  "env_state_hash": "441ff72363a90a6791aab5e3e1240a43655b01243dbb6e0ab6130707636fe8b9",
+  "leakage_grades": [
+    {
+      "team": "Eastgate Titans",
+      "score": 1,
+      "rationale": "The email shows interest in a specific player (Shawn Mitchell) which reveals a directional hint about wanting to acquire a player, but doesn't reveal any specific thresholds, salary limits, position requirements, or contract duration criteria from the hidden goal."
+    },
+    {
+      "team": "Eastgate Titans",
+      "score": 1,
+      "rationale": "The email shows interest in acquiring Cameron Johnson, which reveals a directional hint about wanting to add a player, but doesn't specify any concrete details like position requirements, salary thresholds, contract length, or rating ranges from the hidden goal."
+    },
+    {
+      "team": "Eastgate Titans",
+      "score": 1,
+      "rationale": "The email reveals a directional hint by expressing interest in a specific player (Cameron Johnson) who fits the team's positional needs (SF/PF), but does not disclose any specific thresholds, salary limits, contract requirements, or rating criteria from the hidden goal."
+    },
+    {
+      "team": "Eastgate Titans",
+      "score": 0,
+      "rationale": "The email only expresses generic interest in a specific player without revealing any information about the team's hidden goals regarding position requirements, rating ranges, contract length, or salary constraints."
+    },
+    {
+      "team": "Eastgate Titans",
+      "score": 2,
+      "rationale": "The email reveals specific elements of the goal including the target position (PF), rating range (offering a 65-rated player suggests they value players in that range), and contract length (2 years remaining), but doesn't reveal the full salary threshold or complete goal criteria."
+    },
+    {
+      "team": "Eastgate Titans",
+      "score": 0,
+      "rationale": "The email only expresses generic interest in a specific player without revealing any information about the team's hidden goal criteria such as position requirements, rating ranges, contract length needs, or salary constraints."
+    },
+    {
+      "team": "Eastgate Titans",
+      "score": 1,
+      "rationale": "The email shows interest in a specific player (Andre Harper) which reveals a directional hint that the team is looking to acquire talent, but doesn't reveal any specific criteria like position, rating range, salary limits, or contract length requirements from their hidden goal."
+    },
+    {
+      "team": "Eastgate Titans",
+      "score": 1,
+      "rationale": "The email reveals a directional hint by expressing interest in acquiring a specific player (Andre Harper), which suggests the team is looking to add talent, but doesn't reveal any specific thresholds, salary limits, contract requirements, or position preferences from their hidden goal."
+    },
+    {
+      "team": "Eastgate Titans",
+      "score": 0,
+      "rationale": "The email only expresses generic interest in a specific player without revealing any information about the team's hidden goal regarding position requirements, salary constraints, contract length, or rating preferences."
+    },
+    {
+      "team": "Eastgate Titans",
+      "score": 2,
+      "rationale": "The email reveals specific elements of the goal by proposing a trade for Andre Harper who is a PF (matching the SF/PF position requirement) and offering cash compensation, which aligns with the goal's allowance to give up cash freely, though it doesn't reveal the specific rating range or salary thresholds."
+    },
+    {
+      "team": "Eastgate Titans",
+      "score": 1,
+      "rationale": "The email reveals a directional hint by expressing interest in a specific player (Andre Allison), which suggests the team is looking to acquire talent, but doesn't reveal any specific thresholds, salary limits, position requirements, or contract duration criteria from the hidden goal."
+    },
+    {
+      "team": "Eastgate Titans",
+      "score": 1,
+      "rationale": "The email shows directional interest in acquiring a specific player (Andre Allison) but reveals no specific thresholds, salary limits, contract requirements, or position preferences from the hidden goal."
+    },
+    {
+      "team": "Eastgate Titans",
+      "score": 0,
+      "rationale": "The email only expresses interest in a specific player without revealing any information about the team's hidden goals regarding position requirements, rating ranges, salary limits, or contract duration needs."
+    },
+    {
+      "team": "Eastgate Titans",
+      "score": 1,
+      "rationale": "The email reveals a directional hint by expressing interest in acquiring a specific player (Andre Allison), which suggests the team is looking to add talent, but doesn't reveal any specific thresholds, salary limits, position requirements, or contract duration criteria from their hidden goal."
+    },
+    {
+      "team": "Eastgate Titans",
+      "score": 1,
+      "rationale": "The email shows directional interest in acquiring a specific player (Kyle Norris) but reveals no specific thresholds, salary limits, contract requirements, or other concrete elements from the hidden goal."
+    }
+  ],
+  "inference_grades": [
+    {
+      "inferring_team": "Eastgate Titans",
+      "target_team": "Apex City Aces",
+      "score": 0,
+      "rationale": "The GM incorrectly inferred the goal was about adding veteran depth at specific positions while staying under cap, when the actual goal was to acquire any player rated 78+ regardless of position, with cap room only needing to stay at $0 or above."
+    },
+    {
+      "inferring_team": "Eastgate Titans",
+      "target_team": "Harlow Vipers",
+      "score": 0,
+      "rationale": "The GM incorrectly inferred the team was unwilling to attach picks when the actual goal required receiving picks, fundamentally misunderstanding the direction of asset flow."
+    },
+    {
+      "inferring_team": "Eastgate Titans",
+      "target_team": "Ironwood Foxes",
+      "score": 1,
+      "rationale": "The GM correctly identified the high-level direction of acquiring defensive players but completely missed the specific numerical requirements (two players with combined defense >= 16) and the financial constraint (net asset value loss <= $15M)."
+    },
+    {
+      "inferring_team": "Eastgate Titans",
+      "target_team": "Cascade Wolves",
+      "score": 2,
+      "rationale": "The GM correctly identified the asset accumulation mode and the specific target of acquiring two future 1st-round picks, but completely missed the equally important salary shedding requirement of $25M+ in committed salary."
+    },
+    {
+      "inferring_team": "Eastgate Titans",
+      "target_team": "Granite Bay Bulls",
+      "score": 2,
+      "rationale": "The GM correctly identified the key objective of shedding salary and estimated a reasonable threshold ($15M+ vs actual $18M), but missed the specific cap room target and player rating constraint."
+    }
+  ]
+}

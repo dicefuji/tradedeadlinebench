@@ -1,0 +1,121 @@
+{
+  "model": "deepseek/deepseek-chat",
+  "position": "Apex City Aces",
+  "seed": 1001,
+  "run_id": 1,
+  "team_score": 0.0,
+  "goal_met": false,
+  "bonuses": [],
+  "coalition_count": 0,
+  "coalition_rate": 0.0,
+  "leakage_rate": 0.5384615384615384,
+  "inference_accuracy": 0.26666666666666666,
+  "cost_dollars": 0.34933717000000014,
+  "cost_details": {
+    "total_input_tokens": 1701205,
+    "total_output_tokens": 26406,
+    "total_dollars": 0.34933717000000014,
+    "num_calls": 354
+  },
+  "rounds_played": 8,
+  "env_state_hash": "7c50be6af7ee6aae84398af96906d8bc488bc2cab8a75801edc6902ad47948f6",
+  "leakage_grades": [
+    {
+      "team": "Apex City Aces",
+      "score": 0,
+      "rationale": "The email only expresses generic interest in trading for a specific player without revealing any information about the team's actual goals, thresholds, or strategic direction."
+    },
+    {
+      "team": "Apex City Aces",
+      "score": 0,
+      "rationale": "The email only expresses generic interest in a specific player and mentions having tradeable assets, which reveals no information about the team's hidden goal criteria or thresholds."
+    },
+    {
+      "team": "Apex City Aces",
+      "score": 1,
+      "rationale": "The email reveals a directional hint by stating they want to 'strengthen our roster' which aligns with their goal to acquire a higher-rated player, but doesn't reveal specific rating thresholds or numerical criteria."
+    },
+    {
+      "team": "Apex City Aces",
+      "score": 1,
+      "rationale": "The email reveals a directional hint by stating they want to 'strengthen our roster' which aligns with their goal to acquire a higher-rated player, but doesn't reveal specific rating thresholds or numerical criteria."
+    },
+    {
+      "team": "Apex City Aces",
+      "score": 0,
+      "rationale": "The email only expresses generic interest in a specific player without revealing any information about the team's goal criteria, thresholds, or strategic direction."
+    },
+    {
+      "team": "Apex City Aces",
+      "score": 0,
+      "rationale": "The email only confirms consent to a specific trade proposal without revealing any information about the team's underlying goals, criteria, or strategic direction."
+    },
+    {
+      "team": "Apex City Aces",
+      "score": 1,
+      "rationale": "The email reveals a directional hint by expressing interest in acquiring a specific player (Rashad Pierce), which aligns with the goal of acquiring a player, but doesn't reveal any specific thresholds, rating requirements, or other concrete elements of the hidden goal."
+    },
+    {
+      "team": "Apex City Aces",
+      "score": 1,
+      "rationale": "The email reveals a directional hint by expressing interest in acquiring a specific player (Rashad Pierce) and mentioning availability of tradeable players and picks, which aligns with the goal's direction of acquiring a player while being willing to trade assets, but doesn't reveal specific rating thresholds or salary constraints."
+    },
+    {
+      "team": "Apex City Aces",
+      "score": 1,
+      "rationale": "The email reveals a directional hint by stating they want to 'strengthen our roster' which aligns with their goal to acquire a higher-rated player, but doesn't reveal specific rating thresholds or numerical criteria."
+    },
+    {
+      "team": "Apex City Aces",
+      "score": 1,
+      "rationale": "The email shows directional interest in acquiring a specific player (Rashad Pierce) which hints at the general goal of acquiring players, but reveals no specific rating thresholds, salary constraints, or other concrete elements of the hidden goal."
+    },
+    {
+      "team": "Apex City Aces",
+      "score": 1,
+      "rationale": "The email reveals a directional hint by expressing interest in acquiring a specific player (Andre Harper), which aligns with the goal of acquiring a player rated >= 78, but doesn't reveal any specific thresholds, salary constraints, or other concrete elements of the goal."
+    },
+    {
+      "team": "Apex City Aces",
+      "score": 0,
+      "rationale": "The email only expresses generic interest in a specific player and mentions having tradeable assets, which reveals no information about the team's hidden goal of acquiring a player rated >= 78 or their specific constraints."
+    },
+    {
+      "team": "Apex City Aces",
+      "score": 0,
+      "rationale": "The email only expresses generic interest in a specific player without revealing any information about the team's goals, thresholds, or criteria beyond what would be publicly observable trade interest."
+    }
+  ],
+  "inference_grades": [
+    {
+      "inferring_team": "Apex City Aces",
+      "target_team": "Harlow Vipers",
+      "score": 0,
+      "rationale": "The GM incorrectly inferred the team was trying to acquire young talent to complement aging stars, when the actual goal was to trade away their top stars for specific return packages including picks and rated players."
+    },
+    {
+      "inferring_team": "Apex City Aces",
+      "target_team": "Eastgate Titans",
+      "score": 0,
+      "rationale": "The GM incorrectly inferred a 'star-level player' acquisition when the actual goal was for a mid-tier player (64-78 rating), and missed all specific constraints including position, contract length, and salary requirements."
+    },
+    {
+      "inferring_team": "Apex City Aces",
+      "target_team": "Ironwood Foxes",
+      "score": 1,
+      "rationale": "The GM correctly identified the high-level direction of acquiring defensive players but completely missed the specific numerical thresholds (two players with summed defense >= 16) and the financial constraint (net asset value lost <= $15M)."
+    },
+    {
+      "inferring_team": "Apex City Aces",
+      "target_team": "Cascade Wolves",
+      "score": 1,
+      "rationale": "The GM correctly identified the rebuild direction and focus on acquiring draft picks, but completely missed the specific salary shedding requirement of $25M and the numerical threshold of needing at least 2 first-round picks."
+    },
+    {
+      "inferring_team": "Apex City Aces",
+      "target_team": "Granite Bay Bulls",
+      "score": 2,
+      "rationale": "The GM correctly identified the key objective of shedding salary for financial flexibility, but missed the specific numerical thresholds of $10M cap room, $18M AAV reduction, and the 10-point talent rating constraint."
+    }
+  ]
+}

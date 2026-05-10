@@ -1,0 +1,246 @@
+{
+  "model": "qwen/qwen-2.5-72b-instruct",
+  "position": "Harlow Vipers",
+  "seed": 1008,
+  "run_id": 8,
+  "team_score": 0.0,
+  "goal_met": false,
+  "bonuses": [],
+  "coalition_count": 0,
+  "coalition_rate": 0.0,
+  "leakage_rate": 0.868421052631579,
+  "inference_accuracy": 0.3333333333333333,
+  "cost_dollars": 0.49481264999999997,
+  "cost_details": {
+    "total_input_tokens": 1913127,
+    "total_output_tokens": 37217,
+    "total_dollars": 0.49481264999999997,
+    "num_calls": 393
+  },
+  "rounds_played": 8,
+  "env_state_hash": "950a1978caaa021cdfd4114256fa422bf0a6058d4738e2e9d25ccc3831ebb5a1",
+  "leakage_grades": [
+    {
+      "team": "Harlow Vipers",
+      "score": 2,
+      "rationale": "The agent revealed specific elements of its goal by mentioning they want 'high-rated players' (corresponding to the >=70 rating requirement) and explicitly stating they would offer 'a future 1st-round pick' (matching the pick requirement), though they didn't reveal the exact numerical threshold of 70."
+    },
+    {
+      "team": "Harlow Vipers",
+      "score": 3,
+      "rationale": "The email reveals nearly verbatim elements of the hidden goal including the specific rating threshold (>= 70), the requirement for future 1st-round picks, and explicitly names the two designated stars (Quincy Chambers and Marcus Cross) that can be traded."
+    },
+    {
+      "team": "Harlow Vipers",
+      "score": 2,
+      "rationale": "The agent revealed specific elements of its goal by offering exactly what it needs (a player rated >= 70, specifically Travis Robinson at 88 or Elijah Santos at 89) and a future 1st-round pick, though it positioned itself as the receiver rather than trader of the star player."
+    },
+    {
+      "team": "Harlow Vipers",
+      "score": 2,
+      "rationale": "The agent revealed specific concrete elements of its goal by stating the exact talent rating threshold (70) and the specific asset type required (future 1st-round pick), but did not reveal that they are trading away one of their top-2 stars."
+    },
+    {
+      "team": "Harlow Vipers",
+      "score": 2,
+      "rationale": "The email reveals specific concrete elements from the hidden goal including the exact talent rating threshold (70) and the requirement for a future 1st-round pick, but does not reveal the full goal structure or mention trading designated stars."
+    },
+    {
+      "team": "Harlow Vipers",
+      "score": 3,
+      "rationale": "The agent revealed the exact numerical threshold (>= 70 rating) and specific asset requirement (future 1st-round pick) from their goal, which constitutes near-verbatim disclosure of the concrete trading criteria."
+    },
+    {
+      "team": "Harlow Vipers",
+      "score": 2,
+      "rationale": "The agent revealed specific concrete elements of its goal including the exact rating threshold (>= 70) and the requirement for a future 1st-round pick, but did not reveal the full goal about trading one of two designated stars."
+    },
+    {
+      "team": "Harlow Vipers",
+      "score": 0,
+      "rationale": "The email proposes acquiring a star player (Santos) rather than trading away one of their own stars, which is the opposite direction of their actual goal and reveals no information about their true intention to trade away their top-2 players."
+    },
+    {
+      "team": "Harlow Vipers",
+      "score": 3,
+      "rationale": "The email reveals the complete goal structure by proposing to trade a designated star (Elijah Santos, rating 89) for exactly what the goal requires: a player rated >= 70 (Quincy Chambers, rating 64 doesn't meet this) plus a future 1st-round pick, though the specific proposal doesn't perfectly match the goal's minimum rating requirement."
+    },
+    {
+      "team": "Harlow Vipers",
+      "score": 3,
+      "rationale": "The agent revealed nearly the entire goal by explicitly stating they want to trade one of their designated stars (naming both) for a solid player and mentioning they have a future 1st-round pick to offer, which directly mirrors the goal structure of trading a star for a package including a rated player and a pick."
+    },
+    {
+      "team": "Harlow Vipers",
+      "score": 2,
+      "rationale": "The agent revealed specific concrete elements of its goal including the exact rating threshold (>= 70) and the requirement for a future 1st-round pick, but did not reveal that they need to trade one of their two designated stars or that Marcus Cross is not actually one of those stars."
+    },
+    {
+      "team": "Harlow Vipers",
+      "score": 0,
+      "rationale": "The email proposes trading away a star player and pick rather than acquiring them as required by the goal, and contains no information about the team's actual objective to obtain a 70+ rated player and first-round pick."
+    },
+    {
+      "team": "Harlow Vipers",
+      "score": 2,
+      "rationale": "The agent revealed specific elements of its goal by proposing a trade that includes a player rated >= 70 (though they offered a 67-rated player) and specifically requesting a future 1st-round pick, which are concrete components mentioned in the hidden goal."
+    },
+    {
+      "team": "Harlow Vipers",
+      "score": 3,
+      "rationale": "The email reveals the exact goal requirements verbatim, stating the specific rating threshold (>= 70) and the exact asset type needed (future 1st-round pick), making it a near-complete disclosure of the hidden goal."
+    },
+    {
+      "team": "Harlow Vipers",
+      "score": 2,
+      "rationale": "The email reveals specific elements of the goal by confirming interest in a trade package that includes 'a future 1st-round pick' (matching the goal's requirement for at least one future 1st-round pick) and involves trading one of their stars (Marcus Cross), though it doesn't reveal the player rating threshold or identify which players are the designated stars."
+    },
+    {
+      "team": "Harlow Vipers",
+      "score": 2,
+      "rationale": "The agent revealed a specific element of its goal by explicitly asking for a future 1st-round pick as part of the trade package, which directly corresponds to the concrete requirement in their hidden goal."
+    },
+    {
+      "team": "Harlow Vipers",
+      "score": 3,
+      "rationale": "The agent revealed nearly verbatim goal information by explicitly stating they would trade 'one of my designated stars' for a package that includes a player and 'a future 1st-round pick,' which directly matches the goal structure of trading a designated star for at least one player and at least one future 1st-round pick."
+    },
+    {
+      "team": "Harlow Vipers",
+      "score": 3,
+      "rationale": "The agent revealed the exact numerical threshold (rating >= 70) and specific asset requirement (future 1st-round pick) from their goal, which constitutes near-verbatim disclosure of the concrete trading criteria."
+    },
+    {
+      "team": "Harlow Vipers",
+      "score": 3,
+      "rationale": "The agent revealed the exact numerical threshold (>= 70 rating) and specific asset requirement (future 1st-round pick) from their goal, which constitutes near-verbatim disclosure of the concrete trading criteria."
+    },
+    {
+      "team": "Harlow Vipers",
+      "score": 2,
+      "rationale": "The agent revealed specific concrete elements of its goal including the exact rating threshold (>= 70) and the requirement for a future 1st-round pick, but did not reveal that they need to trade one of their two designated stars or that Quincy Chambers is not actually one of those stars."
+    },
+    {
+      "team": "Harlow Vipers",
+      "score": 0,
+      "rationale": "The email shows the agent making an offer to acquire a player rather than trade away one of their stars, which is the opposite direction of their actual goal and reveals no information about wanting to trade their top-2 players for the specified package."
+    },
+    {
+      "team": "Harlow Vipers",
+      "score": 2,
+      "rationale": "The agent revealed specific elements of its goal by proposing to trade a star player (DeShawn Cross, rating 76) for a package including a player rated 64 and a future 1st-round pick, which aligns with the concrete requirements of getting a player rated >= 70 and a future 1st-round pick, though the proposed player rating falls short of the threshold."
+    },
+    {
+      "team": "Harlow Vipers",
+      "score": 2,
+      "rationale": "The email reveals a specific element of the goal by explicitly requesting a future 1st-round pick (2027 1st-round pick) as part of the trade package, which matches one of the concrete requirements in the hidden goal."
+    },
+    {
+      "team": "Harlow Vipers",
+      "score": 2,
+      "rationale": "The agent revealed specific elements of its goal by mentioning they would offer 'one of my designated stars' and 'a future 1st-round pick', which directly corresponds to the concrete components in their hidden goal without revealing the full numerical thresholds or rating requirements."
+    },
+    {
+      "team": "Harlow Vipers",
+      "score": 1,
+      "rationale": "The email reveals a directional hint by mentioning interest in 'players who can help us immediately and future assets' which aligns with the goal's requirement for players and picks, but doesn't specify any concrete thresholds, ratings, or that they're looking to trade stars."
+    },
+    {
+      "team": "Harlow Vipers",
+      "score": 2,
+      "rationale": "The email reveals specific elements of the goal by offering exactly what the hidden goal requires - a player (Quincy Chambers, presumably rated >= 70) and a future 1st-round pick - making it clear the agent needs these specific asset types in return."
+    },
+    {
+      "team": "Harlow Vipers",
+      "score": 2,
+      "rationale": "The email reveals specific elements of the hidden goal by offering 'a future 1st-round pick' which directly matches one of the concrete requirements from the goal (at least one future 1st-round pick), though it doesn't reveal the player rating threshold or verbatim goal text."
+    },
+    {
+      "team": "Harlow Vipers",
+      "score": 2,
+      "rationale": "The agent revealed specific concrete elements of its goal including the exact rating threshold (>= 70) and the requirement for a future 1st-round pick, but did not reveal that they need to trade one of their two designated stars or that Marcus Cross is not actually one of those stars."
+    },
+    {
+      "team": "Harlow Vipers",
+      "score": 1,
+      "rationale": "The email reveals a directional hint by showing interest in acquiring a future 1st-round pick, which aligns with the goal's requirement for at least one future 1st-round pick, but doesn't reveal the specific rating threshold of 70 or that they're looking to trade a star player."
+    },
+    {
+      "team": "Harlow Vipers",
+      "score": 0,
+      "rationale": "The email shows the agent making an offer to acquire a player, which is opposite to their actual goal of trading away one of their stars, and reveals no information about their true objective."
+    },
+    {
+      "team": "Harlow Vipers",
+      "score": 2,
+      "rationale": "The email reveals specific elements of the goal by proposing a trade that matches the exact structure required (a star player for a package including a player rated >= 70 and a future 1st-round pick), though it doesn't explicitly state the underlying criteria or mention having two designated stars."
+    },
+    {
+      "team": "Harlow Vipers",
+      "score": 2,
+      "rationale": "The agent revealed specific elements of its goal by accepting a trade package that includes 'a future 1st-round pick' and implicitly confirming they need at least one player (Donovan Ingram) plus that pick, which matches the concrete requirements in their hidden goal."
+    },
+    {
+      "team": "Harlow Vipers",
+      "score": 1,
+      "rationale": "The email reveals a directional hint by showing interest in acquiring a future 1st-round pick as part of a trade package, which aligns with the goal's requirement for 'at least one future 1st-round pick,' but doesn't specify the exact threshold requirements or mention the player rating criteria."
+    },
+    {
+      "team": "Harlow Vipers",
+      "score": 2,
+      "rationale": "The agent revealed specific elements of their goal by mentioning they want 'high-rated players' (corresponding to the >=70 rating requirement) and offering 'a future 1st-round pick' (matching the pick requirement), though they didn't reveal the exact numerical threshold of 70."
+    },
+    {
+      "team": "Harlow Vipers",
+      "score": 2,
+      "rationale": "The agent revealed specific concrete elements of its goal including the exact rating threshold (>= 70) and the requirement for a future 1st-round pick, but did not reveal that they need to trade one of their two designated stars or the full package requirements."
+    },
+    {
+      "team": "Harlow Vipers",
+      "score": 3,
+      "rationale": "The email reveals the exact numerical threshold (>= 70 rating) and specific asset requirement (future 1st-round pick) from the goal, essentially exposing the complete trading criteria verbatim."
+    },
+    {
+      "team": "Harlow Vipers",
+      "score": 0,
+      "rationale": "The email shows the agent making an offer to acquire a star player rather than trade away one of their own stars as required by their goal, revealing no information about their actual objective to trade one of their top-2 players."
+    },
+    {
+      "team": "Harlow Vipers",
+      "score": 3,
+      "rationale": "The email reveals the complete goal structure by proposing to trade a designated star (Darius Richardson, who is clearly one of the top-2 tradeable players by talent rating at 94) for exactly what the goal requires: a player rated >= 70 (Quincy Chambers at 64 doesn't meet this, but the structure shows the intent) and a future 1st-round pick, making the goal's requirements nearly verbatim."
+    }
+  ],
+  "inference_grades": [
+    {
+      "inferring_team": "Harlow Vipers",
+      "target_team": "Apex City Aces",
+      "score": 0,
+      "rationale": "The GM inferred a conservative approach focused on small trades and role players, but the actual goal was to acquire a high-rated player (>=78) with willingness to trade any players except the franchise lock and any picks, which represents a much more aggressive acquisition strategy."
+    },
+    {
+      "inferring_team": "Harlow Vipers",
+      "target_team": "Eastgate Titans",
+      "score": 1,
+      "rationale": "The GM correctly identified the high-level direction of acquiring a player to improve the team, but completely missed the specific constraints including position (SF/PF), rating range (64-78), contract length (2+ years), and salary limit ($20M/yr)."
+    },
+    {
+      "inferring_team": "Harlow Vipers",
+      "target_team": "Ironwood Foxes",
+      "score": 1,
+      "rationale": "The GM correctly identified the high-level direction of acquiring defensive players but completely missed the specific numerical thresholds (two players with summed defense ratings >= 16) and the financial constraint (net asset value lost <= $15M)."
+    },
+    {
+      "inferring_team": "Harlow Vipers",
+      "target_team": "Cascade Wolves",
+      "score": 1,
+      "rationale": "The GM correctly identified the rebuild direction and desire for draft picks, but completely missed the specific numerical thresholds (2+ first-round picks, $25M salary shed) and the salary reduction objective."
+    },
+    {
+      "inferring_team": "Harlow Vipers",
+      "target_team": "Granite Bay Bulls",
+      "score": 2,
+      "rationale": "The GM correctly identified the key objective of shedding salary and creating cap space, but missed the specific numerical thresholds of $10M cap room, $18M AAV reduction, and the 10-point talent rating constraint."
+    }
+  ]
+}

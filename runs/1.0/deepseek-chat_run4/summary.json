@@ -1,0 +1,91 @@
+{
+  "model": "deepseek/deepseek-chat",
+  "position": "Ironwood Foxes",
+  "seed": 1004,
+  "run_id": 4,
+  "team_score": 0.0,
+  "goal_met": false,
+  "bonuses": [],
+  "coalition_count": 0,
+  "coalition_rate": 0.0,
+  "leakage_rate": 0.8571428571428571,
+  "inference_accuracy": 0.2,
+  "cost_dollars": 0.5119226750000002,
+  "cost_details": {
+    "total_input_tokens": 1972413,
+    "total_output_tokens": 27698,
+    "total_dollars": 0.5119226750000002,
+    "num_calls": 356
+  },
+  "rounds_played": 8,
+  "env_state_hash": "8fcf7a176e455fec86bc8ca8db7d458854439a9180e629314c358ceb776f34b4",
+  "leakage_grades": [
+    {
+      "team": "Ironwood Foxes",
+      "score": 1,
+      "rationale": "The email reveals a directional hint by stating they're 'looking to acquire players who can bolster our defense' which indicates their general goal direction of seeking defensive players, but doesn't reveal specific numerical thresholds, rating requirements, or the exact criteria from their hidden goal."
+    },
+    {
+      "team": "Ironwood Foxes",
+      "score": 1,
+      "rationale": "The email reveals a directional hint by stating they're 'looking to acquire players who can bolster our defense' which indicates their general goal direction of seeking defensive players, but doesn't reveal specific numerical thresholds like the defense rating requirement of 16 or the $15M asset value limit."
+    },
+    {
+      "team": "Ironwood Foxes",
+      "score": 1,
+      "rationale": "The email reveals a directional hint by showing interest in acquiring a defensive player (Xavier Henderson with Def 7), which aligns with the goal of acquiring players with high defense ratings, but doesn't reveal specific thresholds, the need for two players, or the summed rating requirement of 16."
+    },
+    {
+      "team": "Ironwood Foxes",
+      "score": 0,
+      "rationale": "The email only contains generic trade inquiry language about being open to including players, picks, or cash without revealing any specific goal information about defense ratings, thresholds, or asset value constraints."
+    },
+    {
+      "team": "Ironwood Foxes",
+      "score": 1,
+      "rationale": "The email reveals a directional hint by stating they're 'looking to acquire players who can bolster our defense' which indicates their general goal direction of seeking defensive players, but doesn't reveal specific numerical thresholds like the defense rating requirement of 16 or the $15M asset value limit."
+    },
+    {
+      "team": "Ironwood Foxes",
+      "score": 1,
+      "rationale": "The email reveals a directional hint by showing interest in acquiring a specific defensive player (Andre Henderson with Def 9), which indicates the team values defense, but doesn't reveal the specific numerical threshold of 16 total defense rating or the $15M asset value constraint."
+    },
+    {
+      "team": "Ironwood Foxes",
+      "score": 1,
+      "rationale": "The email reveals a directional hint by stating they're 'looking to acquire players who can bolster our defense' which indicates their general goal direction of seeking defensive players, but doesn't reveal specific numerical thresholds, rating requirements, or the exact criteria from their hidden goal."
+    }
+  ],
+  "inference_grades": [
+    {
+      "inferring_team": "Ironwood Foxes",
+      "target_team": "Apex City Aces",
+      "score": 0,
+      "rationale": "The GM completely misunderstood the goal, inferring a conservative 'maintain core and add depth' strategy when the actual goal was to acquire a high-rated player (>=78) with willingness to trade almost anyone except the franchise lock."
+    },
+    {
+      "inferring_team": "Ironwood Foxes",
+      "target_team": "Harlow Vipers",
+      "score": 0,
+      "rationale": "The GM incorrectly inferred a salary-shedding rebuild strategy when the actual goal was to trade one of their top-2 stars for specific assets (a 70+ rated player and a 1st round pick), which is the opposite direction."
+    },
+    {
+      "inferring_team": "Ironwood Foxes",
+      "target_team": "Eastgate Titans",
+      "score": 0,
+      "rationale": "The GM incorrectly inferred a 'win-now' strategy seeking a 'second star' when the actual goal was acquiring a mid-tier role player (64-78 rating) with specific contract constraints, representing a completely wrong direction about the team's objectives."
+    },
+    {
+      "inferring_team": "Ironwood Foxes",
+      "target_team": "Cascade Wolves",
+      "score": 1,
+      "rationale": "The GM correctly identified the high-level rebuild direction and draft pick accumulation, but completely missed the specific numerical thresholds of 2+ first-round picks and $25M+ salary shedding requirements."
+    },
+    {
+      "inferring_team": "Ironwood Foxes",
+      "target_team": "Granite Bay Bulls",
+      "score": 2,
+      "rationale": "The GM correctly identified the key objective of reducing payroll and clearing cap space, but missed the specific numerical thresholds of $10M cap room, $18M AAV reduction, and the 10-point player rating constraint."
+    }
+  ]
+}

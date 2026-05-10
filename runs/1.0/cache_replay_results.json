@@ -1,0 +1,47 @@
+[
+  {
+    "model": "deepseek/deepseek-chat",
+    "run_id": 1,
+    "status": "PASS",
+    "original_hash": "7c50be6af7ee6aae84398af96906d8bc488bc2cab8a75801edc6902ad47948f6",
+    "replay_hash": "7c50be6af7ee6aae84398af96906d8bc488bc2cab8a75801edc6902ad47948f6",
+    "match": true,
+    "elapsed_seconds": 0.0
+  },
+  {
+    "model": "deepseek/deepseek-chat",
+    "run_id": 5,
+    "status": "PASS",
+    "original_hash": "c8b01be5bbd61089fd6b6224f3ce26dc775a08fc832ca16496797b43556a4149",
+    "replay_hash": "c8b01be5bbd61089fd6b6224f3ce26dc775a08fc832ca16496797b43556a4149",
+    "match": true,
+    "elapsed_seconds": 0.0
+  },
+  {
+    "model": "qwen/qwen-2.5-72b-instruct",
+    "run_id": 3,
+    "status": "PASS",
+    "original_hash": "441ff72363a90a6791aab5e3e1240a43655b01243dbb6e0ab6130707636fe8b9",
+    "replay_hash": "441ff72363a90a6791aab5e3e1240a43655b01243dbb6e0ab6130707636fe8b9",
+    "match": true,
+    "elapsed_seconds": 0.0
+  },
+  {
+    "model": "qwen/qwen-2.5-72b-instruct",
+    "run_id": 8,
+    "status": "PASS",
+    "original_hash": "950a1978caaa021cdfd4114256fa422bf0a6058d4738e2e9d25ccc3831ebb5a1",
+    "replay_hash": "950a1978caaa021cdfd4114256fa422bf0a6058d4738e2e9d25ccc3831ebb5a1",
+    "match": true,
+    "elapsed_seconds": 0.0
+  },
+  {
+    "model": "moonshotai/kimi-k2",
+    "run_id": 6,
+    "status": "PASS",
+    "original_hash": "bad127d4b50b7653ffea657b595573d323b363260b23ad5ea88c1fe64d0c32ad",
+    "replay_hash": "bad127d4b50b7653ffea657b595573d323b363260b23ad5ea88c1fe64d0c32ad",
+    "match": true,
+    "elapsed_seconds": 0.0
+  }
+]

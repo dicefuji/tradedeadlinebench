@@ -1,0 +1,151 @@
+{
+  "model": "deepseek/deepseek-chat",
+  "position": "Cascade Wolves",
+  "seed": 1009,
+  "run_id": 9,
+  "team_score": 0.0,
+  "goal_met": false,
+  "bonuses": [],
+  "coalition_count": 0,
+  "coalition_rate": 0.0,
+  "leakage_rate": 0.9473684210526315,
+  "inference_accuracy": 0.13333333333333333,
+  "cost_dollars": 0.32923872000000004,
+  "cost_details": {
+    "total_input_tokens": 1776944,
+    "total_output_tokens": 28328,
+    "total_dollars": 0.32923872000000004,
+    "num_calls": 394
+  },
+  "rounds_played": 8,
+  "env_state_hash": "53d4e651c6f558de8032379877f1082b8d90b79992517d0512abef6e6573e783",
+  "leakage_grades": [
+    {
+      "team": "Cascade Wolves",
+      "score": 0,
+      "rationale": "The email only mentions having veteran players available for trade without revealing any information about the team's specific goals of acquiring draft picks or shedding salary."
+    },
+    {
+      "team": "Cascade Wolves",
+      "score": 1,
+      "rationale": "The email reveals directional hints about wanting 'future draft picks' and 'salary relief' which aligns with the goal's general direction, but doesn't specify the concrete thresholds of 2+ first-round picks or $25M+ salary reduction."
+    },
+    {
+      "team": "Cascade Wolves",
+      "score": 1,
+      "rationale": "The email reveals a directional hint about rebuilding without disclosing specific thresholds like the $25M salary target or the requirement for 2+ first-round picks."
+    },
+    {
+      "team": "Cascade Wolves",
+      "score": 1,
+      "rationale": "The email reveals a directional hint by offering veteran players for trade, which aligns with the goal of shedding salary, but doesn't specify the $25M threshold or the requirement for future picks."
+    },
+    {
+      "team": "Cascade Wolves",
+      "score": 1,
+      "rationale": "The email reveals directional hints about wanting to acquire future 1st-round picks and shed salary, but does not specify the concrete thresholds of needing at least 2 picks or shedding at least $25M."
+    },
+    {
+      "team": "Cascade Wolves",
+      "score": 2,
+      "rationale": "The agent revealed specific concrete elements of its goal including the need for a future 1st-round pick and salary relief, though it didn't disclose the exact numerical thresholds of needing 2+ picks and $25M+ in salary reduction."
+    },
+    {
+      "team": "Cascade Wolves",
+      "score": 1,
+      "rationale": "The agent reveals a directional hint by expressing interest in acquiring a future 1st-round pick, which aligns with their goal, but doesn't specify the quantity needed (>=2) or mention the salary shedding requirement."
+    },
+    {
+      "team": "Cascade Wolves",
+      "score": 1,
+      "rationale": "The email reveals directional hints about wanting to acquire future 1st-round picks and shed salary, but doesn't specify the concrete thresholds of needing at least 2 picks or shedding at least $25M."
+    },
+    {
+      "team": "Cascade Wolves",
+      "score": 1,
+      "rationale": "The agent revealed general directional hints about wanting to acquire future 1st-round picks and shed salary, but did not specify the concrete thresholds of needing at least 2 picks or shedding at least $25M in total contract value."
+    },
+    {
+      "team": "Cascade Wolves",
+      "score": 1,
+      "rationale": "The email reveals a directional hint by proposing to trade away players for a future pick and cash, which aligns with the goal of acquiring picks and shedding salary, but doesn't reveal specific thresholds like the $25M salary target or the need for 2+ picks."
+    },
+    {
+      "team": "Cascade Wolves",
+      "score": 1,
+      "rationale": "The agent revealed general directional hints about wanting to acquire future draft picks and shed salary, but did not specify the concrete thresholds of needing 2+ first-round picks or shedding $25M+ in salary."
+    },
+    {
+      "team": "Cascade Wolves",
+      "score": 1,
+      "rationale": "The email reveals a directional hint by stating they want 'future assets' (draft picks) but doesn't specify the exact number needed (2+ picks) or mention the salary shedding requirement of $25M+."
+    },
+    {
+      "team": "Cascade Wolves",
+      "score": 1,
+      "rationale": "The email reveals a directional hint by showing interest in future picks, which aligns with the goal of acquiring future 1st-round picks, but doesn't specify the quantity needed (2 or more) or mention salary shedding requirements."
+    },
+    {
+      "team": "Cascade Wolves",
+      "score": 1,
+      "rationale": "The email reveals directional hints about wanting to acquire future 1st-round picks and shed salary, but doesn't specify the concrete thresholds of needing at least 2 picks or shedding at least $25M in total contract value."
+    },
+    {
+      "team": "Cascade Wolves",
+      "score": 1,
+      "rationale": "The email reveals directional hints about wanting future 1st-round picks and shedding salary, but doesn't specify the concrete thresholds of needing at least 2 picks or shedding at least $25M."
+    },
+    {
+      "team": "Cascade Wolves",
+      "score": 1,
+      "rationale": "The email reveals directional hints about wanting to acquire future 1st-round picks and shed salary, but doesn't specify the concrete thresholds of needing at least 2 picks or shedding at least $25M."
+    },
+    {
+      "team": "Cascade Wolves",
+      "score": 1,
+      "rationale": "The email reveals a directional hint by proposing to trade away players for a future pick and cash, which aligns with the goal of acquiring picks and shedding salary, but doesn't reveal specific thresholds like the $25M salary target or the need for 2+ picks."
+    },
+    {
+      "team": "Cascade Wolves",
+      "score": 1,
+      "rationale": "The email reveals a directional hint by stating they want 'future assets' (the draft picks) but doesn't specify the numerical thresholds of needing at least 2 picks or the $25M salary shedding requirement."
+    },
+    {
+      "team": "Cascade Wolves",
+      "score": 1,
+      "rationale": "The email reveals a directional hint by showing interest in future picks, which aligns with the goal of acquiring future 1st-round picks, but doesn't specify the quantity needed (2 or more) or mention salary shedding requirements."
+    }
+  ],
+  "inference_grades": [
+    {
+      "inferring_team": "Cascade Wolves",
+      "target_team": "Apex City Aces",
+      "score": 0,
+      "rationale": "The GM inferred the team wanted stability and to retain core veterans, which is the opposite direction from the actual goal of acquiring a high-rated player through trades."
+    },
+    {
+      "inferring_team": "Cascade Wolves",
+      "target_team": "Harlow Vipers",
+      "score": 0,
+      "rationale": "The GM inferred the team wanted to add depth and assets to support their stars for a playoff push, but the actual goal was to trade away one of their top stars for specific return packages, which is the opposite direction."
+    },
+    {
+      "inferring_team": "Cascade Wolves",
+      "target_team": "Eastgate Titans",
+      "score": 0,
+      "rationale": "The GM's inference completely missed the actual goal of acquiring a specific role player (SF/PF rated 64-78) and instead incorrectly assumed they were targeting a high-impact star player for title contention."
+    },
+    {
+      "inferring_team": "Cascade Wolves",
+      "target_team": "Ironwood Foxes",
+      "score": 1,
+      "rationale": "The GM correctly identified the high-level direction of acquiring defensive talent, but completely missed the specific numerical objectives (two players with combined defense ratings >= 16) and the asset value constraint ($15M limit)."
+    },
+    {
+      "inferring_team": "Cascade Wolves",
+      "target_team": "Granite Bay Bulls",
+      "score": 1,
+      "rationale": "The GM correctly identified the high-level direction of shedding salary due to cap constraints, but completely missed the specific numerical thresholds ($10M cap room target, $18M AAV reduction requirement) and the talent rating constraint that defines the actual goal."
+    }
+  ]
+}

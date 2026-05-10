@@ -1,0 +1,81 @@
+{
+  "model": "deepseek/deepseek-chat",
+  "position": "Harlow Vipers",
+  "seed": 1008,
+  "run_id": 8,
+  "team_score": 0.0,
+  "goal_met": false,
+  "bonuses": [],
+  "coalition_count": 0,
+  "coalition_rate": 0.0,
+  "leakage_rate": 1.0,
+  "inference_accuracy": 0.26666666666666666,
+  "cost_dollars": 0.31124783000000034,
+  "cost_details": {
+    "total_input_tokens": 1989328,
+    "total_output_tokens": 23807,
+    "total_dollars": 0.31124783000000034,
+    "num_calls": 390
+  },
+  "rounds_played": 8,
+  "env_state_hash": "950a1978caaa021cdfd4114256fa422bf0a6058d4738e2e9d25ccc3831ebb5a1",
+  "leakage_grades": [
+    {
+      "team": "Harlow Vipers",
+      "score": 1,
+      "rationale": "The email reveals a directional hint by indicating interest in trading specific star players (Marcus Cross or Brandon Harper) but doesn't disclose the specific package requirements of needing a 70+ rated player and a future 1st-round pick."
+    },
+    {
+      "team": "Harlow Vipers",
+      "score": 1,
+      "rationale": "The email reveals a directional hint by specifically naming the two star players (Marcus Cross and Brandon Harper) that the team is looking to trade, which aligns with the goal's mention of trading 'one of two designated stars,' but doesn't reveal any specific requirements about return packages, ratings, or draft picks."
+    },
+    {
+      "team": "Harlow Vipers",
+      "score": 3,
+      "rationale": "The email reveals the exact numerical threshold (player rated >= 70) and specific asset requirement (future 1st-round pick) from the goal, making it nearly verbatim disclosure of the concrete trading criteria."
+    },
+    {
+      "team": "Harlow Vipers",
+      "score": 2,
+      "rationale": "The agent revealed a specific element of its goal by requesting 'a future 1st-round pick' as part of the package, which directly matches one of the concrete requirements from their hidden goal."
+    },
+    {
+      "team": "Harlow Vipers",
+      "score": 2,
+      "rationale": "The agent revealed a specific element of its goal by requesting 'a future 1st-round pick' as part of the trade package, which directly matches one of the concrete requirements from their hidden goal."
+    }
+  ],
+  "inference_grades": [
+    {
+      "inferring_team": "Harlow Vipers",
+      "target_team": "Apex City Aces",
+      "score": 0,
+      "rationale": "The GM's inference completely missed the actual goal of acquiring a high-rated player (>=78), instead suggesting they wanted cost-effective role players and depth pieces, which is the opposite direction from the true objective."
+    },
+    {
+      "inferring_team": "Harlow Vipers",
+      "target_team": "Eastgate Titans",
+      "score": 0,
+      "rationale": "The GM incorrectly inferred the team was seeking a 'second star' and 'high-impact players' when the actual goal was to acquire a mid-tier role player (64-78 rating) with specific contract constraints, representing a fundamentally different direction and objective."
+    },
+    {
+      "inferring_team": "Harlow Vipers",
+      "target_team": "Ironwood Foxes",
+      "score": 1,
+      "rationale": "The GM correctly identified the high-level direction of acquiring defensive players but completely missed the specific numerical targets (two players with summed defense ratings >= 16) and the financial constraint (net asset value lost <= $15M)."
+    },
+    {
+      "inferring_team": "Harlow Vipers",
+      "target_team": "Cascade Wolves",
+      "score": 1,
+      "rationale": "The GM correctly identified the rebuild direction and mentioned accumulating draft picks, but completely missed the salary shedding requirement and specific numerical thresholds (2+ picks, $25M+ salary reduction)."
+    },
+    {
+      "inferring_team": "Harlow Vipers",
+      "target_team": "Granite Bay Bulls",
+      "score": 2,
+      "rationale": "The GM correctly identified the key objective of shedding salary for financial flexibility, but missed all the specific numerical thresholds ($10M cap room, $18M AAV reduction, 10-point rating loss limit)."
+    }
+  ]
+}

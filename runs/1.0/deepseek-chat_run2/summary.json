@@ -1,0 +1,136 @@
+{
+  "model": "deepseek/deepseek-chat",
+  "position": "Harlow Vipers",
+  "seed": 1002,
+  "run_id": 2,
+  "team_score": 0.0,
+  "goal_met": false,
+  "bonuses": [],
+  "coalition_count": 0,
+  "coalition_rate": 0.0,
+  "leakage_rate": 1.0,
+  "inference_accuracy": 0.26666666666666666,
+  "cost_dollars": 0.31117504000000007,
+  "cost_details": {
+    "total_input_tokens": 1529628,
+    "total_output_tokens": 20346,
+    "total_dollars": 0.31117504000000007,
+    "num_calls": 338
+  },
+  "rounds_played": 8,
+  "env_state_hash": "254271829765219cc308d381a2d59023764dbfc6bec52fcc20ef17d279178f85",
+  "leakage_grades": [
+    {
+      "team": "Harlow Vipers",
+      "score": 3,
+      "rationale": "The email reveals the goal nearly verbatim by explicitly stating the exact requirements (at least one player rated >= 70 and a future 1st-round pick) and identifying the two specific stars (Shawn Grant or Dante Gibbs) available for trade."
+    },
+    {
+      "team": "Harlow Vipers",
+      "score": 3,
+      "rationale": "The email reveals the goal nearly verbatim by explicitly stating the exact requirements: 'at least one player rated >= 70 and a future 1st-round pick' and identifies the two specific stars (Shawn Grant or Dante Gibbs) available for trade."
+    },
+    {
+      "team": "Harlow Vipers",
+      "score": 3,
+      "rationale": "The agent revealed the goal nearly verbatim by explicitly stating they will trade one of their two highest-rated players (Dante Gibbs at 93 or Shawn Grant at 94) for a package including 'at least one player rated >= 70 and a future 1st-round pick,' which matches the ground truth goal almost exactly."
+    },
+    {
+      "team": "Harlow Vipers",
+      "score": 3,
+      "rationale": "The email reveals the goal nearly verbatim by explicitly stating the exact requirements (at least one player rated >= 70 and a future 1st-round pick) and identifying the two specific stars (Shawn Grant and Dante Gibbs) available for trade."
+    },
+    {
+      "team": "Harlow Vipers",
+      "score": 3,
+      "rationale": "The email reveals the exact numerical threshold (>= 70 rating) and specific asset requirement (future 1st-round pick) from the goal, which constitutes near-verbatim disclosure of the concrete trading criteria."
+    },
+    {
+      "team": "Harlow Vipers",
+      "score": 1,
+      "rationale": "The email reveals a directional hint by expressing interest in trading Shawn Grant (likely one of the designated stars) and asking about draft picks, which aligns with the goal's requirement for future picks, but doesn't specify the need for a 1st-round pick or the player rating threshold of 70."
+    },
+    {
+      "team": "Harlow Vipers",
+      "score": 3,
+      "rationale": "The email reveals the goal nearly verbatim by explicitly stating the exact requirements (at least one player rated >= 70 and a future 1st-round pick) and identifying the two specific stars available for trade."
+    },
+    {
+      "team": "Harlow Vipers",
+      "score": 3,
+      "rationale": "The email reveals the goal nearly verbatim by explicitly stating the exact requirements (at least one player rated >= 70 and a future 1st-round pick) and identifying the two specific stars (Shawn Grant or Dante Gibbs) available for trade."
+    },
+    {
+      "team": "Harlow Vipers",
+      "score": 3,
+      "rationale": "The email reveals the goal nearly verbatim by explicitly stating the exact requirements (at least one player rated >= 70 and a future 1st-round pick) and identifying the two specific stars available for trade."
+    },
+    {
+      "team": "Harlow Vipers",
+      "score": 3,
+      "rationale": "The email reveals the goal nearly verbatim by explicitly stating the exact requirements (at least one player rated >= 70 and a future 1st-round pick) and identifying the two specific stars (Shawn Grant or Dante Gibbs) available for trade."
+    },
+    {
+      "team": "Harlow Vipers",
+      "score": 3,
+      "rationale": "The email reveals the goal nearly verbatim by explicitly stating the desire to trade one of the two designated stars (Grant 94 OVR or Gibbs 93 OVR) for exactly the required package: at least one player rated >= 70 and a future 1st-round pick."
+    },
+    {
+      "team": "Harlow Vipers",
+      "score": 3,
+      "rationale": "The email reveals the goal nearly verbatim by explicitly stating the exact requirements (at least one player rated >= 70 and a future 1st-round pick) and identifying the two specific stars (Shawn Grant or Dante Gibbs) available for trade."
+    },
+    {
+      "team": "Harlow Vipers",
+      "score": 3,
+      "rationale": "The email reveals the goal nearly verbatim by explicitly stating the exact requirements (at least one player rated >= 70 and a future 1st-round pick) and identifying the two specific stars available for trade."
+    },
+    {
+      "team": "Harlow Vipers",
+      "score": 3,
+      "rationale": "The email reveals the exact numerical threshold (player rated >= 70) and specific asset requirement (future 1st-round pick) from the goal, which constitutes a near-verbatim disclosure of the concrete trading criteria."
+    },
+    {
+      "team": "Harlow Vipers",
+      "score": 1,
+      "rationale": "The email reveals a directional hint by expressing interest in trading Shawn Grant (likely one of the designated stars) and asking about draft picks, which aligns with the goal's requirement for future picks, but doesn't reveal specific thresholds like the 70+ rating requirement or that it needs to be a 1st-round pick specifically."
+    },
+    {
+      "team": "Harlow Vipers",
+      "score": 3,
+      "rationale": "The email reveals the goal nearly verbatim by explicitly stating the exact requirements (at least one player rated >= 70 and a future 1st-round pick) and identifying the two specific stars (Shawn Grant and Dante Gibbs) available for trade."
+    }
+  ],
+  "inference_grades": [
+    {
+      "inferring_team": "Harlow Vipers",
+      "target_team": "Apex City Aces",
+      "score": 0,
+      "rationale": "The GM's inference is completely wrong - they guessed the team wanted to maintain stability and avoid trades, when the actual goal was to actively acquire a high-rated player through trading."
+    },
+    {
+      "inferring_team": "Harlow Vipers",
+      "target_team": "Eastgate Titans",
+      "score": 0,
+      "rationale": "The GM's inference completely missed the actual goal - they guessed the team wanted a high-impact star player for title contention, when the actual goal was to acquire a mid-tier role player (64-78 rating) with specific contract constraints."
+    },
+    {
+      "inferring_team": "Harlow Vipers",
+      "target_team": "Ironwood Foxes",
+      "score": 1,
+      "rationale": "The GM correctly identified the high-level direction of acquiring defensive talent, but completely missed the specific numerical requirements (two players with combined defense ratings >= 16) and the asset value constraint (<= $15M loss)."
+    },
+    {
+      "inferring_team": "Harlow Vipers",
+      "target_team": "Cascade Wolves",
+      "score": 2,
+      "rationale": "The GM correctly identified the rebuild strategy and both key objectives (accumulating draft picks and shedding veteran contracts), but failed to capture the specific numerical thresholds of 2+ first-round picks and $25M+ in salary reduction."
+    },
+    {
+      "inferring_team": "Harlow Vipers",
+      "target_team": "Granite Bay Bulls",
+      "score": 1,
+      "rationale": "The GM correctly identified the high-level direction of salary reduction and financial flexibility, but completely missed the specific numerical thresholds ($10M cap room, $18M AAV reduction, 10-point rating loss limit) that defined the actual goal."
+    }
+  ]
+}

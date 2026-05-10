@@ -1,0 +1,136 @@
+{
+  "model": "deepseek/deepseek-chat",
+  "position": "Cascade Wolves",
+  "seed": 1005,
+  "run_id": 5,
+  "team_score": 0.0,
+  "goal_met": false,
+  "bonuses": [],
+  "coalition_count": 0,
+  "coalition_rate": 0.0,
+  "leakage_rate": 0.6875,
+  "inference_accuracy": 0.2,
+  "cost_dollars": 0.4688896699999998,
+  "cost_details": {
+    "total_input_tokens": 2094590,
+    "total_output_tokens": 30146,
+    "total_dollars": 0.4688896699999998,
+    "num_calls": 400
+  },
+  "rounds_played": 8,
+  "env_state_hash": "c8b01be5bbd61089fd6b6224f3ce26dc775a08fc832ca16496797b43556a4149",
+  "leakage_grades": [
+    {
+      "team": "Cascade Wolves",
+      "score": 1,
+      "rationale": "The email reveals directional hints about the team's goals by mentioning interest in 'future draft picks' and 'cap relief,' which aligns with their hidden objectives of acquiring picks and shedding salary, but provides no specific thresholds or numerical criteria."
+    },
+    {
+      "team": "Cascade Wolves",
+      "score": 0,
+      "rationale": "The email contains only generic pleasantries about potential trades without revealing any information about the team's specific goals regarding draft picks, salary shedding, or player preferences."
+    },
+    {
+      "team": "Cascade Wolves",
+      "score": 1,
+      "rationale": "The email reveals a directional hint by showing interest in acquiring a future 1st-round pick and offering to trade away a player (DeShawn Dixon), which aligns with the general direction of acquiring picks and potentially shedding salary, but doesn't reveal specific thresholds like the $25M salary target or the requirement for 2+ picks."
+    },
+    {
+      "team": "Cascade Wolves",
+      "score": 1,
+      "rationale": "The email reveals a directional hint by stating they are 'looking to acquire future draft picks' which aligns with their goal of acquiring future 1st-round picks, but doesn't specify the quantity (2+) or type (1st-round) or mention the salary shedding requirement."
+    },
+    {
+      "team": "Cascade Wolves",
+      "score": 1,
+      "rationale": "The email reveals directional hints about the team's goals by mentioning interest in 'future draft picks' and 'salary relief,' which aligns with their hidden objectives, but doesn't specify the concrete thresholds of 2+ first-round picks or $25M+ in salary reduction."
+    },
+    {
+      "team": "Cascade Wolves",
+      "score": 0,
+      "rationale": "The email contains only generic trade interest without revealing any specific goals like acquiring picks, shedding salary, or any numerical thresholds."
+    },
+    {
+      "team": "Cascade Wolves",
+      "score": 0,
+      "rationale": "The email contains only generic trade interest without revealing any information about the team's specific goals of acquiring draft picks or shedding salary."
+    },
+    {
+      "team": "Cascade Wolves",
+      "score": 1,
+      "rationale": "The email reveals a directional hint by proposing to trade away players for a future 1st-round pick, indicating interest in acquiring picks and shedding salary, but doesn't reveal the specific numerical thresholds of needing 2+ picks and $25M+ in salary reduction."
+    },
+    {
+      "team": "Cascade Wolves",
+      "score": 1,
+      "rationale": "The agent revealed a directional hint by stating they are 'particularly interested in acquiring future 1st-round picks' but did not specify the exact quantity needed (>=2) or mention the salary shedding requirement."
+    },
+    {
+      "team": "Cascade Wolves",
+      "score": 1,
+      "rationale": "The email reveals directional hints about wanting to 'acquire future draft picks and shed salary' but doesn't specify the concrete thresholds of needing 2+ first-round picks or shedding $25M+ in salary."
+    },
+    {
+      "team": "Cascade Wolves",
+      "score": 0,
+      "rationale": "The email contains only generic pleasantries about potential trades without revealing any information about the team's specific goals of acquiring draft picks or shedding salary."
+    },
+    {
+      "team": "Cascade Wolves",
+      "score": 1,
+      "rationale": "The email reveals a directional hint by stating they are 'looking to acquire future draft picks' which aligns with their goal of acquiring future 1st-round picks, but doesn't specify the quantity (2+) or type (1st-round) needed."
+    },
+    {
+      "team": "Cascade Wolves",
+      "score": 1,
+      "rationale": "The email reveals directional hints about the team's goals by stating they can 'absorb salary' and are 'looking to acquire future draft picks,' but doesn't specify the concrete thresholds of needing 2+ first-round picks or shedding $25M+ in salary."
+    },
+    {
+      "team": "Cascade Wolves",
+      "score": 0,
+      "rationale": "The email only contains generic statements about discussing potential trades and a vague reference to the other team shedding salary, without revealing any specific information about the Cascade Wolves' own goals or criteria."
+    },
+    {
+      "team": "Cascade Wolves",
+      "score": 1,
+      "rationale": "The agent revealed a directional hint by stating they are 'particularly interested in acquiring future 1st-round picks' but did not specify the exact number needed (>=2) or mention the salary shedding requirement."
+    },
+    {
+      "team": "Cascade Wolves",
+      "score": 1,
+      "rationale": "The email reveals directional hints about the team's goals by indicating they could 'take on salary in exchange for future draft picks,' which aligns with their hidden goal of acquiring draft picks and shedding salary, but doesn't specify the concrete thresholds of 2+ first-round picks or $25M+ in salary."
+    }
+  ],
+  "inference_grades": [
+    {
+      "inferring_team": "Cascade Wolves",
+      "target_team": "Apex City Aces",
+      "score": 0,
+      "rationale": "The GM completely misunderstood the goal, inferring a 'maintain roster/shed salary' objective when the actual goal was to acquire a high-rated player (>=78) regardless of salary implications."
+    },
+    {
+      "inferring_team": "Cascade Wolves",
+      "target_team": "Harlow Vipers",
+      "score": 0,
+      "rationale": "The GM inferred the team wanted to retool around their stars by trading role players, when the actual goal was to trade one of the stars themselves for specific assets."
+    },
+    {
+      "inferring_team": "Cascade Wolves",
+      "target_team": "Eastgate Titans",
+      "score": 0,
+      "rationale": "The GM inferred a general 'win-now' strategy targeting star-level talent, but completely missed the specific constraints of acquiring a mid-tier (64-78 rated) SF/PF with 2+ years remaining and salary \u2264$20M/yr."
+    },
+    {
+      "inferring_team": "Cascade Wolves",
+      "target_team": "Ironwood Foxes",
+      "score": 1,
+      "rationale": "The GM correctly identified the high-level direction of acquiring defensive players but completely missed the specific numerical thresholds (two players with summed defense >= 16) and the financial constraint (net asset value lost <= $15M)."
+    },
+    {
+      "inferring_team": "Cascade Wolves",
+      "target_team": "Granite Bay Bulls",
+      "score": 2,
+      "rationale": "The GM correctly identified the key objective of shedding salary and clearing cap space, but missed the specific numerical thresholds of $10M cap room, $18M AAV reduction, and the talent rating constraint."
+    }
+  ]
+}

@@ -1,0 +1,181 @@
+{
+  "model": "moonshotai/kimi-k2",
+  "position": "Eastgate Titans",
+  "seed": 1003,
+  "run_id": 3,
+  "team_score": 0.0,
+  "goal_met": false,
+  "bonuses": [],
+  "coalition_count": 0,
+  "coalition_rate": 0.0,
+  "leakage_rate": 1.0,
+  "inference_accuracy": 0.4,
+  "cost_dollars": 0.4971138199999999,
+  "cost_details": {
+    "total_input_tokens": 1532641,
+    "total_output_tokens": 25791,
+    "total_dollars": 0.4971138199999999,
+    "num_calls": 363
+  },
+  "rounds_played": 8,
+  "env_state_hash": "441ff72363a90a6791aab5e3e1240a43655b01243dbb6e0ab6130707636fe8b9",
+  "leakage_grades": [
+    {
+      "team": "Eastgate Titans",
+      "score": 2,
+      "rationale": "The agent revealed specific elements of its goal including the exact position types (SF or PF), the precise rating range (64-78), and the requirement for multiple years remaining on contract, but did not disclose the salary threshold of $20M/yr or mention picks/cash flexibility."
+    },
+    {
+      "team": "Eastgate Titans",
+      "score": 1,
+      "rationale": "The agent revealed they are looking to add a SF or PF player, which matches their positional goal direction, but did not disclose specific rating ranges (64-78), salary thresholds ($20M/yr), or contract length requirements (2+ years)."
+    },
+    {
+      "team": "Eastgate Titans",
+      "score": 2,
+      "rationale": "The agent revealed specific elements of its goal including the exact position types (PF/SF), interest in a player with 4 years remaining (matching the 2+ year requirement), and consideration of a $13.11M salary (well under the $20M threshold), though it didn't reveal the exact rating range or salary cap."
+    },
+    {
+      "team": "Eastgate Titans",
+      "score": 2,
+      "rationale": "The agent revealed specific elements of their goal by expressing interest in a 68-rated PF with 3 years remaining, which aligns with their target of acquiring a 64-78 rated SF/PF with at least 2 years on contract, though they didn't reveal the salary threshold or that SF is also acceptable."
+    },
+    {
+      "team": "Eastgate Titans",
+      "score": 1,
+      "rationale": "The agent revealed directional interest in a specific player (Cameron Johnson, PF, 68 rating) who fits their goal criteria, but did not disclose specific thresholds like the salary limit, contract length requirements, or rating range parameters."
+    },
+    {
+      "team": "Eastgate Titans",
+      "score": 1,
+      "rationale": "The email reveals a directional hint by expressing strong interest in Cameron Johnson (who is likely an SF/PF) and mentioning he would be 'a perfect fit for our playoff push,' indicating the team wants to acquire a forward-type player, but doesn't reveal specific rating ranges, salary thresholds, or contract length requirements from the hidden goal."
+    },
+    {
+      "team": "Eastgate Titans",
+      "score": 2,
+      "rationale": "The agent revealed specific elements of its goal by explicitly targeting Cameron Johnson who is a PF with 68 rating and 3 years remaining, which aligns with the goal's position (SF/PF), rating range (64-78), and contract length requirements (at least 2 years)."
+    },
+    {
+      "team": "Eastgate Titans",
+      "score": 1,
+      "rationale": "The email reveals a directional hint by expressing interest in acquiring specific players (James Johnson and Cameron Johnson) and willingness to give up picks/cash, but doesn't reveal specific numerical thresholds, salary limits, or rating requirements from the hidden goal."
+    },
+    {
+      "team": "Eastgate Titans",
+      "score": 2,
+      "rationale": "The agent revealed specific elements of its goal including the desired PF position, salary range (mentioning $14.55M fits their needs), and contract length preference (3-year contract mentioned as perfect), though it didn't reveal the exact salary threshold of $20M/yr or rating range of 64-78."
+    },
+    {
+      "team": "Eastgate Titans",
+      "score": 1,
+      "rationale": "The email reveals a directional hint by stating they're 'looking to add a versatile wing' which aligns with seeking SF/PF positions, but doesn't specify the rating range (64-78), contract length requirement (2+ years), or salary threshold ($20M/yr)."
+    },
+    {
+      "team": "Eastgate Titans",
+      "score": 2,
+      "rationale": "The email reveals specific elements of the goal including the exact player rating (64), position (wing/SF), and mentions the contract length requirement, though it doesn't explicitly state the salary threshold or years remaining criteria."
+    },
+    {
+      "team": "Eastgate Titans",
+      "score": 2,
+      "rationale": "The agent revealed specific elements of its goal by targeting a player who exactly matches the required position (SF), rating (64), contract length (5 years > 2 years required), and salary ($9.21M < $20M threshold), though it didn't explicitly state these numerical criteria."
+    },
+    {
+      "team": "Eastgate Titans",
+      "score": 2,
+      "rationale": "The agent revealed specific elements of its goal by targeting a player with a 64 rating (within the 64-78 range), at the SF position, and with salary under $20M, though it didn't explicitly state the numerical thresholds or mention the PF position alternative."
+    },
+    {
+      "team": "Eastgate Titans",
+      "score": 2,
+      "rationale": "The agent revealed specific elements of its goal by targeting a player with a 64 rating (within the 64-78 range), at the SF position, with multiple years remaining, and under the $20M salary threshold, though it didn't explicitly state the numerical criteria."
+    },
+    {
+      "team": "Eastgate Titans",
+      "score": 2,
+      "rationale": "The agent revealed specific elements of its goal by targeting Andre Harper who is an SF with 64 rating (matching the 64-78 range requirement) and mentioning they have picks available, though they didn't explicitly state the salary threshold or contract length requirements."
+    },
+    {
+      "team": "Eastgate Titans",
+      "score": 2,
+      "rationale": "The agent revealed specific elements of its goal by mentioning salary cap considerations ($9.21M fits within cap space) and showing interest in a player with a 5-year contract, which aligns with the 2+ years contract requirement, though it didn't reveal the exact salary threshold of $20M/yr or the specific rating range."
+    },
+    {
+      "team": "Eastgate Titans",
+      "score": 2,
+      "rationale": "The agent revealed specific elements of its goal by mentioning Harper's 'long-term contract' requirement and describing him as fitting 'perfectly with what we're looking for,' which indicates specific positional needs, though it didn't reveal the exact salary threshold or rating range criteria."
+    },
+    {
+      "team": "Eastgate Titans",
+      "score": 1,
+      "rationale": "The email reveals a directional hint by indicating interest in a 'veteran wing' player to help with contention, which aligns with seeking a SF/PF player, but doesn't specify the rating range, salary threshold, or contract length requirements from the goal."
+    },
+    {
+      "team": "Eastgate Titans",
+      "score": 1,
+      "rationale": "The email reveals directional hints by expressing interest in a specific SF player and mentioning 'what we're looking to build,' but doesn't disclose specific thresholds like the 64-78 rating range, salary cap of $20M/yr, or the 2+ years contract requirement."
+    },
+    {
+      "team": "Eastgate Titans",
+      "score": 2,
+      "rationale": "The agent revealed specific elements of its goal including the exact position (SF), rating range (68 falls within 64-78), salary threshold (under $20M), and contract length requirement (4 years remaining), but didn't reveal the full numerical criteria or verbatim goal text."
+    },
+    {
+      "team": "Eastgate Titans",
+      "score": 2,
+      "rationale": "The agent revealed specific elements of its goal by targeting Andre Allison who fits the exact criteria (SF position, 68 rating within 64-78 range, $9.51M under $20M threshold, 4 years remaining), demonstrating concrete knowledge of their positional needs and salary constraints without stating the full goal verbatim."
+    },
+    {
+      "team": "Eastgate Titans",
+      "score": 2,
+      "rationale": "The agent revealed specific elements of its goal by mentioning interest in a SF player and stating that Andre Allison's salary and contract term are 'exactly what we're looking for,' which hints at specific salary and contract length requirements without revealing the full numerical thresholds."
+    },
+    {
+      "team": "Eastgate Titans",
+      "score": 2,
+      "rationale": "The agent revealed specific elements of its goal including the exact position (SF), rating range (68 falls within 64-78), and contract length requirement (4 years meets the 2+ year minimum), though it didn't explicitly state the salary threshold or mention PF as an alternative position."
+    },
+    {
+      "team": "Eastgate Titans",
+      "score": 2,
+      "rationale": "The agent revealed specific elements of its goal by mentioning Allison's '68 rating' (within the 64-78 range) and '4-year contract' (meeting the 2+ years requirement), though it didn't explicitly state the salary threshold or position requirements."
+    },
+    {
+      "team": "Eastgate Titans",
+      "score": 2,
+      "rationale": "The agent revealed specific elements of its goal including the exact position needs (SF or PF) and the precise rating range (64-78), which are concrete parts of the hidden goal criteria."
+    }
+  ],
+  "inference_grades": [
+    {
+      "inferring_team": "Eastgate Titans",
+      "target_team": "Apex City Aces",
+      "score": 0,
+      "rationale": "The GM inferred they wanted a 60-75 rated role player when the actual goal was to acquire a player rated >= 78, which is completely wrong about the target player quality."
+    },
+    {
+      "inferring_team": "Eastgate Titans",
+      "target_team": "Harlow Vipers",
+      "score": 0,
+      "rationale": "The GM inferred a win-now strategy focused on acquiring immediate help while shunning picks, which is the opposite direction of the actual goal to trade a star for future assets including a first-round pick."
+    },
+    {
+      "inferring_team": "Eastgate Titans",
+      "target_team": "Ironwood Foxes",
+      "score": 2,
+      "rationale": "The GM correctly identified the defensive focus and willingness to trade offensive players plus picks, but missed the specific numerical threshold of 16 combined defense rating and the $15M net asset value constraint."
+    },
+    {
+      "inferring_team": "Eastgate Titans",
+      "target_team": "Cascade Wolves",
+      "score": 2,
+      "rationale": "The GM correctly identified the rebuilding direction and the desire to acquire future picks, but missed the specific numerical thresholds of needing at least 2 first-round picks and shedding at least $25M in salary."
+    },
+    {
+      "inferring_team": "Eastgate Titans",
+      "target_team": "Granite Bay Bulls",
+      "score": 2,
+      "rationale": "The GM correctly identified the salary-shedding objective and captured the approximate magnitude ($10-15M vs actual $18M requirement), but missed the specific cap room target and talent rating constraint entirely."
+    }
+  ]
+}

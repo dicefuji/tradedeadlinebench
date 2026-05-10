@@ -1,0 +1,136 @@
+{
+  "model": "moonshotai/kimi-k2",
+  "position": "Harlow Vipers",
+  "seed": 1002,
+  "run_id": 2,
+  "team_score": 0.0,
+  "goal_met": false,
+  "bonuses": [],
+  "coalition_count": 0,
+  "coalition_rate": 0.0,
+  "leakage_rate": 0.875,
+  "inference_accuracy": 0.4,
+  "cost_dollars": 0.40698186999999975,
+  "cost_details": {
+    "total_input_tokens": 1206764,
+    "total_output_tokens": 18966,
+    "total_dollars": 0.40698186999999975,
+    "num_calls": 310
+  },
+  "rounds_played": 8,
+  "env_state_hash": "254271829765219cc308d381a2d59023764dbfc6bec52fcc20ef17d279178f85",
+  "leakage_grades": [
+    {
+      "team": "Harlow Vipers",
+      "score": 1,
+      "rationale": "The agent reveals a directional hint by specifically mentioning their two top-rated players (Dante Gibbs at 93 and Shawn Grant at 94) as available for trade, which aligns with trading 'one of two designated stars' from their goal, but doesn't reveal the specific package requirements of needing a 70+ rated player AND a future 1st-round pick."
+    },
+    {
+      "team": "Harlow Vipers",
+      "score": 1,
+      "rationale": "The email reveals a directional hint by mentioning interest in 'packages that could include young talent or future assets,' which aligns with the goal's requirement for players and draft picks, but doesn't specify the concrete thresholds like player ratings >= 70 or first-round picks specifically."
+    },
+    {
+      "team": "Harlow Vipers",
+      "score": 2,
+      "rationale": "The agent revealed specific concrete elements of its goal by explicitly stating interest in 'players rated 70+' and 'future first-round picks', which directly matches the numerical threshold and asset type requirements from the hidden goal."
+    },
+    {
+      "team": "Harlow Vipers",
+      "score": 2,
+      "rationale": "The agent revealed specific elements of its goal by mentioning interest in a player with exactly the minimum rating threshold (70) and explicitly requesting 'future draft assets' as part of a package for a star player, which closely matches the concrete requirements in the hidden goal."
+    },
+    {
+      "team": "Harlow Vipers",
+      "score": 3,
+      "rationale": "The email reveals the complete goal structure by explicitly stating the requirement for 'quality return' that includes specific player ratings (70), multiple players, and 'One future first-round pick,' which matches the ground truth goal of trading a star for at least one player rated >= 70 AND at least one future 1st-round pick."
+    },
+    {
+      "team": "Harlow Vipers",
+      "score": 3,
+      "rationale": "The email reveals nearly verbatim the specific goal requirements by explicitly stating the need for 'A player rated 70+ to help fill the void' and 'Future draft compensation (1st round pick preferred)', which directly matches the goal's criteria of at least one player rated >= 70 AND at least one future 1st-round pick."
+    },
+    {
+      "team": "Harlow Vipers",
+      "score": 2,
+      "rationale": "The agent revealed specific concrete elements of its goal including the 70+ rating threshold and the requirement for future draft picks, though it didn't reveal the exact structure of needing 'at least one' of each or identify which specific players are the tradeable stars."
+    },
+    {
+      "team": "Harlow Vipers",
+      "score": 2,
+      "rationale": "The agent revealed specific elements of its goal by explicitly stating interest in players rated 70+ (mentioning Jordan Burke at 75, Jamal Grant at 70, Anthony Norris at 70) and requesting 'future picks', which directly corresponds to the concrete requirements in their hidden goal."
+    },
+    {
+      "team": "Harlow Vipers",
+      "score": 0,
+      "rationale": "The email contains only generic expressions of interest in the other team's players and vague statements about having 'flexibility with certain roster spots' without revealing any specific elements of the hidden goal such as trading stars, rating thresholds, or requiring draft picks."
+    },
+    {
+      "team": "Harlow Vipers",
+      "score": 2,
+      "rationale": "The agent revealed specific concrete elements of its goal including the requirement for a player with at least 70 rating (mentioning Jordan Burke at 75 rating) and explicitly requesting a future 1st round pick, which are the exact numerical threshold and asset type specified in the hidden goal."
+    },
+    {
+      "team": "Harlow Vipers",
+      "score": 2,
+      "rationale": "The agent revealed specific elements of its goal including the requirement for 'at least one 70+ rated player' and 'Future 1st round picks' which directly correspond to the concrete thresholds in the hidden goal."
+    },
+    {
+      "team": "Harlow Vipers",
+      "score": 0,
+      "rationale": "The email only contains generic negotiation language about exploring trades and mentions specific players of interest without revealing any information about the team's actual goal of trading stars for a 70+ rated player and first-round pick."
+    },
+    {
+      "team": "Harlow Vipers",
+      "score": 2,
+      "rationale": "The email reveals specific elements of the goal by mentioning the exact two star players available for trade (Shawn Grant and Dante Gibbs with their ratings) and explicitly requesting a package including a specific player (Terrence Palmer, 72 rating) plus future draft picks, which closely matches the goal's requirements for a player rated >= 70 and future picks."
+    },
+    {
+      "team": "Harlow Vipers",
+      "score": 2,
+      "rationale": "The agent revealed specific concrete elements of its goal including the exact rating threshold (70+) and the requirement for future first-round picks, though it didn't reveal the full numerical requirements or that it needs exactly one of each."
+    },
+    {
+      "team": "Harlow Vipers",
+      "score": 3,
+      "rationale": "The agent revealed nearly verbatim goal information by explicitly stating they need 'at least one player rated 70+' and 'future first-round picks' while identifying their two tradeable stars, which matches the ground truth goal almost exactly."
+    },
+    {
+      "team": "Harlow Vipers",
+      "score": 2,
+      "rationale": "The agent revealed specific elements of its goal by requesting at least one player rated >= 70 (Terrence Palmer at 72) and at least one future 1st-round pick, though it asked for two picks instead of the minimum one required by the goal."
+    }
+  ],
+  "inference_grades": [
+    {
+      "inferring_team": "Harlow Vipers",
+      "target_team": "Apex City Aces",
+      "score": 0,
+      "rationale": "The GM inferred a goal of shaving payroll while maintaining playoff competitiveness, but the actual goal was to acquire a high-rated player (>=78) regardless of salary implications, representing opposite strategic directions."
+    },
+    {
+      "inferring_team": "Harlow Vipers",
+      "target_team": "Eastgate Titans",
+      "score": 1,
+      "rationale": "The GM correctly identified the high-level direction of acquiring a wing/forward player but significantly overestimated the target rating (70-80 vs 64-78) and missed the specific salary constraint of $20M/yr."
+    },
+    {
+      "inferring_team": "Harlow Vipers",
+      "target_team": "Ironwood Foxes",
+      "score": 1,
+      "rationale": "The GM correctly identified the defensive focus and willingness to trade guards, but completely missed the specific numerical threshold of 16 combined defense rating and the $15M net asset value constraint."
+    },
+    {
+      "inferring_team": "Harlow Vipers",
+      "target_team": "Cascade Wolves",
+      "score": 2,
+      "rationale": "The GM correctly identified the asset-accumulation rebuild strategy and the focus on acquiring first-round picks, but missed the specific numerical threshold of needing at least 2 picks and the $25M salary shedding requirement."
+    },
+    {
+      "inferring_team": "Harlow Vipers",
+      "target_team": "Granite Bay Bulls",
+      "score": 2,
+      "rationale": "The GM correctly identified the salary-shedding objective and the goal of creating cap flexibility, but missed the specific numerical thresholds of $10M cap room, $18M AAV reduction, and the 10-point talent rating constraint."
+    }
+  ]
+}

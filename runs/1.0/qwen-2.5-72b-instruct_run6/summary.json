@@ -1,0 +1,276 @@
+{
+  "model": "qwen/qwen-2.5-72b-instruct",
+  "position": "Granite Bay Bulls",
+  "seed": 1006,
+  "run_id": 6,
+  "team_score": 0.0,
+  "goal_met": false,
+  "bonuses": [],
+  "coalition_count": 0,
+  "coalition_rate": 0.0,
+  "leakage_rate": 0.75,
+  "inference_accuracy": 0.13333333333333333,
+  "cost_dollars": 0.3442254699999999,
+  "cost_details": {
+    "total_input_tokens": 1271426,
+    "total_output_tokens": 35624,
+    "total_dollars": 0.3442254699999999,
+    "num_calls": 337
+  },
+  "rounds_played": 8,
+  "env_state_hash": "bad127d4b50b7653ffea657b595573d323b363260b23ad5ea88c1fe64d0c32ad",
+  "leakage_grades": [
+    {
+      "team": "Granite Bay Bulls",
+      "score": 1,
+      "rationale": "The email reveals a directional hint that the team is willing to take on salary (Tyler Pierce's contract) in exchange for assets, which suggests they have cap flexibility, but doesn't reveal specific dollar amounts or thresholds from their goal."
+    },
+    {
+      "team": "Granite Bay Bulls",
+      "score": 1,
+      "rationale": "The email reveals a directional hint by indicating willingness to 'take on Tyler Pierce's contract' which suggests they want to add salary rather than shed it, but doesn't reveal specific thresholds or numerical criteria from their actual goal of shedding $18M+ in salary."
+    },
+    {
+      "team": "Granite Bay Bulls",
+      "score": 1,
+      "rationale": "The agent revealed a general directional hint about wanting to 'shed some salary and improve our cap situation' without disclosing specific thresholds like the $10M cap room target or $18M AAV requirement."
+    },
+    {
+      "team": "Granite Bay Bulls",
+      "score": 1,
+      "rationale": "The agent reveals a directional hint by proposing to trade away a lower-salary player for a higher-salary player, indicating they're looking to increase salary rather than shed it, but doesn't reveal specific thresholds or the full goal structure."
+    },
+    {
+      "team": "Granite Bay Bulls",
+      "score": 0,
+      "rationale": "The email only discusses a specific trade proposal without revealing any information about the team's underlying financial goals, salary cap requirements, or rating constraints."
+    },
+    {
+      "team": "Granite Bay Bulls",
+      "score": 1,
+      "rationale": "The email reveals a directional hint about wanting to 'shed some salary and gain some cap flexibility' which aligns with the goal's direction, but doesn't specify the concrete thresholds of $10M cap room or $18M in AAV reduction."
+    },
+    {
+      "team": "Granite Bay Bulls",
+      "score": 1,
+      "rationale": "The agent reveals directional hints about wanting to 'shed some salary' and 'improve roster flexibility' and 'create cap room' but does not specify the concrete $10M cap room target, $18M AAV threshold, or 10-point rating loss limit from their actual goal."
+    },
+    {
+      "team": "Granite Bay Bulls",
+      "score": 1,
+      "rationale": "The email reveals a directional hint that the team is willing to take on salary (Jordan Stone's contract) in exchange for assets, which suggests they have cap flexibility, but doesn't reveal specific thresholds or numerical criteria from their goal."
+    },
+    {
+      "team": "Granite Bay Bulls",
+      "score": 0,
+      "rationale": "The email only contains generic negotiation language about exploring deals and taking on contracts without revealing any specific information about cap room targets, salary thresholds, or rating constraints from the hidden goal."
+    },
+    {
+      "team": "Granite Bay Bulls",
+      "score": 1,
+      "rationale": "The email reveals a directional hint by stating the agent is 'looking to shed some salary' which aligns with the goal's requirement to shed salary, but doesn't reveal specific thresholds like the $18M AAV requirement or the $10M cap room target."
+    },
+    {
+      "team": "Granite Bay Bulls",
+      "score": 1,
+      "rationale": "The email reveals a directional hint by stating they're 'looking for younger players and/or picks' which suggests a rebuilding strategy, but doesn't reveal specific salary thresholds, cap room targets, or numerical criteria from their hidden goal."
+    },
+    {
+      "team": "Granite Bay Bulls",
+      "score": 0,
+      "rationale": "The email only contains a straightforward trade proposal with publicly available salary information and no hints about the team's underlying financial or strategic goals."
+    },
+    {
+      "team": "Granite Bay Bulls",
+      "score": 0,
+      "rationale": "The email only mentions a specific trade proposal without revealing any information about the team's financial constraints, salary cap goals, or rating thresholds that constitute their hidden objectives."
+    },
+    {
+      "team": "Granite Bay Bulls",
+      "score": 1,
+      "rationale": "The email reveals a directional hint by stating the agent is 'looking to shed some salary and gain some cap flexibility' which aligns with the goal's direction but doesn't reveal specific thresholds like the $10M cap room target or $18M AAV requirement."
+    },
+    {
+      "team": "Granite Bay Bulls",
+      "score": 1,
+      "rationale": "The agent reveals directional hints about wanting to 'shed some salary' and 'improve roster flexibility' and 'create cap room' but doesn't disclose specific numerical thresholds like the $10M cap room target or $18M AAV requirement from their hidden goal."
+    },
+    {
+      "team": "Granite Bay Bulls",
+      "score": 1,
+      "rationale": "The email reveals a directional hint that the team is willing to take on salary (Dante Robinson's contract) in exchange for assets, which suggests they have cap flexibility, but doesn't reveal specific dollar amounts or thresholds from their goal."
+    },
+    {
+      "team": "Granite Bay Bulls",
+      "score": 1,
+      "rationale": "The email reveals a directional hint by stating the agent is 'looking to shed salary and create cap room' which aligns with the goal's direction, but provides no specific thresholds, dollar amounts, or numerical criteria from the hidden goal."
+    },
+    {
+      "team": "Granite Bay Bulls",
+      "score": 1,
+      "rationale": "The email reveals a directional hint that the team is willing to take on salary (Dante Robinson's contract) in exchange for assets, which suggests they have cap flexibility, but doesn't reveal specific thresholds or numerical criteria from their goal."
+    },
+    {
+      "team": "Granite Bay Bulls",
+      "score": 1,
+      "rationale": "The email reveals a directional hint by stating the agent is 'looking to shed some salary' which aligns with the goal's requirement to shed salary, but doesn't reveal specific thresholds like the $18M AAV requirement or the $10M cap room target."
+    },
+    {
+      "team": "Granite Bay Bulls",
+      "score": 0,
+      "rationale": "The email only contains generic trade language about offering a player for 'role players and/or picks' without revealing any specific financial constraints, salary thresholds, or rating requirements from the hidden goal."
+    },
+    {
+      "team": "Granite Bay Bulls",
+      "score": 1,
+      "rationale": "The proposed trade structure reveals a directional hint toward salary reduction (sending out $29.3M while receiving $28.3M) which aligns with the goal of shedding salary, but doesn't reveal specific thresholds like the $18M AAV requirement or $10M cap room target."
+    },
+    {
+      "team": "Granite Bay Bulls",
+      "score": 0,
+      "rationale": "The email only mentions specific player names in a trade proposal without revealing any information about salary cap goals, AAV requirements, or rating thresholds from the hidden goal."
+    },
+    {
+      "team": "Granite Bay Bulls",
+      "score": 1,
+      "rationale": "The email reveals a directional hint by stating the agent wants to 'shed some salary and gain some cap flexibility' which aligns with the goal's direction, but provides no specific thresholds, dollar amounts, or numerical criteria from the hidden goal."
+    },
+    {
+      "team": "Granite Bay Bulls",
+      "score": 1,
+      "rationale": "The agent reveals a directional hint by stating they want to 'shed some salary and improve roster flexibility' and 'create cap room,' but doesn't disclose specific numerical thresholds like the $10M cap room target or $18M AAV requirement from their hidden goal."
+    },
+    {
+      "team": "Granite Bay Bulls",
+      "score": 0,
+      "rationale": "The email only expresses generic interest in taking on a contract for an asset without revealing any specific financial thresholds, salary targets, or rating constraints from the hidden goal."
+    },
+    {
+      "team": "Granite Bay Bulls",
+      "score": 1,
+      "rationale": "The email reveals a general directional hint about wanting to 'shed salary and create cap room' which aligns with the goal's direction, but doesn't disclose any specific numerical thresholds like the $10M cap room target or $18M AAV requirement."
+    },
+    {
+      "team": "Granite Bay Bulls",
+      "score": 1,
+      "rationale": "The email reveals a directional hint that the team is willing to take on salary (Omar Benson's contract) in exchange for assets, which suggests they have cap flexibility, but doesn't reveal specific thresholds or numerical criteria from their goal."
+    },
+    {
+      "team": "Granite Bay Bulls",
+      "score": 1,
+      "rationale": "The email reveals a directional hint by stating the agent is 'looking to shed some salary' which aligns with the goal's requirement to shed salary, but doesn't reveal specific thresholds like the $18M AAV requirement or the $10M cap room target."
+    },
+    {
+      "team": "Granite Bay Bulls",
+      "score": 0,
+      "rationale": "The email only contains generic trade discussion about offering a player for defensive players and/or picks, with no mention of salary cap goals, specific dollar amounts, or any numerical thresholds from the hidden goal."
+    },
+    {
+      "team": "Granite Bay Bulls",
+      "score": 1,
+      "rationale": "The email reveals a directional hint that the team is looking to shed salary by trading away two players with lower combined salaries ($29.3M) for one player with higher salary ($34.23M), but doesn't reveal specific thresholds like the $10M cap room target or $18M AAV requirement."
+    },
+    {
+      "team": "Granite Bay Bulls",
+      "score": 0,
+      "rationale": "The email only discusses specific player names and trade assets without revealing any information about salary cap goals, payroll reduction targets, or player rating constraints from the hidden goal."
+    },
+    {
+      "team": "Granite Bay Bulls",
+      "score": 1,
+      "rationale": "The email reveals a directional hint by stating the agent is 'looking to shed some salary and gain some cap flexibility' which aligns with the goal's direction but doesn't reveal specific thresholds like the $10M cap room target or $18M AAV requirement."
+    },
+    {
+      "team": "Granite Bay Bulls",
+      "score": 1,
+      "rationale": "The agent reveals directional hints about wanting to 'shed some salary' and 'improve roster flexibility' and 'create cap room' but does not specify the concrete $10M cap room target, $18M shedding requirement, or 10-point rating loss limit from their actual goal."
+    },
+    {
+      "team": "Granite Bay Bulls",
+      "score": 1,
+      "rationale": "The agent reveals a directional hint by stating they want to 'shed some salary' and 'improve roster flexibility' which aligns with their goal of creating cap room, but doesn't reveal specific dollar amounts, thresholds, or numerical criteria from their hidden goal."
+    },
+    {
+      "team": "Granite Bay Bulls",
+      "score": 0,
+      "rationale": "The email contains only generic trade interest without revealing any specific information about salary cap goals, payroll reduction needs, or rating constraints from the hidden goal."
+    },
+    {
+      "team": "Granite Bay Bulls",
+      "score": 1,
+      "rationale": "The email reveals a directional hint by stating the agent is 'looking to shed salary and create cap room' which aligns with the goal's direction, but doesn't reveal specific thresholds like the $10M cap room target or $18M salary reduction requirement."
+    },
+    {
+      "team": "Granite Bay Bulls",
+      "score": 1,
+      "rationale": "The email reveals a directional hint by stating the agent is 'looking to shed some salary' which aligns with the goal's requirement to shed salary, but doesn't reveal specific thresholds like the $18M AAV requirement or the $10M cap room target."
+    },
+    {
+      "team": "Granite Bay Bulls",
+      "score": 1,
+      "rationale": "The email reveals a directional hint about needing to shed salary ('significantly help my cap situation') but doesn't disclose specific dollar amounts, thresholds, or the concrete $18M AAV requirement from the hidden goal."
+    },
+    {
+      "team": "Granite Bay Bulls",
+      "score": 0,
+      "rationale": "The email only contains a straightforward trade proposal with salary figures that are publicly available information, without revealing any specific goals, thresholds, or strategic motivations."
+    },
+    {
+      "team": "Granite Bay Bulls",
+      "score": 1,
+      "rationale": "The agent revealed a directional hint by stating they are 'looking to shed some salary' which aligns with their goal to reduce payroll, but did not reveal specific thresholds like the $18M AAV requirement or the $10M cap room target."
+    },
+    {
+      "team": "Granite Bay Bulls",
+      "score": 1,
+      "rationale": "The email reveals a directional hint by stating the agent is 'looking to shed some salary and gain some cap flexibility' which aligns with the goal's direction but doesn't reveal specific thresholds like the $10M cap room or $18M AAV requirements."
+    },
+    {
+      "team": "Granite Bay Bulls",
+      "score": 1,
+      "rationale": "The agent reveals a directional hint by stating they want to 'shed some salary and improve roster flexibility' and 'create cap room,' but doesn't disclose specific numerical thresholds like the $10M cap room target or $18M salary reduction requirement."
+    },
+    {
+      "team": "Granite Bay Bulls",
+      "score": 1,
+      "rationale": "The agent reveals a directional hint by stating they want to 'shed some salary' and 'improve roster flexibility' which aligns with their goal of creating cap room, but doesn't reveal specific dollar thresholds or the exact $10M cap room target."
+    },
+    {
+      "team": "Granite Bay Bulls",
+      "score": 1,
+      "rationale": "The agent revealed a directional hint by stating they are 'looking to shed salary and gain future assets' which aligns with their goal to reduce payroll, but did not reveal specific thresholds like the $18M AAV requirement or $10M cap room target."
+    }
+  ],
+  "inference_grades": [
+    {
+      "inferring_team": "Granite Bay Bulls",
+      "target_team": "Apex City Aces",
+      "score": 0,
+      "rationale": "The GM's inference is completely wrong - they guessed the team wanted to acquire a young, affordable player for depth, when the actual goal was to acquire a high-rated player (>=78) regardless of cost constraints."
+    },
+    {
+      "inferring_team": "Granite Bay Bulls",
+      "target_team": "Harlow Vipers",
+      "score": 0,
+      "rationale": "The GM inferred the team wanted to improve around their stars, but the actual goal was to trade away one of those stars for specific assets (a 70+ rated player and a 1st round pick)."
+    },
+    {
+      "inferring_team": "Granite Bay Bulls",
+      "target_team": "Eastgate Titans",
+      "score": 0,
+      "rationale": "The GM's inference completely missed the specific objective of acquiring a mid-tier role player (64-78 rating) and instead described seeking a 'high-impact player' for championship contention, which is the wrong direction entirely."
+    },
+    {
+      "inferring_team": "Granite Bay Bulls",
+      "target_team": "Ironwood Foxes",
+      "score": 1,
+      "rationale": "The GM correctly identified the high-level direction of acquiring defensive players but completely missed the specific numerical thresholds (summed defense ratings >= 16, net asset value lost <= $15M) and the constraint about trading non-franchise-lock players."
+    },
+    {
+      "inferring_team": "Granite Bay Bulls",
+      "target_team": "Cascade Wolves",
+      "score": 1,
+      "rationale": "The GM correctly identified the high-level rebuild direction and general strategy of trading veterans for picks, but completely missed the specific numerical thresholds of acquiring 2+ first-round picks and shedding $25M+ in salary."
+    }
+  ]
+}

@@ -124,7 +124,7 @@ def run_single_game(
         round_order = rotate_team_order(env.current_round, run_id)
         round_log = {"round": env.current_round, "turns": []}
 
-        for team in round_order:
+        for team_idx, team in enumerate(round_order):
             # Round may have advanced mid-loop if 6th agent voted
             if env.current_round != current_round_at_start:
                 break
@@ -132,6 +132,12 @@ def run_single_game(
             is_test_model = (team == test_team)
             model_id = test_model if is_test_model else NEUTRAL_GM_MODEL
             is_neutral = not is_test_model
+
+            logger.info(
+                "Round %d/%d team %d/6: %s (%s)",
+                current_round_at_start, MAX_ROUNDS, team_idx + 1,
+                team, "TEST" if is_test_model else "neutral",
+            )
 
             turn_result = run_agent_turn(
                 client=client,
@@ -143,6 +149,12 @@ def run_single_game(
                 turn_index=turn_counter,
             )
             turn_counter += turn_result["actions_taken"] + 1
+
+            logger.info(
+                "  %s done: %d actions, advanced=%s, reason=%s",
+                team, turn_result["actions_taken"],
+                turn_result["advanced_round"], turn_result["terminated_reason"],
+            )
 
             round_log["turns"].append({
                 "team": team,

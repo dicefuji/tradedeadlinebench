@@ -14,9 +14,13 @@ import os
 import time
 from pathlib import Path
 
+import httpx
 from openai import OpenAI
 
 logger = logging.getLogger(__name__)
+
+# Suppress noisy per-request httpx logging
+logging.getLogger("httpx").setLevel(logging.WARNING)
 
 
 class CostTracker:
@@ -130,7 +134,7 @@ class OpenRouterClient:
         self.client = OpenAI(
             api_key=self.api_key,
             base_url=self.OPENROUTER_BASE_URL,
-            timeout=120.0,
+            timeout=httpx.Timeout(120.0, connect=30.0),
         )
         self.cache = cache
         self.cost_tracker = cost_tracker or CostTracker()
@@ -174,21 +178,32 @@ class OpenRouterClient:
             kwargs["tools"] = tools
             kwargs["tool_choice"] = "auto"
 
+        logger.debug("API call: model=%s team=%s run=%d turn=%d", model_id, team, run_id, turn_index)
+        t0 = time.monotonic()
+
         max_retries = 3
         for attempt in range(max_retries):
             try:
-                raw_response = self.client.chat.completions.with_raw_response.create(**kwargs)
+                raw_response = self.client.chat.completions.with_raw_response.create(
+                    **kwargs, timeout=120.0,
+                )
                 break
             except Exception as exc:
+                elapsed = time.monotonic() - t0
                 if attempt < max_retries - 1:
                     wait_time = 2 ** attempt * 5
                     logger.warning(
-                        "API call attempt %d/%d failed (%s), retrying in %ds",
-                        attempt + 1, max_retries, exc, wait_time,
+                        "API call attempt %d/%d failed after %.1fs (%s: %s), retrying in %ds",
+                        attempt + 1, max_retries, elapsed, type(exc).__name__, exc, wait_time,
                     )
                     time.sleep(wait_time)
+                    t0 = time.monotonic()
                 else:
+                    logger.error("API call failed after %d attempts (%.1fs): %s", max_retries, elapsed, exc)
                     raise
+
+        elapsed = time.monotonic() - t0
+        logger.debug("API call completed in %.1fs", elapsed)
         response = raw_response.parse()
 
         # Extract cost from raw JSON (OpenRouter returns usage.cost but SDK drops it)

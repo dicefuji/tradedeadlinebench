@@ -9,10 +9,14 @@ from __future__ import annotations
 
 import hashlib
 import json
+import logging
 import os
+import time
 from pathlib import Path
 
 from openai import OpenAI
+
+logger = logging.getLogger(__name__)
 
 
 class CostTracker:
@@ -126,6 +130,7 @@ class OpenRouterClient:
         self.client = OpenAI(
             api_key=self.api_key,
             base_url=self.OPENROUTER_BASE_URL,
+            timeout=120.0,
         )
         self.cache = cache
         self.cost_tracker = cost_tracker or CostTracker()
@@ -169,7 +174,21 @@ class OpenRouterClient:
             kwargs["tools"] = tools
             kwargs["tool_choice"] = "auto"
 
-        raw_response = self.client.chat.completions.with_raw_response.create(**kwargs)
+        max_retries = 3
+        for attempt in range(max_retries):
+            try:
+                raw_response = self.client.chat.completions.with_raw_response.create(**kwargs)
+                break
+            except Exception as exc:
+                if attempt < max_retries - 1:
+                    wait_time = 2 ** attempt * 5
+                    logger.warning(
+                        "API call attempt %d/%d failed (%s), retrying in %ds",
+                        attempt + 1, max_retries, exc, wait_time,
+                    )
+                    time.sleep(wait_time)
+                else:
+                    raise
         response = raw_response.parse()
 
         # Extract cost from raw JSON (OpenRouter returns usage.cost but SDK drops it)

@@ -11,6 +11,7 @@ Responses are cached by
 
 from __future__ import annotations
 
+import concurrent.futures
 import hashlib
 import json
 import logging
@@ -27,6 +28,8 @@ logging.getLogger("httpx").setLevel(logging.WARNING)
 
 # 30 s connect, 180 s read (some models are slow on long prompts)
 _DEFAULT_TIMEOUT = httpx.Timeout(180.0, connect=30.0)
+# Hard ceiling enforced via thread pool — kills truly stuck requests
+_HARD_TIMEOUT_SECONDS = 210
 _MAX_RETRIES = 3
 
 
@@ -138,14 +141,10 @@ class OpenRouterClient:
         if not self.api_key:
             raise ValueError("OPENROUTER_API_KEY not set")
 
-        self._http = httpx.Client(
-            base_url=self.OPENROUTER_BASE_URL,
-            headers={
-                "Authorization": f"Bearer {self.api_key}",
-                "Content-Type": "application/json",
-            },
-            timeout=_DEFAULT_TIMEOUT,
-        )
+        self._headers = {
+            "Authorization": f"Bearer {self.api_key}",
+            "Content-Type": "application/json",
+        }
         self.cache = cache
         self.cost_tracker = cost_tracker or CostTracker()
         self._cache_hits = 0
@@ -193,9 +192,7 @@ class OpenRouterClient:
         raw_body: dict | None = None
         for attempt in range(_MAX_RETRIES):
             try:
-                resp = self._http.post("/chat/completions", json=payload)
-                resp.raise_for_status()
-                raw_body = resp.json()
+                raw_body = self._post_with_hard_timeout(payload)
                 break
             except Exception as exc:
                 elapsed = time.monotonic() - t0
@@ -267,10 +264,42 @@ class OpenRouterClient:
 
         return result
 
+    def _post_with_hard_timeout(self, payload: dict) -> dict:
+        """POST to /chat/completions with a hard thread-based timeout.
+
+        Each call creates a fresh httpx connection (no pool reuse) so stale
+        CLOSE-WAIT sockets cannot cause indefinite hangs.
+        """
+        url = f"{self.OPENROUTER_BASE_URL}/chat/completions"
+
+        def _do_post() -> dict:
+            resp = httpx.post(
+                url,
+                json=payload,
+                headers=self._headers,
+                timeout=_DEFAULT_TIMEOUT,
+            )
+            resp.raise_for_status()
+            return resp.json()
+
+        with concurrent.futures.ThreadPoolExecutor(max_workers=1) as pool:
+            future = pool.submit(_do_post)
+            try:
+                return future.result(timeout=_HARD_TIMEOUT_SECONDS)
+            except concurrent.futures.TimeoutError:
+                future.cancel()
+                raise TimeoutError(
+                    f"API call exceeded hard timeout of {_HARD_TIMEOUT_SECONDS}s"
+                )
+
     def verify_model(self, model_id: str) -> bool:
         """Verify a model ID is available on OpenRouter."""
         try:
-            resp = self._http.get("/models")
+            resp = httpx.get(
+                f"{self.OPENROUTER_BASE_URL}/models",
+                headers=self._headers,
+                timeout=_DEFAULT_TIMEOUT,
+            )
             resp.raise_for_status()
             data = resp.json().get("data", [])
             available_ids = {m["id"] for m in data}

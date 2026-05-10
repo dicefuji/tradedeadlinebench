@@ -72,15 +72,42 @@ def main():
         print(json.dumps(summary, indent=2))
         return
 
-    # Run all 30 pilot runs
+    # Run all 30 pilot runs (with resume support)
     all_summaries = []
     cumulative_cost = 0.0
 
+    # Check for already-completed runs and load their summaries
     for model_idx, model in enumerate(PILOT_MODELS):
+        model_short = model.split("/")[-1]
+        for run_idx in range(10):
+            run_id = run_idx + 1
+            run_dir = os.path.join(runs_dir, gm_stack_version, f"{model_short}_run{run_id}")
+            summary_path = os.path.join(run_dir, "summary.json")
+            if os.path.exists(summary_path):
+                with open(summary_path) as f:
+                    summary = json.load(f)
+                cumulative_cost += summary.get("cost_dollars", 0.0)
+                all_summaries.append(summary)
+                logger.info(
+                    "RESUME: Loaded %s run %d (score=%.2f cost=$%.4f)",
+                    model, run_id, summary["team_score"], summary["cost_dollars"],
+                )
+
+    logger.info("Resumed %d completed runs, cumulative cost=$%.4f", len(all_summaries), cumulative_cost)
+
+    for model_idx, model in enumerate(PILOT_MODELS):
+        model_short = model.split("/")[-1]
         for run_idx in range(10):
             run_id = run_idx + 1
             team = ROTATION[run_idx]
             seed = SEEDS[run_idx]
+
+            # Skip already-completed runs
+            run_dir = os.path.join(runs_dir, gm_stack_version, f"{model_short}_run{run_id}")
+            summary_path = os.path.join(run_dir, "summary.json")
+            if os.path.exists(summary_path):
+                continue
+
             logger.info(
                 "=== Model %d/%d Run %d/10: %s as %s (seed %d) ===",
                 model_idx + 1, len(PILOT_MODELS), run_id, model, team, seed,

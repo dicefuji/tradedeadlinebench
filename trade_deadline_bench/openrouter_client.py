@@ -26,10 +26,10 @@ logger = logging.getLogger(__name__)
 # Suppress noisy per-request httpx logging
 logging.getLogger("httpx").setLevel(logging.WARNING)
 
-# 30 s connect, 180 s read (some models are slow on long prompts)
-_DEFAULT_TIMEOUT = httpx.Timeout(180.0, connect=30.0)
-# Hard ceiling enforced via thread pool — kills truly stuck requests
-_HARD_TIMEOUT_SECONDS = 210
+# 30 s connect, 120 s read (some models are slow on long prompts)
+_DEFAULT_TIMEOUT = httpx.Timeout(120.0, connect=30.0)
+# Hard ceiling enforced via daemon thread — kills truly stuck requests
+_HARD_TIMEOUT_SECONDS = 150
 _MAX_RETRIES = 3
 
 
@@ -194,6 +194,14 @@ class OpenRouterClient:
             try:
                 raw_body = self._post_with_hard_timeout(payload)
                 break
+            except TimeoutError:
+                # Timeout means the endpoint is hung — retrying won't help
+                elapsed = time.monotonic() - t0
+                logger.error(
+                    "API call timed out after %.1fs — not retrying",
+                    elapsed,
+                )
+                raise
             except Exception as exc:
                 elapsed = time.monotonic() - t0
                 if attempt < _MAX_RETRIES - 1:

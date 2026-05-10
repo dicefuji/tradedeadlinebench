@@ -23,10 +23,22 @@ from trade_deadline_bench.run_orchestrator import (
     run_pilot_run,
 )
 
+# Force immediate flushing so log lines appear in real time even when
+# output is redirected to a file.
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s %(levelname)s %(name)s: %(message)s",
 )
+for _h in logging.root.handlers:
+    if hasattr(_h, "stream"):
+        import functools as _ft
+        _orig_emit = _h.emit
+        @_ft.wraps(_orig_emit)
+        def _flushing_emit(record, _oe=_orig_emit, _hh=_h):
+            _oe(record)
+            if hasattr(_hh, "stream"):
+                _hh.stream.flush()
+        _h.emit = _flushing_emit
 logger = logging.getLogger("pilot_runner")
 
 

@@ -1,7 +1,11 @@
 """OpenRouter API client with caching and cost tracking.
 
 All LLM API calls route through OpenRouter using the OpenAI-compatible
-/v1/chat/completions endpoint. Responses are cached by
+/v1/chat/completions endpoint.  Uses httpx directly (not the OpenAI SDK)
+so that connect / read timeouts are reliably enforced and the raw JSON
+body — including ``usage.cost`` — is always available.
+
+Responses are cached by
 (model_id, prompt_hash, team, run_id, turn_index) for reproducibility.
 """
 
@@ -15,12 +19,12 @@ import time
 from pathlib import Path
 
 import httpx
-from openai import OpenAI
 
 logger = logging.getLogger(__name__)
 
-# Suppress noisy per-request httpx logging
-logging.getLogger("httpx").setLevel(logging.WARNING)
+# 30 s connect, 180 s read (some models are slow on long prompts)
+_DEFAULT_TIMEOUT = httpx.Timeout(180.0, connect=30.0)
+_MAX_RETRIES = 3
 
 
 class CostTracker:
@@ -116,7 +120,7 @@ class APICache:
 class OpenRouterClient:
     """Single API surface for all LLM calls via OpenRouter.
 
-    Uses the OpenAI Python SDK pointed at the OpenRouter base URL.
+    Uses httpx directly for reliable timeout control and raw-JSON access.
     """
 
     OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
@@ -131,10 +135,13 @@ class OpenRouterClient:
         if not self.api_key:
             raise ValueError("OPENROUTER_API_KEY not set")
 
-        self.client = OpenAI(
-            api_key=self.api_key,
+        self._http = httpx.Client(
             base_url=self.OPENROUTER_BASE_URL,
-            timeout=httpx.Timeout(120.0, connect=30.0),
+            headers={
+                "Authorization": f"Bearer {self.api_key}",
+                "Content-Type": "application/json",
+            },
+            timeout=_DEFAULT_TIMEOUT,
         )
         self.cache = cache
         self.cost_tracker = cost_tracker or CostTracker()
@@ -169,82 +176,85 @@ class OpenRouterClient:
 
         full_messages = [{"role": "system", "content": system_prompt}] + messages
 
-        kwargs: dict = {
+        payload: dict = {
             "model": model_id,
             "messages": full_messages,
             "temperature": temperature,
         }
         if tools:
-            kwargs["tools"] = tools
-            kwargs["tool_choice"] = "auto"
+            payload["tools"] = tools
+            payload["tool_choice"] = "auto"
 
-        logger.debug("API call: model=%s team=%s run=%d turn=%d", model_id, team, run_id, turn_index)
         t0 = time.monotonic()
 
-        max_retries = 3
-        for attempt in range(max_retries):
+        raw_body: dict | None = None
+        for attempt in range(_MAX_RETRIES):
             try:
-                raw_response = self.client.chat.completions.with_raw_response.create(
-                    **kwargs, timeout=120.0,
-                )
+                resp = self._http.post("/chat/completions", json=payload)
+                resp.raise_for_status()
+                raw_body = resp.json()
                 break
             except Exception as exc:
                 elapsed = time.monotonic() - t0
-                if attempt < max_retries - 1:
+                if attempt < _MAX_RETRIES - 1:
                     wait_time = 2 ** attempt * 5
                     logger.warning(
                         "API call attempt %d/%d failed after %.1fs (%s: %s), retrying in %ds",
-                        attempt + 1, max_retries, elapsed, type(exc).__name__, exc, wait_time,
+                        attempt + 1, _MAX_RETRIES, elapsed,
+                        type(exc).__name__, exc, wait_time,
                     )
                     time.sleep(wait_time)
                     t0 = time.monotonic()
                 else:
-                    logger.error("API call failed after %d attempts (%.1fs): %s", max_retries, elapsed, exc)
+                    logger.error(
+                        "API call failed after %d attempts (%.1fs): %s",
+                        _MAX_RETRIES, elapsed, exc,
+                    )
                     raise
 
+        assert raw_body is not None
+
         elapsed = time.monotonic() - t0
-        logger.debug("API call completed in %.1fs", elapsed)
-        response = raw_response.parse()
+        logger.debug("API call to %s completed in %.1fs", model_id, elapsed)
 
-        # Extract cost from raw JSON (OpenRouter returns usage.cost but SDK drops it)
+        # --- Parse the raw JSON ourselves --------------------------------
+        choice = raw_body["choices"][0]
+        message = choice["message"]
+
+        # Cost from OpenRouter's usage.cost field
         generation_cost = None
-        try:
-            raw_body = json.loads(raw_response.content)
-            raw_usage = raw_body.get("usage", {})
-            if "cost" in raw_usage:
+        raw_usage = raw_body.get("usage") or {}
+        if "cost" in raw_usage:
+            try:
                 generation_cost = float(raw_usage["cost"])
-        except (json.JSONDecodeError, ValueError, TypeError):
-            pass
+            except (ValueError, TypeError):
+                pass
 
-        choice = response.choices[0]
-        message = choice.message
+        tool_calls_list: list[dict] = []
+        for tc in message.get("tool_calls") or []:
+            tool_calls_list.append({
+                "id": tc["id"],
+                "type": "function",
+                "function": {
+                    "name": tc["function"]["name"],
+                    "arguments": tc["function"]["arguments"],
+                },
+            })
 
-        tool_calls_list = []
-        if message.tool_calls:
-            for tc in message.tool_calls:
-                tool_calls_list.append({
-                    "id": tc.id,
-                    "type": "function",
-                    "function": {
-                        "name": tc.function.name,
-                        "arguments": tc.function.arguments,
-                    },
-                })
-
-        usage_dict = {}
-        if response.usage:
+        usage_dict: dict = {}
+        if raw_usage:
             usage_dict = {
-                "prompt_tokens": response.usage.prompt_tokens,
-                "completion_tokens": response.usage.completion_tokens,
-                "total_tokens": response.usage.total_tokens,
+                "prompt_tokens": raw_usage.get("prompt_tokens", 0),
+                "completion_tokens": raw_usage.get("completion_tokens", 0),
+                "total_tokens": raw_usage.get("total_tokens", 0),
             }
 
         result = {
-            "content": message.content or "",
+            "content": message.get("content") or "",
             "tool_calls": tool_calls_list,
             "usage": usage_dict,
             "model": model_id,
-            "finish_reason": choice.finish_reason,
+            "finish_reason": choice.get("finish_reason", ""),
         }
 
         if self.cache is not None:
@@ -257,8 +267,10 @@ class OpenRouterClient:
     def verify_model(self, model_id: str) -> bool:
         """Verify a model ID is available on OpenRouter."""
         try:
-            models_response = self.client.models.list()
-            available_ids = {m.id for m in models_response.data}
+            resp = self._http.get("/models")
+            resp.raise_for_status()
+            data = resp.json().get("data", [])
+            available_ids = {m["id"] for m in data}
             return model_id in available_ids
         except Exception:
             return False

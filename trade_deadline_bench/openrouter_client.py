@@ -11,11 +11,11 @@ Responses are cached by
 
 from __future__ import annotations
 
-import concurrent.futures
 import hashlib
 import json
 import logging
 import os
+import threading
 import time
 from pathlib import Path
 
@@ -265,32 +265,46 @@ class OpenRouterClient:
         return result
 
     def _post_with_hard_timeout(self, payload: dict) -> dict:
-        """POST to /chat/completions with a hard thread-based timeout.
+        """POST to /chat/completions with a hard daemon-thread timeout.
 
         Each call creates a fresh httpx connection (no pool reuse) so stale
-        CLOSE-WAIT sockets cannot cause indefinite hangs.
+        CLOSE-WAIT sockets cannot cause indefinite hangs.  The worker runs
+        on a daemon thread so the main thread is never blocked by cleanup.
         """
         url = f"{self.OPENROUTER_BASE_URL}/chat/completions"
+        result_box: list[dict] = []
+        error_box: list[Exception] = []
 
-        def _do_post() -> dict:
-            resp = httpx.post(
-                url,
-                json=payload,
-                headers=self._headers,
-                timeout=_DEFAULT_TIMEOUT,
-            )
-            resp.raise_for_status()
-            return resp.json()
-
-        with concurrent.futures.ThreadPoolExecutor(max_workers=1) as pool:
-            future = pool.submit(_do_post)
+        def _do_post() -> None:
             try:
-                return future.result(timeout=_HARD_TIMEOUT_SECONDS)
-            except concurrent.futures.TimeoutError:
-                future.cancel()
-                raise TimeoutError(
-                    f"API call exceeded hard timeout of {_HARD_TIMEOUT_SECONDS}s"
+                resp = httpx.post(
+                    url,
+                    json=payload,
+                    headers=self._headers,
+                    timeout=_DEFAULT_TIMEOUT,
                 )
+                resp.raise_for_status()
+                result_box.append(resp.json())
+            except Exception as exc:
+                error_box.append(exc)
+
+        worker = threading.Thread(target=_do_post, daemon=True)
+        worker.start()
+        worker.join(timeout=_HARD_TIMEOUT_SECONDS)
+
+        if worker.is_alive():
+            logger.warning("Hard timeout fired after %ds — abandoning request", _HARD_TIMEOUT_SECONDS)
+            raise TimeoutError(
+                f"API call exceeded hard timeout of {_HARD_TIMEOUT_SECONDS}s"
+            )
+
+        if error_box:
+            raise error_box[0]
+
+        if not result_box:
+            raise RuntimeError("API call returned no result and no error")
+
+        return result_box[0]
 
     def verify_model(self, model_id: str) -> bool:
         """Verify a model ID is available on OpenRouter."""

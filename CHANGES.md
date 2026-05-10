@@ -186,3 +186,33 @@ Phase 4 calibration (Path C) adjusted them to achieve balanced feasibility:
 - **Ironwood**: >= 17 defense (unchanged)
 - **Cascade**: >= $25M shed → >= $22M shed
 - **Granite Bay**: cap >= $12M/shed >= $20M/loss <= 10 → cap >= $12M/shed >= $20M AAV/loss <= 6
+
+## Phase 5
+
+### OpenRouter as single API surface (known limitation)
+
+All LLM API calls (pilot models, neutral GMs, judges) route through OpenRouter
+using the OpenAI-compatible `/v1/chat/completions` endpoint. This means all
+models — including Claude when used as judge — use OpenAI function-calling
+schema, not their native tool-use formats.
+
+**Tradeoff:** Results may differ slightly from native-API runs of the same
+models. This is acceptable because all benchmark results are routed identically
+and the leaderboard is internally consistent. Any future comparison with
+native-API results should note this difference.
+
+### Stage 1 GM Prompt addendum (Section 6.2)
+
+Neutral GMs (Llama 3.3 70B) receive the universal agent prompt plus a
+calibration addendum constraining behavior: at least one substantive proposal
+in rounds 1-4, respond to counter-proposals within one round, 80-150 word
+emails, no coordination between calibration GMs.
+
+### Judge validation methodology
+
+Leakage and inference judges use Claude Sonnet 4 (`anthropic/claude-sonnet-4`)
+as primary grader and Claude Opus 4 (`anthropic/claude-opus-4`) as second
+grader. Cohen's kappa is computed between the two LLM graders on a sample of
+50 items each. This "two LLM graders" approach is permitted by the spec for
+the Phase 5 pilot (NOTE 3: "two graders can be human reviewer + Claude Opus 4
+as second LLM grader").

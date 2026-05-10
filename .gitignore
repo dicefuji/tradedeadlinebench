@@ -4,3 +4,6 @@ __pycache__/
 .pytest_cache/
 dist/
 build/
+.env
+runs/*/api_cache.jsonl
+distribution_analysis.md

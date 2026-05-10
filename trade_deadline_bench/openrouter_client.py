@@ -160,6 +160,7 @@ class OpenRouterClient:
         run_id: int = 0,
         turn_index: int = 0,
         temperature: float = 0.0,
+        max_tokens: int = 4096,
     ) -> dict:
         """Make an LLM API call, checking cache first.
 
@@ -182,6 +183,7 @@ class OpenRouterClient:
             "model": model_id,
             "messages": full_messages,
             "temperature": temperature,
+            "max_tokens": max_tokens,
         }
         if tools:
             payload["tools"] = tools

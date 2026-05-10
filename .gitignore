@@ -5,5 +5,5 @@ __pycache__/
 dist/
 build/
 .env
-runs/*/api_cache.jsonl
+runs/**/api_cache.jsonl
 distribution_analysis.md

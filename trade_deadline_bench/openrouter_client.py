@@ -169,7 +169,18 @@ class OpenRouterClient:
             kwargs["tools"] = tools
             kwargs["tool_choice"] = "auto"
 
-        response = self.client.chat.completions.create(**kwargs)
+        raw_response = self.client.chat.completions.with_raw_response.create(**kwargs)
+        response = raw_response.parse()
+
+        # Extract cost from raw JSON (OpenRouter returns usage.cost but SDK drops it)
+        generation_cost = None
+        try:
+            raw_body = json.loads(raw_response.content)
+            raw_usage = raw_body.get("usage", {})
+            if "cost" in raw_usage:
+                generation_cost = float(raw_usage["cost"])
+        except (json.JSONDecodeError, ValueError, TypeError):
+            pass
 
         choice = response.choices[0]
         message = choice.message
@@ -193,10 +204,6 @@ class OpenRouterClient:
                 "completion_tokens": response.usage.completion_tokens,
                 "total_tokens": response.usage.total_tokens,
             }
-
-        generation_cost = None
-        if hasattr(response, "x_openrouter") and response.x_openrouter:
-            generation_cost = getattr(response.x_openrouter, "generation_cost", None)
 
         result = {
             "content": message.content or "",

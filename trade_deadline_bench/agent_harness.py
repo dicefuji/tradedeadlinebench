@@ -208,7 +208,11 @@ def run_agent_turn(
             except (json.JSONDecodeError, TypeError):
                 args = {}
 
-            result = _dispatch_tool_call(env, team, func_name, args)
+            try:
+                result = _dispatch_tool_call(env, team, func_name, args)
+            except Exception as exc:
+                logger.warning("Tool %s raised %s: %s", func_name, type(exc).__name__, exc)
+                result = {"error": f"Tool '{func_name}' failed: {exc}"}
             actions_taken += 1
 
             tool_calls_log.append({

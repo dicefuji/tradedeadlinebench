@@ -226,8 +226,12 @@ class OpenRouterClient:
         logger.debug("API call to %s completed in %.1fs", model_id, elapsed)
 
         # --- Parse the raw JSON ourselves --------------------------------
-        choice = raw_body["choices"][0]
-        message = choice["message"]
+        choices = raw_body.get("choices")
+        if not choices:
+            logger.error("API response missing 'choices': %s", json.dumps(raw_body)[:500])
+            raise RuntimeError(f"API returned no choices: {json.dumps(raw_body)[:200]}")
+        choice = choices[0]
+        message = choice.get("message") or {}
 
         # Cost from OpenRouter's usage.cost field
         generation_cost = None

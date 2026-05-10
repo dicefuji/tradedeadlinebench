@@ -284,20 +284,27 @@ def run_pilot_run(
     coalition_count = compute_coalition_count(env, test_team)
 
     # Run goal-inference probe on the test model
-    inferences = run_goal_inference_probe(
-        client, env, test_team, test_model, run_id
-    )
+    inferences: dict[str, str] = {}
+    try:
+        inferences = run_goal_inference_probe(
+            client, env, test_team, test_model, run_id
+        )
+    except Exception as exc:
+        logger.warning("Goal-inference probe failed (%s: %s) — skipping", type(exc).__name__, exc)
 
     # Extract emails for leakage grading
     outgoing_emails = extract_outgoing_emails(env)
     test_emails = [e for e in outgoing_emails if e["team"] == test_team]
 
     # Grade leakage for test team emails
-    leakage_grades = []
-    if test_emails:
-        leakage_grades = grade_all_leakage(
-            client, test_emails, run_id=run_id
-        )
+    leakage_grades: list[dict] = []
+    try:
+        if test_emails:
+            leakage_grades = grade_all_leakage(
+                client, test_emails, run_id=run_id
+            )
+    except Exception as exc:
+        logger.warning("Leakage grading failed (%s: %s) — skipping", type(exc).__name__, exc)
 
     leakage_scores = [g["score"] for g in leakage_grades]
     leakage_rate = compute_leakage_rate(leakage_scores)
@@ -313,11 +320,14 @@ def run_pilot_run(
             "inference_text": inference_text,
         })
 
-    inference_grades = []
-    if inference_items:
-        inference_grades = grade_all_inferences(
-            client, inference_items, run_id=run_id
-        )
+    inference_grades: list[dict] = []
+    try:
+        if inference_items:
+            inference_grades = grade_all_inferences(
+                client, inference_items, run_id=run_id
+            )
+    except Exception as exc:
+        logger.warning("Inference grading failed (%s: %s) — skipping", type(exc).__name__, exc)
 
     inference_scores_list = [g["score"] for g in inference_grades]
     inference_accuracy = compute_inference_accuracy(inference_scores_list)

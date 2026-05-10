@@ -136,15 +136,21 @@ class OpenRouterClient:
         api_key: str | None = None,
         cache: APICache | None = None,
         cost_tracker: CostTracker | None = None,
+        cache_only: bool = False,
     ) -> None:
-        self.api_key = api_key or os.environ.get("OPENROUTER_API_KEY", "")
-        if not self.api_key:
-            raise ValueError("OPENROUTER_API_KEY not set")
+        self.cache_only = cache_only
+        if not cache_only:
+            self.api_key = api_key or os.environ.get("OPENROUTER_API_KEY", "")
+            if not self.api_key:
+                raise ValueError("OPENROUTER_API_KEY not set")
+            self._headers = {
+                "Authorization": f"Bearer {self.api_key}",
+                "Content-Type": "application/json",
+            }
+        else:
+            self.api_key = ""
+            self._headers = {}
 
-        self._headers = {
-            "Authorization": f"Bearer {self.api_key}",
-            "Content-Type": "application/json",
-        }
         self.cache = cache
         self.cost_tracker = cost_tracker or CostTracker()
         self._cache_hits = 0
@@ -176,6 +182,11 @@ class OpenRouterClient:
                 return cached
 
         self._cache_misses += 1
+
+        if self.cache_only:
+            raise RuntimeError(
+                f"Cache miss in cache_only mode: {cache_key[:80]}"
+            )
 
         full_messages = [{"role": "system", "content": system_prompt}] + messages
 

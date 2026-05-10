@@ -25,7 +25,7 @@ logger = logging.getLogger(__name__)
 # Maximum messages to keep in the tool-call loop conversation.
 # The first user message is always retained; older assistant/tool pairs
 # are dropped so the payload stays within provider context limits.
-_MAX_CONVERSATION_MESSAGES = 40
+_MAX_CONVERSATION_MESSAGES = 20
 
 
 def _build_system_prompt(

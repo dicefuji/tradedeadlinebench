@@ -139,15 +139,33 @@ def run_single_game(
                 team, "TEST" if is_test_model else "neutral",
             )
 
-            turn_result = run_agent_turn(
-                client=client,
-                env=env,
-                team=team,
-                model_id=model_id,
-                is_neutral_gm=is_neutral,
-                run_id=run_id,
-                turn_index=turn_counter,
-            )
+            try:
+                turn_result = run_agent_turn(
+                    client=client,
+                    env=env,
+                    team=team,
+                    model_id=model_id,
+                    is_neutral_gm=is_neutral,
+                    run_id=run_id,
+                    turn_index=turn_counter,
+                )
+            except Exception as exc:
+                logger.warning(
+                    "  %s turn failed (%s: %s) — force-advancing",
+                    team, type(exc).__name__, exc,
+                )
+                turn_result = {
+                    "team": team,
+                    "model_id": model_id,
+                    "actions_taken": 0,
+                    "advanced_round": False,
+                    "tool_calls_log": [],
+                    "terminated_reason": f"api_error:{type(exc).__name__}",
+                }
+                # Force-advance the failed agent so the game continues
+                if team not in env.advance_votes:
+                    env.tool_advance_round(team=team, notes="auto-advance after API error")
+
             turn_counter += turn_result["actions_taken"] + 1
 
             logger.info(
